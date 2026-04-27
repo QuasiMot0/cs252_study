@@ -344,8 +344,9 @@
       <label><input type="radio" name="report-reason" value="Something else"> Something else</label>
     </div>
     <textarea id="report-desc" placeholder="Describe the issue in more detail (optional)…"></textarea>
+    <div id="report-status" style="font-size:0.85rem;min-height:1.2em;margin-bottom:10px;font-weight:600"></div>
     <div id="report-modal-btns">
-      <button id="report-submit-btn" onclick="submitReport()">Open GitHub Issue</button>
+      <button id="report-submit-btn" onclick="submitReport()">Submit Report</button>
       <button id="report-cancel-btn" onclick="closeReport()">Cancel</button>
     </div>
   </div>
@@ -876,8 +877,6 @@
   /* ═══════════════════════════════════════════
      REPORT
   ═══════════════════════════════════════════ */
-  const GITHUB_REPO = 'https://github.com/QuasiMot0/cs252_study';
-
   function openReport() {
     const q = questions[idx];
     document.getElementById('report-q-label').textContent =
@@ -885,6 +884,9 @@
     document.querySelectorAll('#report-reasons input').forEach(r => r.checked = false);
     document.querySelectorAll('#report-reasons label').forEach(l => l.classList.remove('selected'));
     document.getElementById('report-desc').value = '';
+    document.getElementById('report-status').textContent = '';
+    document.getElementById('report-submit-btn').disabled = false;
+    document.getElementById('report-submit-btn').textContent = 'Submit Report';
     document.getElementById('report-modal').classList.add('open');
   }
 
@@ -892,35 +894,49 @@
     document.getElementById('report-modal').classList.remove('open');
   }
 
-  function submitReport() {
+  async function submitReport() {
     const q      = questions[idx];
     const reason = document.querySelector('#report-reasons input:checked');
     if (!reason) { alert('Please select a reason.'); return; }
-    const desc     = document.getElementById('report-desc').value.trim();
-    const labels   = ['A','B','C','D'];
+    const desc   = document.getElementById('report-desc').value.trim();
+    const labels = ['A','B','C','D'];
     const optLines = q.options.map((o, i) =>
       `  ${labels[i]}) ${o}${i === q.answer_index ? '  ← marked correct' : ''}`).join('\n');
 
-    const body = `Fix a reported question in questions.json.
+    const btn = document.getElementById('report-submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
 
-## Reported Issue
-- **Question ${idx + 1}** (subtopic: \`${q.subtopic_id}\`, difficulty: ${q.difficulty})
-- **Reason:** ${reason.value}${desc ? `\n- **Description:** ${desc}` : ''}
+    try {
+      const res = await fetch('https://formspree.io/f/mvzdjgqr', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          subject: `[Report] Q${idx + 1} (${q.subtopic_id}): ${reason.value}`,
+          reason:  reason.value,
+          description: desc || '(none)',
+          question_number: idx + 1,
+          subtopic: q.subtopic_id,
+          difficulty: q.difficulty,
+          question: q.question,
+          options: optLines,
+          explanation: q.explanation,
+        })
+      });
 
-## Question Data
-**Question:** ${q.question}
-
-**Options:**
-${optLines}
-
-**Explanation:** ${q.explanation}
-
----
-Please update this question in questions.json to address the reported issue. Match the question by its exact text above.`;
-
-    const title = encodeURIComponent(`[Report] Q${idx + 1} (${q.subtopic_id}): ${reason.value}`);
-    window.open(`${GITHUB_REPO}/issues/new?title=${title}&body=${encodeURIComponent(body)}`, '_blank');
-    closeReport();
+      if (res.ok) {
+        document.getElementById('report-status').textContent = '✓ Report sent — thanks!';
+        document.getElementById('report-status').style.color = '#28a745';
+        setTimeout(closeReport, 1500);
+      } else {
+        throw new Error('bad response');
+      }
+    } catch {
+      document.getElementById('report-status').textContent = 'Failed to send. Please try again.';
+      document.getElementById('report-status').style.color = '#dc3545';
+      btn.disabled = false;
+      btn.textContent = 'Submit Report';
+    }
   }
 
   // Highlight selected radio label
