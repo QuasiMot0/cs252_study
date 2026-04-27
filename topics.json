@@ -1,0 +1,1168 @@
+{
+  "units": [
+    {
+      "id": "unit-1",
+      "title": "Program Memory Layout & x86-64 Assembly",
+      "topics": [
+        {
+          "id": "topic-1-1",
+          "title": "Program Memory Layout",
+          "subtopics": [
+            {
+              "id": "sub-1-1-1",
+              "title": "Memory sections: text, data, BSS, heap, stack, shared libs",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p10-17"
+              ]
+            },
+            {
+              "id": "sub-1-1-2",
+              "title": "Address spaces and process isolation",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p14-16"
+              ]
+            },
+            {
+              "id": "sub-1-1-3",
+              "title": "Memory gaps, SEGV signals, and core dumps",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p16-17"
+              ]
+            },
+            {
+              "id": "sub-1-1-4",
+              "title": "Where variables live: global/static/local/heap example walkthrough",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p15-16"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "topic-1-2",
+          "title": "x86-64 Assembly Language",
+          "subtopics": [
+            {
+              "id": "sub-1-2-1",
+              "title": "CPU registers: argument registers vs callee-saved registers, calling conventions",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p22-27"
+              ]
+            },
+            {
+              "id": "sub-1-2-2",
+              "title": "Addressing modes: immediate, register, indirect, direct memory",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p28-30"
+              ]
+            },
+            {
+              "id": "sub-1-2-3",
+              "title": "x86-64 instruction types: mov, add, cmp, test, push/pop (q suffix = 64-bit)",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p18-32"
+              ]
+            },
+            {
+              "id": "sub-1-2-4",
+              "title": "Flags register and conditional jumps: JE, JNE, JGE, JLE, etc.",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p32-34"
+              ]
+            },
+            {
+              "id": "sub-1-2-5",
+              "title": "Translating C if/else and while loops to assembly",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p34-45",
+                "252_graded.pdf:p1-10"
+              ]
+            },
+            {
+              "id": "sub-1-2-6",
+              "title": "Defining global variables in assembly: .data, .comm directive",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p44-47"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unit-2",
+      "title": "Executables, Linking & Libraries",
+      "topics": [
+        {
+          "id": "topic-2-1",
+          "title": "Executable File Formats & the Compilation Pipeline",
+          "subtopics": [
+            {
+              "id": "sub-2-1-1",
+              "title": "ELF, COFF, and a.out executable formats: structure and purpose",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p48-50"
+              ]
+            },
+            {
+              "id": "sub-2-1-2",
+              "title": "Compilation pipeline: preprocessor \u2192 compiler \u2192 assembler \u2192 linker",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p50-58"
+              ]
+            },
+            {
+              "id": "sub-2-1-3",
+              "title": "Static libraries (.a): creation with ar, linking behavior",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p58-62"
+              ]
+            },
+            {
+              "id": "sub-2-1-4",
+              "title": "Shared libraries (.so): advantages over static, runtime linker, LD_LIBRARY_PATH",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p60-62",
+                "CS252-Midterm-Solutions.docx"
+              ]
+            },
+            {
+              "id": "sub-2-1-5",
+              "title": "Dynamic loading at runtime: dlopen(), dlsym(), dlclose()",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p60-62",
+                "Lab5-HTTP-Part2.pdf:p4-6"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unit-3",
+      "title": "Pointers & the C Memory Model",
+      "topics": [
+        {
+          "id": "topic-3-1",
+          "title": "Pointer Fundamentals",
+          "subtopics": [
+            {
+              "id": "sub-3-1-1",
+              "title": "Pointer declaration, dereferencing (*), address-of (&), and NULL",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p62-68"
+              ]
+            },
+            {
+              "id": "sub-3-1-2",
+              "title": "Pointer arithmetic, array-pointer equivalence, and indexing",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p72-76"
+              ]
+            },
+            {
+              "id": "sub-3-1-3",
+              "title": "sizeof operator: pointer size always 8 bytes, type sizes",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p70-72"
+              ]
+            },
+            {
+              "id": "sub-3-1-4",
+              "title": "2D arrays: contiguous, jagged (int**), and pointer-based implementations",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p74-82"
+              ]
+            },
+            {
+              "id": "sub-3-1-5",
+              "title": "Function pointers: declaration, typedef, use in callbacks and generic sort",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p82-92"
+              ]
+            },
+            {
+              "id": "sub-3-1-6",
+              "title": "Common pointer errors: null deref, dangling pointer, uninitialized pointer",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p68-70"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unit-4",
+      "title": "Building Your Own Malloc",
+      "notes": "PRIORITY UNIT \u2014 40-60 questions total; code-trace, debugging scenario, and edge-case style matching CS252 exam format",
+      "topics": [
+        {
+          "id": "topic-4-1",
+          "title": "Heap Management & OS Memory Requests",
+          "subtopics": [
+            {
+              "id": "sub-4-1-1",
+              "title": "Memory layout revisited: where the heap lives, heap growth direction",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p10-14",
+                "CS252-Slides-Sprin2026.pdf:p92-94"
+              ],
+              "question_target": 5
+            },
+            {
+              "id": "sub-4-1-2",
+              "title": "sbrk(n) mechanics: extending/shrinking the heap, ordering constraint, why it's not enough alone",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p92-96",
+                "CS252-LB01-Malloc.pdf:p3-5"
+              ],
+              "question_target": 6
+            },
+            {
+              "id": "sub-4-1-3",
+              "title": "ARENA_SIZE chunks: lazy allocation, when to request a new chunk, handling sbrk failure",
+              "sources": [
+                "CS252-LB01-Malloc.pdf:p14-20"
+              ],
+              "question_target": 5
+            }
+          ]
+        },
+        {
+          "id": "topic-4-2",
+          "title": "Free List Strategies & Placement Policies",
+          "subtopics": [
+            {
+              "id": "sub-4-2-1",
+              "title": "Implicit free list: traversing all blocks (allocated + free) to find a fit",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p96-100"
+              ],
+              "question_target": 4
+            },
+            {
+              "id": "sub-4-2-2",
+              "title": "Explicit free list: linked list of only free blocks, next/prev pointers in metadata",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p96-100",
+                "CS252-LB01-Malloc.pdf:p4-6"
+              ],
+              "question_target": 5
+            },
+            {
+              "id": "sub-4-2-3",
+              "title": "Segregated free lists: N_LISTS size-class buckets, sentinel nodes, circular doubly-linked lists",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p106-110",
+                "CS252-LB01-Malloc.pdf:p8-12"
+              ],
+              "question_target": 7
+            },
+            {
+              "id": "sub-4-2-4",
+              "title": "First-fit vs best-fit placement: time vs fragmentation trade-off, last-list fallback",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p100-106",
+                "CS252-LB01-Malloc.pdf:p16-18"
+              ],
+              "question_target": 5
+            }
+          ]
+        },
+        {
+          "id": "topic-4-3",
+          "title": "Block Metadata, Boundary Tags & Alignment",
+          "subtopics": [
+            {
+              "id": "sub-4-3-1",
+              "title": "Header struct fields: size, left_size, allocated bit, next/prev pointers; actual vs allocable vs request size",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p102-104",
+                "CS252-Slides-Sprin2026.pdf:p110-116",
+                "CS252-LB01-Malloc.pdf:p11-14",
+                "HW1-Solutions.pdf:p5-12"
+              ],
+              "question_target": 7
+            },
+            {
+              "id": "sub-4-3-2",
+              "title": "Boundary tags (footer): O(1) neighbor lookup using left_size and size fields",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p110-120",
+                "CS252-LB01-Malloc.pdf:p9-11"
+              ],
+              "question_target": 6
+            },
+            {
+              "id": "sub-4-3-3",
+              "title": "Alignment: rounding request to next multiple of 8, minimum block size (16 bytes on 64-bit), allocated-bit packing in size field",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p102-104",
+                "CS252-LB01-Malloc.pdf:p12-14"
+              ],
+              "question_target": 6
+            },
+            {
+              "id": "sub-4-3-4",
+              "title": "Pointer arithmetic in malloc: casting to char* for byte offsets, computing neighbor addresses",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p148-153"
+              ],
+              "question_target": 5
+            }
+          ]
+        },
+        {
+          "id": "topic-4-4",
+          "title": "Block Splitting, Coalescing & Fenceposts",
+          "subtopics": [
+            {
+              "id": "sub-4-4-1",
+              "title": "Block splitting: minimum remainder size, allocating the right (higher) half for determinism",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p116-118",
+                "CS252-LB01-Malloc.pdf:p16-18"
+              ],
+              "question_target": 6
+            },
+            {
+              "id": "sub-4-4-2",
+              "title": "Coalescing: 4 cases (neither/right only/left only/both free), updating free-list membership after coalesce",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p118-122",
+                "CS252-LB01-Malloc.pdf:p6-10",
+                "HW1-Solutions.pdf:p8-15"
+              ],
+              "question_target": 8
+            },
+            {
+              "id": "sub-4-4-3",
+              "title": "Fenceposts: why they're needed, placement at chunk edges, removing fenceposts when coalescing adjacent OS chunks",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p120-124",
+                "CS252-LB01-Malloc.pdf:p7-10"
+              ],
+              "question_target": 6
+            },
+            {
+              "id": "sub-4-4-4",
+              "title": "realloc() semantics: grow-in-place vs copy, freeing original on move, NULL input behavior",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p124-130"
+              ],
+              "question_target": 4
+            }
+          ]
+        },
+        {
+          "id": "topic-4-5",
+          "title": "Fragmentation & Memory Errors",
+          "subtopics": [
+            {
+              "id": "sub-4-5-1",
+              "title": "Internal vs external fragmentation: definitions, causes, and which strategies reduce each",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p104-110",
+                "CS252-LB01-Malloc.pdf:p6-8"
+              ],
+              "question_target": 5
+            },
+            {
+              "id": "sub-4-5-2",
+              "title": "Memory leaks: definition, detection, long-lived process impact",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p124-128",
+                "HW1-Solutions.pdf:p1-8"
+              ],
+              "question_target": 5
+            },
+            {
+              "id": "sub-4-5-3",
+              "title": "Premature free and use-after-free: setting p=NULL after free as mitigation",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p128-132",
+                "HW1-Solutions.pdf:p8-12"
+              ],
+              "question_target": 5
+            },
+            {
+              "id": "sub-4-5-4",
+              "title": "Double free: how it corrupts free-list metadata, magic-number detection technique",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p132-136",
+                "CS252-LB01-Malloc.pdf:p18-20"
+              ],
+              "question_target": 6
+            },
+            {
+              "id": "sub-4-5-5",
+              "title": "Wild free: freeing a pointer not returned by malloc, freeing a pointer into the middle of a block",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p136-140"
+              ],
+              "question_target": 5
+            },
+            {
+              "id": "sub-4-5-6",
+              "title": "Memory smashing: writing past end of allocation, how it corrupts adjacent block headers",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p140-144",
+                "CS252-Midterm-Solutions.docx"
+              ],
+              "question_target": 5
+            },
+            {
+              "id": "sub-4-5-7",
+              "title": "Heap check and debugging allocator: magic numbers, boundary validation, gdb integration",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p142-150",
+                "CS252-LB01-Malloc.pdf:p20-23"
+              ],
+              "question_target": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unit-5",
+      "title": "Debugging with gdb",
+      "topics": [
+        {
+          "id": "topic-5-1",
+          "title": "Using gdb for Systems Programs",
+          "subtopics": [
+            {
+              "id": "sub-5-1-1",
+              "title": "Compiling with -g, launching gdb, run/break/next/step/continue/print commands",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p154-164"
+              ]
+            },
+            {
+              "id": "sub-5-1-2",
+              "title": "Post-mortem debugging: gdb with a core file, bt (backtrace) command",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p164-169"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unit-6",
+      "title": "OS Fundamentals, File System & Processes",
+      "topics": [
+        {
+          "id": "topic-6-1",
+          "title": "Unix File System",
+          "subtopics": [
+            {
+              "id": "sub-6-1-1",
+              "title": "Inode structure: metadata fields, direct/indirect block pointers, block size math",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p185-197",
+                "HW1-Solutions.pdf:p1-6"
+              ]
+            },
+            {
+              "id": "sub-6-1-2",
+              "title": "Hard links and reference counting: when a file is actually deleted",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p197-200"
+              ]
+            },
+            {
+              "id": "sub-6-1-3",
+              "title": "File permissions: rwx bits, owner/group/other, chmod octal notation",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p200-206"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "topic-6-2",
+          "title": "Open File Table & File Descriptors",
+          "subtopics": [
+            {
+              "id": "sub-6-2-1",
+              "title": "Open file table: per-process fd table \u2192 system open file table \u2192 inode table",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p269-275",
+                "HW1-Solutions.pdf:p12-18"
+              ]
+            },
+            {
+              "id": "sub-6-2-2",
+              "title": "open() flags: O_RDONLY, O_WRONLY, O_CREAT, O_TRUNC, O_APPEND; return value",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p275-280",
+                "CS252-Midterm-Solutions.docx"
+              ]
+            },
+            {
+              "id": "sub-6-2-3",
+              "title": "File descriptor inheritance across fork(): shared offset behavior",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p270-280",
+                "HW1-Solutions.pdf:p15-20"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "topic-6-3",
+          "title": "Processes",
+          "subtopics": [
+            {
+              "id": "sub-6-3-1",
+              "title": "Process properties: PID, arguments (argc/argv), environment variables, current directory, UID",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p206-218"
+              ]
+            },
+            {
+              "id": "sub-6-3-2",
+              "title": "Environment variables: getenv/setenv, PATH, HOME, USER; environ array",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p212-218"
+              ]
+            },
+            {
+              "id": "sub-6-3-3",
+              "title": "stdin/stdout/stderr: fd 0/1/2, > and < redirection, 2>&1 semantics",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p218-220"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unit-7",
+      "title": "Shell Scripting (Bash)",
+      "topics": [
+        {
+          "id": "topic-7-1",
+          "title": "Bash Fundamentals",
+          "subtopics": [
+            {
+              "id": "sub-7-1-1",
+              "title": "Variables, command substitution $(), and quoting rules",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p240-245",
+                "LAB2-ShellScripting.pdf:p1-5",
+                "Lab2-Quiz.pdf:p1"
+              ]
+            },
+            {
+              "id": "sub-7-1-2",
+              "title": "Control flow: if/then/else/fi, while/do/done, for loops",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p240-245",
+                "LAB2-ShellScripting.pdf:p1-5"
+              ]
+            },
+            {
+              "id": "sub-7-1-3",
+              "title": "Regular expressions in bash: grep/sed/awk patterns for validation",
+              "sources": [
+                "LAB2-ShellScripting.pdf:p3-7"
+              ]
+            },
+            {
+              "id": "sub-7-1-4",
+              "title": "Script arguments ($1, $2, $#, $@), exit codes, and test/[ ] expressions",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p240-245",
+                "LAB2-ShellScripting.pdf:p5-9"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unit-8",
+      "title": "Building Your Own Shell",
+      "notes": "PRIORITY UNIT \u2014 40-60 questions total; code-trace, debugging scenario, and edge-case style matching CS252 exam format",
+      "topics": [
+        {
+          "id": "topic-8-1",
+          "title": "Shell Architecture & Lexical Analysis with Flex",
+          "subtopics": [
+            {
+              "id": "sub-8-1-1",
+              "title": "Shell design: three parts \u2014 parser, executor, subsystems (wildcarding, subshells, env expansion)",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p245-254",
+                "lab3_quiz.pdf:p1-7"
+              ],
+              "question_target": 4
+            },
+            {
+              "id": "sub-8-1-2",
+              "title": "Flex lexer: token types (WORD, GREAT, GREATGREAT, PIPE, AMPERSAND, etc.), longest-match rule",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p255-260",
+                "lab3_quiz.pdf:p4-5"
+              ],
+              "question_target": 5
+            },
+            {
+              "id": "sub-8-1-3",
+              "title": "Flex start conditions (WORD_STATE): building multi-character tokens, unput() to push back delimiters",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p255-260"
+              ],
+              "question_target": 5
+            }
+          ]
+        },
+        {
+          "id": "topic-8-2",
+          "title": "Parsing with Yacc/Bison",
+          "subtopics": [
+            {
+              "id": "sub-8-2-1",
+              "title": "Yacc grammar rules for shell commands: cmd_and_args, pipe_list, io_modifier, command_line",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p258-268",
+                "lab3_quiz.pdf:p5-6"
+              ],
+              "question_target": 5
+            },
+            {
+              "id": "sub-8-2-2",
+              "title": "Parse tree construction and how the executor walks it to run commands",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p265-270"
+              ],
+              "question_target": 4
+            }
+          ]
+        },
+        {
+          "id": "topic-8-3",
+          "title": "Process Creation: fork, exec, wait",
+          "subtopics": [
+            {
+              "id": "sub-8-3-1",
+              "title": "fork() return value: 0 in child, child PID in parent, -1 on error; what is copied vs shared",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p280-286",
+                "lab3_quiz.pdf:p1-2"
+              ],
+              "question_target": 6
+            },
+            {
+              "id": "sub-8-3-2",
+              "title": "execvp() and family: argument array format (NULL-terminated), when code after exec() runs",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p280-286",
+                "lab3_quiz.pdf:p2-3"
+              ],
+              "question_target": 5
+            },
+            {
+              "id": "sub-8-3-3",
+              "title": "wait() vs waitpid(): blocking, WNOHANG flag, exit status extraction with WEXITSTATUS",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p280-290",
+                "lab3_quiz.pdf:p2"
+              ],
+              "question_target": 5
+            }
+          ]
+        },
+        {
+          "id": "topic-8-4",
+          "title": "I/O Redirection & dup2",
+          "subtopics": [
+            {
+              "id": "sub-8-4-1",
+              "title": "dup2(oldfd, newfd): redirect stdin/stdout/stderr; closing original fd after dup2",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p285-292",
+                "lab3_quiz.pdf:p3"
+              ],
+              "question_target": 6
+            },
+            {
+              "id": "sub-8-4-2",
+              "title": "Redirection operators: > (truncate), >> (append), < (input), 2> (stderr), 2>&1, >&",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p260-268",
+                "lab3_quiz.pdf:p3-4"
+              ],
+              "question_target": 6
+            },
+            {
+              "id": "sub-8-4-3",
+              "title": "Order of redirections matters: why 2>&1 > file differs from > file 2>&1",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p290-296",
+                "lab3_quiz.pdf:p3-4"
+              ],
+              "question_target": 5
+            }
+          ]
+        },
+        {
+          "id": "topic-8-5",
+          "title": "Pipes & Multi-Command Pipelines",
+          "subtopics": [
+            {
+              "id": "sub-8-5-1",
+              "title": "pipe() syscall: fd[0] = read end, fd[1] = write end; must close unused ends",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p292-300",
+                "lab3_quiz.pdf:p2-3"
+              ],
+              "question_target": 6
+            },
+            {
+              "id": "sub-8-5-2",
+              "title": "Chaining N commands with pipes: prevPipe pattern, fork per command, closing fd[1] in parent",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p295-310",
+                "lab3_quiz.pdf:p6-7"
+              ],
+              "question_target": 6
+            },
+            {
+              "id": "sub-8-5-3",
+              "title": "Blocking on read() when write end is still open: deadlock scenario when close() is missed",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p295-300",
+                "lab3_quiz.pdf:p3"
+              ],
+              "question_target": 5
+            }
+          ]
+        },
+        {
+          "id": "topic-8-6",
+          "title": "Signal Handling, Zombies & Job Control",
+          "subtopics": [
+            {
+              "id": "sub-8-6-1",
+              "title": "SIGINT (Ctrl-C) handling: default vs custom handler, signal() vs sigaction()",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p330-336",
+                "lab3_quiz.pdf:p4"
+              ],
+              "question_target": 5
+            },
+            {
+              "id": "sub-8-6-2",
+              "title": "Zombie processes: what they are, why they exist, how SIGCHLD + waitpid(-1,WNOHANG) reaps them",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p330-336",
+                "lab3_quiz.pdf:p2",
+                "lab3_quiz.pdf:p4-5"
+              ],
+              "question_target": 6
+            },
+            {
+              "id": "sub-8-6-3",
+              "title": "Background (&) vs foreground processes: when parent calls waitpid vs skips it; isatty() for non-interactive mode",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p325-335",
+                "lab3_quiz.pdf:p6"
+              ],
+              "question_target": 5
+            },
+            {
+              "id": "sub-8-6-4",
+              "title": "Exit status $?: how the shell stores and exposes the last command's exit code",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p325-330"
+              ],
+              "question_target": 4
+            }
+          ]
+        },
+        {
+          "id": "topic-8-7",
+          "title": "Shell Expansions",
+          "subtopics": [
+            {
+              "id": "sub-8-7-1",
+              "title": "Wildcard/glob expansion: readdir() + regex matching, sorting results, hidden files (dot-files)",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p310-325",
+                "lab3_quiz.pdf:p6-7"
+              ],
+              "question_target": 5
+            },
+            {
+              "id": "sub-8-7-2",
+              "title": "Subdirectory wildcard expansion: recursive expandWildcard() with prefix/suffix approach",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p320-325"
+              ],
+              "question_target": 4
+            },
+            {
+              "id": "sub-8-7-3",
+              "title": "Subshell/backtick expansion: fork \u2192 exec \u2192 read pipe output \u2192 myunputc() in reverse into lexer",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p333-336",
+                "lab3_quiz.pdf:p6-7"
+              ],
+              "question_target": 6
+            },
+            {
+              "id": "sub-8-7-4",
+              "title": "Environment variable expansion ($VAR) and tilde expansion (~) at lex/parse time",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p325-330"
+              ],
+              "question_target": 4
+            }
+          ]
+        },
+        {
+          "id": "topic-8-8",
+          "title": "Shell Builtins",
+          "subtopics": [
+            {
+              "id": "sub-8-8-1",
+              "title": "cd, setenv, unsetenv, exit: why builtins can't be forked (must change shell's own state)",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p325-330"
+              ],
+              "question_target": 4
+            },
+            {
+              "id": "sub-8-8-2",
+              "title": "source builtin: YY_BUFFER_STATE switching to parse a file without losing current lex buffer",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p333-336",
+                "lab3_quiz.pdf:p7"
+              ],
+              "question_target": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unit-9",
+      "title": "OS Internals & CPU Scheduling",
+      "topics": [
+        {
+          "id": "topic-9-1",
+          "title": "Kernel & User Mode",
+          "subtopics": [
+            {
+              "id": "sub-9-1-1",
+              "title": "Kernel vs user mode: permissions, why user programs can't directly access hardware",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p337-345"
+              ]
+            },
+            {
+              "id": "sub-9-1-2",
+              "title": "Interrupts: hardware vs software interrupts, ISR, returning from interrupt",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p345-355"
+              ]
+            },
+            {
+              "id": "sub-9-1-3",
+              "title": "System calls: software interrupt mechanism, syscall table, security enforcement in handler",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p355-365"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "topic-9-2",
+          "title": "CPU Scheduling",
+          "subtopics": [
+            {
+              "id": "sub-9-2-1",
+              "title": "Scheduling algorithms: FIFO, round-robin, preemptive vs non-preemptive",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p370-394"
+              ]
+            },
+            {
+              "id": "sub-9-2-2",
+              "title": "Time quantum choice: trade-offs between context-switch overhead and responsiveness",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p388-395"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unit-10",
+      "title": "Threads & Synchronization",
+      "topics": [
+        {
+          "id": "topic-10-1",
+          "title": "Thread Basics",
+          "subtopics": [
+            {
+              "id": "sub-10-1-1",
+              "title": "What a thread is: shared vs private state (heap/globals shared, stack/registers private)",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p395-405",
+                "CS252-Lab4-Threads.pdf:p1-4"
+              ]
+            },
+            {
+              "id": "sub-10-1-2",
+              "title": "pthread_create(), pthread_join(), thread function signature",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p395-410",
+                "CS252-Lab4-Threads.pdf:p2-5"
+              ]
+            },
+            {
+              "id": "sub-10-1-3",
+              "title": "Threads vs processes: advantages and disadvantages (creation cost, isolation, shared memory)",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p405-410"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "topic-10-2",
+          "title": "Race Conditions & Mutual Exclusion",
+          "subtopics": [
+            {
+              "id": "sub-10-2-1",
+              "title": "Race conditions: non-deterministic interleaving, lost update problem",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p410-420",
+                "Lab4.pdf:p2-5"
+              ]
+            },
+            {
+              "id": "sub-10-2-2",
+              "title": "Mutex locks: pthread_mutex_lock/unlock, critical sections, mutual exclusion guarantee",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p415-425",
+                "CS252-Lab4-Threads.pdf:p4-6",
+                "Lab4.pdf:p3-6"
+              ]
+            },
+            {
+              "id": "sub-10-2-3",
+              "title": "Spin locks: busy-wait implementation, pthread_yield(), when to prefer spinlock vs mutex",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p425-435",
+                "CS252-Lab4-Threads.pdf:p5-7",
+                "Lab4.pdf:p5-8"
+              ]
+            },
+            {
+              "id": "sub-10-2-4",
+              "title": "Atomic operations and mutex implementation with test-and-set hardware instruction",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p425-435"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "topic-10-3",
+          "title": "Semaphores & Classical Problems",
+          "subtopics": [
+            {
+              "id": "sub-10-3-1",
+              "title": "Semaphores: sem_wait/sem_post, counting semaphore vs binary (mutex) semaphore",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p440-455"
+              ]
+            },
+            {
+              "id": "sub-10-3-2",
+              "title": "Bounded buffer (producer-consumer): _emptySem and _fullSem pattern",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p460-470",
+                "Lab4.pdf:p6-9"
+              ]
+            },
+            {
+              "id": "sub-10-3-3",
+              "title": "Read-write locks: multiple concurrent readers, exclusive writer",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p470-480"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "topic-10-4",
+          "title": "Deadlock & Condition Variables",
+          "subtopics": [
+            {
+              "id": "sub-10-4-1",
+              "title": "Deadlock: 4 conditions (mutual exclusion, hold-and-wait, no preemption, circular wait), detection as cycle in resource graph",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p480-490",
+                "Lab4.pdf:p7-9"
+              ]
+            },
+            {
+              "id": "sub-10-4-2",
+              "title": "Deadlock prevention: resource ordering, lock hierarchy",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p485-495"
+              ]
+            },
+            {
+              "id": "sub-10-4-3",
+              "title": "Condition variables: pthread_cond_wait/signal/broadcast, spurious wakeups, use with mutex",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p500-515"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "topic-10-5",
+          "title": "Buffer Overflow & Security (Thread Lab Context)",
+          "subtopics": [
+            {
+              "id": "sub-10-5-1",
+              "title": "Stack-based buffer overflow: overwriting return address, little-endian encoding",
+              "sources": [
+                "CS252-Lab4-Threads.pdf:p6-8",
+                "Lab4.pdf:p9-11"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unit-11",
+      "title": "Networking & Socket Programming",
+      "topics": [
+        {
+          "id": "topic-11-1",
+          "title": "Internet & TCP/IP Fundamentals",
+          "subtopics": [
+            {
+              "id": "sub-11-1-1",
+              "title": "IP addressing: IPv4 dotted notation, public vs private addresses, packet routing",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p525-540"
+              ]
+            },
+            {
+              "id": "sub-11-1-2",
+              "title": "TCP: reliability, flow control, connection-oriented (3-way handshake), vs UDP",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p550-560"
+              ]
+            },
+            {
+              "id": "sub-11-1-3",
+              "title": "NAT: port mapping, how private hosts reach the internet",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p560-575"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "topic-11-2",
+          "title": "Socket API",
+          "subtopics": [
+            {
+              "id": "sub-11-2-1",
+              "title": "Server socket lifecycle: socket() \u2192 bind() \u2192 listen() \u2192 accept() \u2192 read/write \u2192 close()",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p575-600",
+                "Lab5-HTTP.pdf:p1-7",
+                "lab5-slides.pdf:p1-10"
+              ]
+            },
+            {
+              "id": "sub-11-2-2",
+              "title": "Client socket lifecycle: socket() \u2192 connect() \u2192 read/write \u2192 close()",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p580-590"
+              ]
+            },
+            {
+              "id": "sub-11-2-3",
+              "title": "Iterative vs concurrent server designs: thread-per-request, thread pool",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p595-605",
+                "Lab5-HTTP.pdf:p10-13",
+                "lab5-slides.pdf:p18-23"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "topic-11-3",
+          "title": "HTTP Protocol & Web Server",
+          "subtopics": [
+            {
+              "id": "sub-11-3-1",
+              "title": "HTTP GET request format: request line, headers, blank line; response: status line + headers + body",
+              "sources": [
+                "Lab5-HTTP-Part1.pdf:p1-8",
+                "lab5-slides.pdf:p1-10"
+              ]
+            },
+            {
+              "id": "sub-11-3-2",
+              "title": "HTTP status codes: 200 OK, 301/302 redirect, 404 Not Found, 401 Unauthorized",
+              "sources": [
+                "Lab5-HTTP-Part1.pdf:p4-10"
+              ]
+            },
+            {
+              "id": "sub-11-3-3",
+              "title": "HTTP Basic Auth: Base64 encoding, WWW-Authenticate / Authorization headers (RFC 7617)",
+              "sources": [
+                "Lab5-HTTP-Part1.pdf:p10-18"
+              ]
+            },
+            {
+              "id": "sub-11-3-4",
+              "title": "Persistent connections and keep-alive; content-type detection by file extension",
+              "sources": [
+                "Lab5-HTTP-Part1.pdf:p8-12",
+                "lab5-slides.pdf:p12-18"
+              ]
+            },
+            {
+              "id": "sub-11-3-5",
+              "title": "CGI-BIN: fork/exec with QUERY_STRING and REQUEST_METHOD env vars, capturing stdout",
+              "sources": [
+                "Lab5-HTTP-Part2.pdf:p1-6"
+              ]
+            },
+            {
+              "id": "sub-11-3-6",
+              "title": "Directory traversal security: path normalization, preventing ../../ escapes",
+              "sources": [
+                "Lab5-HTTP-Part1.pdf:p14-18",
+                "lab5-slides.pdf:p10-15"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CS252 Quiz</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f4f5f7;
+    color: #1a1a2e;
+    min-height: 100vh;
+    padding: 24px 16px;
+  }
+
+  #app { max-width: 720px; margin: 0 auto; }
+
+  /* ── Header ── */
+  header {
+    display: flex; justify-content: space-between;
+    align-items: center; margin-bottom: 16px; gap: 12px;
+  }
+  h1 { font-size: 1.3rem; font-weight: 700; white-space: nowrap; }
+  #header-right { display: flex; align-items: center; gap: 14px; }
+  #score-display { font-size: 0.9rem; color: #555; font-weight: 600; }
+  #back-btn {
+    font-size: 0.82rem; color: #4a6cf7; background: none;
+    border: 1px solid #4a6cf7; border-radius: 6px;
+    padding: 4px 10px; cursor: pointer; white-space: nowrap; display: none;
+  }
+  #back-btn:hover { background: #f0f3ff; }
+
+  /* ── Tabs ── */
+  .tabs {
+    display: flex; gap: 4px; margin-bottom: 18px;
+    background: #e2e4e9; border-radius: 10px; padding: 4px;
+  }
+  .tab {
+    flex: 1; padding: 9px 12px; border: none; border-radius: 7px;
+    font-size: 0.9rem; font-weight: 600; cursor: pointer;
+    background: transparent; color: #666; transition: all 0.15s;
+    position: relative;
+  }
+  .tab.active { background: #fff; color: #4a6cf7; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+  .tab .dot {
+    display: inline-block; width: 7px; height: 7px;
+    background: #dc3545; border-radius: 50%;
+    margin-left: 6px; vertical-align: middle;
+  }
+
+  /* ── Progress bar ── */
+  #progress-bar {
+    width: 100%; height: 4px; background: #e2e4e9;
+    border-radius: 2px; margin-bottom: 18px; overflow: hidden;
+  }
+  #progress-fill { height: 100%; background: #4a6cf7; border-radius: 2px; transition: width 0.3s; }
+
+  #loading { text-align: center; padding: 60px; color: #888; font-size: 1rem; }
+
+  /* ─────────────────────────────────────────
+     FILTER SCREEN
+  ───────────────────────────────────────── */
+  #filter-screen { display: none; }
+
+  .filter-title {
+    font-size: 0.78rem; font-weight: 700; color: #555;
+    margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+
+  #all-btn {
+    display: flex; justify-content: space-between; align-items: center;
+    width: 100%; padding: 16px 20px; background: #4a6cf7; color: #fff;
+    border: none; border-radius: 10px; font-size: 1rem; font-weight: 600;
+    cursor: pointer; margin-bottom: 20px; transition: background 0.15s;
+  }
+  #all-btn:hover { background: #3a5ce5; }
+  #all-btn .q-count { font-size: 0.85rem; font-weight: 400; opacity: 0.85; }
+
+  .unit-item {
+    background: #fff; border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    margin-bottom: 10px; overflow: hidden;
+  }
+  .unit-header {
+    display: flex; align-items: center;
+    padding: 13px 16px; gap: 10px; cursor: pointer; user-select: none;
+  }
+  .unit-header:hover { background: #f8f9ff; }
+  .unit-toggle { font-size: 0.7rem; color: #aaa; transition: transform 0.2s; flex-shrink: 0; }
+  .unit-toggle.open { transform: rotate(90deg); }
+  .unit-name  { flex: 1; font-weight: 600; font-size: 0.95rem; }
+  .unit-count { font-size: 0.8rem; color: #888; white-space: nowrap; margin-right: 4px; }
+
+  .start-btn {
+    padding: 5px 12px; background: #4a6cf7; color: #fff;
+    border: none; border-radius: 6px; font-size: 0.8rem; font-weight: 600;
+    cursor: pointer; white-space: nowrap; flex-shrink: 0;
+  }
+  .start-btn:hover { background: #3a5ce5; }
+  .start-btn.sm { font-size: 0.75rem; padding: 4px 9px; }
+
+  .unit-subs { border-top: 1px solid #f0f0f0; }
+  .sub-item {
+    display: flex; align-items: center;
+    padding: 10px 16px 10px 36px; gap: 10px; border-bottom: 1px solid #f7f7f7;
+  }
+  .sub-item:last-child { border-bottom: none; }
+  .sub-item:hover { background: #fafbff; }
+  .sub-name  { flex: 1; font-size: 0.85rem; color: #444; line-height: 1.4; }
+  .sub-count { font-size: 0.78rem; color: #aaa; white-space: nowrap; margin-right: 4px; }
+
+  /* ─────────────────────────────────────────
+     QUIZ CARD
+  ───────────────────────────────────────── */
+  #card {
+    display: none; background: #fff; border-radius: 12px;
+    padding: 28px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  #meta {
+    display: flex; justify-content: space-between;
+    font-size: 0.78rem; color: #888; margin-bottom: 16px;
+  }
+  #question { font-size: 1.05rem; line-height: 1.6; margin-bottom: 22px; }
+  #question pre, #explanation pre {
+    background: #f0f0f0; border-radius: 6px; padding: 12px; margin: 10px 0;
+    overflow-x: auto; font-size: 0.88rem; line-height: 1.5;
+  }
+  #question code, #explanation code {
+    background: #f0f0f0; padding: 2px 5px; border-radius: 4px;
+    font-size: 0.9em; font-family: "SFMono-Regular", Consolas, monospace;
+  }
+  #question pre code, #explanation pre code { background: none; padding: 0; }
+
+  #options { display: flex; flex-direction: column; gap: 10px; }
+  .opt {
+    background: #f8f9fa; border: 2px solid #e2e4e9; border-radius: 8px;
+    padding: 12px 16px; text-align: left; font-size: 0.95rem;
+    cursor: pointer; transition: border-color 0.15s, background 0.15s; line-height: 1.5;
+  }
+  .opt:hover:not(:disabled) { border-color: #4a6cf7; background: #f0f3ff; }
+  .opt.correct { background: #d4edda; border-color: #28a745; color: #155724; }
+  .opt.wrong   { background: #f8d7da; border-color: #dc3545; color: #721c24; }
+  .opt:disabled { cursor: default; }
+
+  #explanation {
+    display: none; margin-top: 18px; background: #fffbea;
+    border-left: 4px solid #f0ad4e; padding: 14px 16px;
+    border-radius: 0 8px 8px 0; font-size: 0.92rem; line-height: 1.6; color: #333;
+  }
+  #explanation pre { background: #f0ede0; }
+
+  #next-btn {
+    display: none; margin-top: 18px; width: 100%; padding: 13px;
+    background: #4a6cf7; color: #fff; border: none; border-radius: 8px;
+    font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.15s;
+  }
+  #next-btn:hover { background: #3a5ce5; }
+
+  /* ─────────────────────────────────────────
+     DONE SCREEN
+  ───────────────────────────────────────── */
+  #done {
+    display: none; background: #fff; border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden;
+  }
+  .done-hero {
+    text-align: center; padding: 36px 24px 28px; border-bottom: 1px solid #f0f0f0;
+  }
+  .done-hero h2   { font-size: 1.5rem; margin-bottom: 8px; }
+  .done-pct       { font-size: 2.4rem; font-weight: 700; color: #4a6cf7; margin-bottom: 4px; }
+  .done-pct.great { color: #28a745; }
+  .done-pct.ok    { color: #f0ad4e; }
+  .done-pct.poor  { color: #dc3545; }
+  .done-detail    { font-size: 0.95rem; color: #666; margin-bottom: 20px; }
+  .done-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .done-btns button {
+    padding: 10px 22px; border: none; border-radius: 8px;
+    font-size: 0.9rem; font-weight: 600; cursor: pointer;
+  }
+  .btn-primary   { background: #4a6cf7; color: #fff; }
+  .btn-secondary { background: #e8ebff; color: #4a6cf7; }
+  .done-btns button:hover { opacity: 0.88; }
+
+  #session-summary { padding: 24px; }
+  .summary-section-header {
+    font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.06em; color: #555; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .summary-section-header .badge {
+    background: #fde8e8; color: #c0392b; border-radius: 20px;
+    padding: 2px 9px; font-size: 0.75rem; font-weight: 600;
+  }
+  .no-wrong { text-align: center; padding: 20px; color: #28a745; font-weight: 600; font-size: 0.95rem; }
+
+  /* ─────────────────────────────────────────
+     WEAK AREAS PANE (persistent tab)
+  ───────────────────────────────────────── */
+  #weak-pane { display: none; }
+
+  .weak-toolbar {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 18px;
+  }
+  .weak-toolbar .weak-subtitle { font-size: 0.85rem; color: #666; }
+  #clear-btn {
+    font-size: 0.78rem; color: #888; background: none;
+    border: 1px solid #ddd; border-radius: 6px; padding: 4px 10px; cursor: pointer;
+  }
+  #clear-btn:hover { border-color: #dc3545; color: #dc3545; }
+
+  .weak-empty {
+    background: #fff; border-radius: 12px; padding: 48px 24px;
+    text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  }
+  .weak-empty .empty-icon { font-size: 2.2rem; margin-bottom: 12px; }
+  .weak-empty p { color: #666; font-size: 0.95rem; line-height: 1.6; }
+
+  /* Shared summary row styles (used in both done screen and weak pane) */
+  .summary-unit { margin-bottom: 16px; }
+  .summary-unit-card {
+    background: #fff; border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07); overflow: hidden;
+  }
+  .summary-unit-title {
+    font-size: 0.82rem; font-weight: 700; color: #333; padding: 10px 16px;
+    background: #f8f9fa; border-bottom: 1px solid #eee;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .unit-agg {
+    font-size: 0.75rem; font-weight: 400; color: #888;
+  }
+  .summary-row {
+    display: flex; align-items: center; padding: 10px 16px; gap: 10px;
+    border-bottom: 1px solid #f5f5f5;
+  }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-sub-name { flex: 1; font-size: 0.85rem; color: #333; line-height: 1.4; }
+  .summary-bar-wrap {
+    width: 60px; height: 6px; background: #eee; border-radius: 3px; overflow: hidden; flex-shrink: 0;
+  }
+  .summary-bar { height: 100%; border-radius: 3px; }
+  .summary-stat {
+    font-size: 0.78rem; font-weight: 600; white-space: nowrap;
+    padding: 3px 8px; border-radius: 10px; flex-shrink: 0;
+  }
+  .stat-high { background: #fde8e8; color: #c0392b; }
+  .stat-mid  { background: #fef3cd; color: #856404; }
+  .stat-low  { background: #d4edda; color: #155724; }
+  .practice-btn {
+    font-size: 0.75rem; padding: 3px 9px; background: #e8ebff;
+    color: #4a6cf7; border: none; border-radius: 6px;
+    cursor: pointer; font-weight: 600; flex-shrink: 0;
+  }
+  .practice-btn:hover { background: #4a6cf7; color: #fff; }
+
+  /* ── Dancing guy ── */
+  #dancer {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 5rem; pointer-events: none;
+    z-index: 9999; display: none;
+  }
+  @keyframes dance {
+    0%   { transform: translate(-50%, -50%) scale(0)    rotate(0deg);   opacity: 0; }
+    10%  { transform: translate(-50%, -50%) scale(1.4)  rotate(-25deg); opacity: 1; }
+    22%  { transform: translate(-50%, -50%) scale(1.0)  rotate(25deg);  opacity: 1; }
+    34%  { transform: translate(-50%, -50%) scale(1.15) rotate(-18deg); opacity: 1; }
+    46%  { transform: translate(-50%, -50%) scale(0.95) rotate(18deg);  opacity: 1; }
+    58%  { transform: translate(-50%, -50%) scale(1.08) rotate(-12deg); opacity: 1; }
+    70%  { transform: translate(-50%, -50%) scale(1.0)  rotate(12deg);  opacity: 1; }
+    82%  { transform: translate(-50%, -50%) scale(1.0)  rotate(-6deg);  opacity: 1; }
+    91%  { transform: translate(-50%, -50%) scale(1.0)  rotate(0deg);   opacity: 0.6; }
+    100% { transform: translate(-50%, -50%) scale(0.3)  rotate(0deg);   opacity: 0; }
+  }
+</style>
+</head>
+<body>
+<div id="dancer">🕺</div>
+<div id="app">
+
+  <header>
+    <h1>CS252 Quiz</h1>
+    <div id="header-right">
+      <button id="back-btn" onclick="goBack()">&#8592; Filter</button>
+      <span id="score-display"></span>
+    </div>
+  </header>
+
+  <!-- ── Tab bar ── -->
+  <div class="tabs">
+    <button class="tab active" id="tab-quiz"  onclick="switchTab('quiz')">Practice</button>
+    <button class="tab"        id="tab-weak"  onclick="switchTab('weak')">
+      Weak Areas <span class="dot" id="weak-dot" style="display:none"></span>
+    </button>
+  </div>
+
+  <div id="progress-bar"><div id="progress-fill" style="width:0%"></div></div>
+
+  <!-- ══════════ QUIZ PANE ══════════ -->
+  <div id="quiz-pane">
+
+    <div id="loading">Loading questions…</div>
+
+    <!-- Filter screen -->
+    <div id="filter-screen">
+      <p class="filter-title">Select a question set</p>
+      <button id="all-btn" onclick="startQuiz(null)">
+        <span>All Questions</span>
+        <span class="q-count" id="all-count"></span>
+      </button>
+      <p class="filter-title">By Unit</p>
+      <div id="unit-list"></div>
+    </div>
+
+    <!-- Quiz card -->
+    <div id="card">
+      <div id="meta">
+        <span id="q-number"></span>
+        <span id="q-tag"></span>
+      </div>
+      <div id="question"></div>
+      <div id="options"></div>
+      <div id="explanation"></div>
+      <button id="next-btn" onclick="nextQuestion()">Next &#8594;</button>
+    </div>
+
+    <!-- Done screen -->
+    <div id="done">
+      <div class="done-hero">
+        <h2>Complete!</h2>
+        <div class="done-pct" id="done-pct"></div>
+        <p class="done-detail" id="done-detail"></p>
+        <div class="done-btns">
+          <button class="btn-primary"   onclick="retryFilter()">Retry Same Set</button>
+          <button class="btn-secondary" onclick="goBack()">Change Filter</button>
+        </div>
+      </div>
+      <div id="session-summary"></div>
+    </div>
+
+  </div><!-- end quiz-pane -->
+
+  <!-- ══════════ WEAK AREAS PANE ══════════ -->
+  <div id="weak-pane">
+    <div class="weak-toolbar">
+      <span class="weak-subtitle" id="weak-subtitle"></span>
+      <button id="clear-btn" onclick="clearStats()">Clear History</button>
+    </div>
+    <div id="weak-content"></div>
+  </div>
+
+</div><!-- end app -->
+
+<script>
+  /* ═══════════════════════════════════════════
+     STATE
+  ═══════════════════════════════════════════ */
+  let allQuestions = [];
+  let topicsData   = {};
+  let subtopicMap  = {};   // subtopic_id -> { unitId, unitTitle, subTitle }
+  let questions    = [];
+  let idx = 0, correct = 0;
+  let answered     = false;
+  let activeFilter = null;
+  let activeTab    = 'quiz';
+
+  // Per-session tracking (resets each quiz)
+  let seenBySubtopic  = {};
+  let wrongBySubtopic = {};
+
+  // Persistent stats (localStorage)
+  let globalStats = {};  // { [subtopic_id]: { wrong, seen } }
+
+  /* ═══════════════════════════════════════════
+     INIT
+  ═══════════════════════════════════════════ */
+  async function init() {
+    loadStats();
+    try {
+      const [qs, ts] = await Promise.all([
+        fetch('questions.json').then(r => r.json()),
+        fetch('topics.json').then(r => r.json()),
+      ]);
+      allQuestions = qs;
+      topicsData   = ts;
+      buildSubtopicMap();
+
+      document.getElementById('loading').style.display = 'none';
+      buildFilterUI();
+      show('filter-screen');
+      updateWeakDot();
+    } catch(e) {
+      document.getElementById('loading').textContent =
+        'Error loading data. Run: python3 -m http.server 8252';
+    }
+  }
+
+  function buildSubtopicMap() {
+    for (const unit of topicsData.units)
+      for (const topic of unit.topics)
+        for (const sub of topic.subtopics)
+          subtopicMap[sub.id] = { unitId: unit.id, unitTitle: unit.title, subTitle: sub.title };
+  }
+
+  /* ═══════════════════════════════════════════
+     TABS
+  ═══════════════════════════════════════════ */
+  function switchTab(tab) {
+    activeTab = tab;
+    document.getElementById('tab-quiz').classList.toggle('active', tab === 'quiz');
+    document.getElementById('tab-weak').classList.toggle('active', tab === 'weak');
+
+    if (tab === 'quiz') {
+      show('quiz-pane');
+      hide('weak-pane');
+      // restore progress bar & score if mid-quiz
+      const quizActive = document.getElementById('card').style.display !== 'none';
+      document.getElementById('progress-bar').style.opacity = '1';
+      if (!quizActive) {
+        document.getElementById('score-display').textContent = '';
+        document.getElementById('back-btn').style.display = 'none';
+      }
+    } else {
+      hide('quiz-pane');
+      show('weak-pane');
+      document.getElementById('progress-bar').style.opacity = '0';
+      document.getElementById('score-display').textContent = '';
+      buildWeakPane();
+    }
+  }
+
+  /* ═══════════════════════════════════════════
+     FILTER UI
+  ═══════════════════════════════════════════ */
+  function buildFilterUI() {
+    const qCount = {};
+    for (const q of allQuestions) qCount[q.subtopic_id] = (qCount[q.subtopic_id] || 0) + 1;
+    document.getElementById('all-count').textContent = `${allQuestions.length} questions`;
+
+    const list = document.getElementById('unit-list');
+    list.innerHTML = '';
+
+    for (const unit of topicsData.units) {
+      const allSubs   = unit.topics.flatMap(t => t.subtopics);
+      const unitTotal = allSubs.reduce((s, sub) => s + (qCount[sub.id] || 0), 0);
+      if (!unitTotal) continue;
+
+      const item = document.createElement('div');
+      item.className = 'unit-item';
+
+      const hdr = document.createElement('div');
+      hdr.className = 'unit-header';
+      hdr.innerHTML = `
+        <span class="unit-toggle" id="toggle-${unit.id}">&#9658;</span>
+        <span class="unit-name">${unit.title}</span>
+        <span class="unit-count">${unitTotal} q</span>
+        <button class="start-btn" onclick="event.stopPropagation();
+          startQuiz({type:'unit',id:'${unit.id}',label:'${escAttr(unit.title)}',total:${unitTotal}})">Start</button>
+      `;
+      hdr.addEventListener('click', () => toggleUnit(unit.id));
+
+      const subsDiv = document.createElement('div');
+      subsDiv.className = 'unit-subs';
+      subsDiv.id = 'subs-' + unit.id;
+      subsDiv.style.display = 'none';
+
+      for (const topic of unit.topics) {
+        for (const sub of topic.subtopics) {
+          const cnt = qCount[sub.id] || 0;
+          if (!cnt) continue;
+          const row = document.createElement('div');
+          row.className = 'sub-item';
+          row.innerHTML = `
+            <span class="sub-name">${sub.title}</span>
+            <span class="sub-count">${cnt} q</span>
+            <button class="start-btn sm" onclick="startQuiz({type:'sub',id:'${sub.id}',
+              label:'${escAttr(sub.title)}',total:${cnt}})">Start</button>
+          `;
+          subsDiv.appendChild(row);
+        }
+      }
+
+      item.appendChild(hdr);
+      item.appendChild(subsDiv);
+      list.appendChild(item);
+    }
+  }
+
+  function toggleUnit(unitId) {
+    const subs   = document.getElementById('subs-' + unitId);
+    const toggle = document.getElementById('toggle-' + unitId);
+    const open   = subs.style.display === 'none';
+    subs.style.display = open ? 'block' : 'none';
+    toggle.classList.toggle('open', open);
+  }
+
+  /* ═══════════════════════════════════════════
+     QUIZ
+  ═══════════════════════════════════════════ */
+  function startQuiz(filter) {
+    if (!filter) filter = { type:'all', id:null, label:'All Questions', total:allQuestions.length };
+    activeFilter = filter;
+
+    if (filter.type === 'all') {
+      questions = [...allQuestions];
+    } else if (filter.type === 'unit') {
+      const unit   = topicsData.units.find(u => u.id === filter.id);
+      const subIds = new Set(unit.topics.flatMap(t => t.subtopics.map(s => s.id)));
+      questions = allQuestions.filter(q => subIds.has(q.subtopic_id));
+    } else {
+      questions = allQuestions.filter(q => q.subtopic_id === filter.id);
+    }
+
+    shuffle(questions);
+    idx = 0; correct = 0; answered = false;
+    seenBySubtopic  = {};
+    wrongBySubtopic = {};
+
+    // Make sure we're on the quiz tab
+    if (activeTab !== 'quiz') switchTab('quiz');
+
+    hide('filter-screen');
+    hide('done');
+    document.getElementById('back-btn').style.display = 'inline-block';
+    document.getElementById('progress-bar').style.opacity = '1';
+    document.getElementById('progress-fill').style.width = '0%';
+    updateScore();
+    show('card');
+    showQuestion();
+  }
+
+  function retryFilter() { startQuiz(activeFilter); }
+
+  function goBack() {
+    hide('card');
+    hide('done');
+    document.getElementById('back-btn').style.display = 'none';
+    document.getElementById('score-display').textContent = '';
+    document.getElementById('progress-fill').style.width = '0%';
+    show('filter-screen');
+  }
+
+  function showQuestion() {
+    answered = false;
+    const q = questions[idx];
+
+    document.getElementById('q-number').textContent = `Question ${idx + 1} / ${questions.length}`;
+    document.getElementById('q-tag').textContent    = `${q.subtopic_id} · ${q.difficulty}`;
+    document.getElementById('question').innerHTML   = parseText(q.question);
+
+    const opts = document.getElementById('options');
+    opts.innerHTML = '';
+    ['A','B','C','D'].forEach((lbl, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.innerHTML = `<strong>${lbl}.</strong> ${parseText(q.options[i])}`;
+      btn.onclick   = () => pick(i);
+      opts.appendChild(btn);
+    });
+
+    document.getElementById('explanation').style.display = 'none';
+    document.getElementById('next-btn').style.display    = 'none';
+    document.getElementById('progress-fill').style.width =
+      (idx / questions.length * 100).toFixed(1) + '%';
+    updateScore();
+  }
+
+  function pick(i) {
+    if (answered) return;
+    answered = true;
+
+    const q   = questions[idx];
+    const sid = q.subtopic_id;
+    seenBySubtopic[sid]  = (seenBySubtopic[sid]  || 0) + 1;
+
+    document.querySelectorAll('.opt').forEach((b, j) => {
+      b.disabled = true;
+      if (j === q.answer_index)                 b.classList.add('correct');
+      else if (j === i && i !== q.answer_index) b.classList.add('wrong');
+    });
+
+    const isCorrect = (i === q.answer_index);
+    if (isCorrect) {
+      correct++;
+      triggerDancer();
+    } else {
+      wrongBySubtopic[sid] = (wrongBySubtopic[sid] || 0) + 1;
+    }
+
+    // Update persistent stats
+    recordAnswer(sid, isCorrect);
+    updateWeakDot();
+
+    updateScore();
+    const expEl = document.getElementById('explanation');
+    expEl.innerHTML    = parseText(q.explanation);
+    expEl.style.display = 'block';
+    document.getElementById('next-btn').style.display = 'block';
+    document.getElementById('next-btn').focus();
+  }
+
+  function nextQuestion() {
+    idx++;
+    if (idx >= questions.length) { showDone(); return; }
+    showQuestion();
+  }
+
+  function updateScore() {
+    const total = answered ? idx + 1 : idx;
+    document.getElementById('score-display').textContent =
+      total > 0 ? `${correct} / ${total}` : '';
+  }
+
+  /* ═══════════════════════════════════════════
+     DONE + SESSION SUMMARY
+  ═══════════════════════════════════════════ */
+  function showDone() {
+    hide('card');
+    document.getElementById('progress-fill').style.width = '100%';
+
+    const pct   = Math.round(correct / questions.length * 100);
+    const pctEl = document.getElementById('done-pct');
+    pctEl.textContent = pct + '%';
+    pctEl.className   = 'done-pct ' + (pct >= 80 ? 'great' : pct >= 60 ? 'ok' : 'poor');
+    document.getElementById('done-detail').textContent =
+      `${correct} of ${questions.length} correct — ${activeFilter.label}`;
+
+    buildSummaryRows(document.getElementById('session-summary'), wrongBySubtopic, seenBySubtopic, true);
+    show('done');
+  }
+
+  /* shared renderer for both done screen and weak pane */
+  function buildSummaryRows(container, wrongMap, seenMap, showSessionHeader) {
+    container.innerHTML = '';
+
+    const wrongSubs = Object.keys(wrongMap).filter(s => wrongMap[s] > 0);
+    if (wrongSubs.length === 0) {
+      if (showSessionHeader) container.innerHTML = '<p class="no-wrong">🎉 Perfect — nothing to review!</p>';
+      return;
+    }
+
+    // Group by unit, sort worst first
+    const byUnit = {};
+    for (const sid of wrongSubs) {
+      const wrong = wrongMap[sid];
+      const seen  = seenMap[sid] || wrong;
+      const ratio = wrong / seen;
+      const info  = subtopicMap[sid] || { unitId:'?', unitTitle:'Unknown', subTitle: sid };
+      if (!byUnit[info.unitId]) byUnit[info.unitId] = { title: info.unitTitle, subs: [] };
+      byUnit[info.unitId].subs.push({ sid, subTitle: info.subTitle, wrong, seen, ratio });
+    }
+    for (const uid of Object.keys(byUnit))
+      byUnit[uid].subs.sort((a, b) => b.ratio - a.ratio);
+    const unitOrder = Object.keys(byUnit).sort((a, b) =>
+      byUnit[b].subs[0].ratio - byUnit[a].subs[0].ratio);
+
+    if (showSessionHeader) {
+      const totalWrong = Object.values(wrongMap).reduce((s, n) => s + n, 0);
+      const hdr = document.createElement('div');
+      hdr.style.padding = '20px 24px 0';
+      hdr.innerHTML = `
+        <div class="summary-section-header">
+          Study These Areas
+          <span class="badge">${totalWrong} wrong answer${totalWrong !== 1 ? 's' : ''}</span>
+        </div>`;
+      container.appendChild(hdr);
+    }
+
+    const inner = document.createElement('div');
+    inner.style.padding = showSessionHeader ? '12px 24px 24px' : '0';
+
+    for (const uid of unitOrder) {
+      const { title, subs } = byUnit[uid];
+      const unitWrong = subs.reduce((s, r) => s + r.wrong, 0);
+      const unitSeen  = subs.reduce((s, r) => s + r.seen,  0);
+
+      const unitDiv = document.createElement('div');
+      unitDiv.className = 'summary-unit';
+
+      const card = document.createElement('div');
+      card.className = 'summary-unit-card';
+
+      const utitle = document.createElement('div');
+      utitle.className = 'summary-unit-title';
+      utitle.innerHTML = `<span>${title}</span><span class="unit-agg">${unitWrong}/${unitSeen} wrong</span>`;
+      card.appendChild(utitle);
+
+      for (const { sid, subTitle, wrong, seen, ratio } of subs) {
+        const statClass = ratio >= 0.6 ? 'stat-high' : ratio >= 0.3 ? 'stat-mid' : 'stat-low';
+        const barColor  = ratio >= 0.6 ? '#dc3545'   : ratio >= 0.3 ? '#f0ad4e'  : '#28a745';
+
+        const row = document.createElement('div');
+        row.className = 'summary-row';
+        row.innerHTML = `
+          <span class="summary-sub-name">${subTitle}</span>
+          <div class="summary-bar-wrap">
+            <div class="summary-bar" style="width:${Math.round(ratio*100)}%;background:${barColor}"></div>
+          </div>
+          <span class="summary-stat ${statClass}">${wrong}/${seen}</span>
+          <button class="practice-btn" onclick="startQuiz({type:'sub',id:'${sid}',
+            label:'${escAttr(subTitle)}',total:999})">Practice</button>
+        `;
+        card.appendChild(row);
+      }
+
+      unitDiv.appendChild(card);
+      inner.appendChild(unitDiv);
+    }
+
+    container.appendChild(inner);
+  }
+
+  /* ═══════════════════════════════════════════
+     WEAK AREAS PANE (persistent)
+  ═══════════════════════════════════════════ */
+  function buildWeakPane() {
+    const seenSubs  = Object.keys(globalStats).filter(s => globalStats[s].seen > 0);
+    const wrongSubs = seenSubs.filter(s => globalStats[s].wrong > 0);
+    const totalSeen = seenSubs.reduce((n, s) => n + globalStats[s].seen, 0);
+
+    document.getElementById('weak-subtitle').textContent =
+      totalSeen > 0
+        ? `${totalSeen} questions answered across ${seenSubs.length} subtopic${seenSubs.length !== 1 ? 's' : ''}`
+        : '';
+
+    const content = document.getElementById('weak-content');
+
+    if (seenSubs.length === 0) {
+      content.innerHTML = `
+        <div class="weak-empty">
+          <div class="empty-icon">📊</div>
+          <p>No history yet.<br>Answer some questions and your weak areas will show up here.</p>
+        </div>`;
+      return;
+    }
+
+    if (wrongSubs.length === 0) {
+      content.innerHTML = `
+        <div class="weak-empty">
+          <div class="empty-icon">🎉</div>
+          <p>No wrong answers recorded yet — keep it up!</p>
+        </div>`;
+      return;
+    }
+
+    // Build wrongMap and seenMap from globalStats
+    const wrongMap = {}, seenMap = {};
+    for (const sid of wrongSubs) {
+      wrongMap[sid] = globalStats[sid].wrong;
+      seenMap[sid]  = globalStats[sid].seen;
+    }
+
+    buildSummaryRows(content, wrongMap, seenMap, false);
+  }
+
+  function updateWeakDot() {
+    const hasWrong = Object.values(globalStats).some(s => s.wrong > 0);
+    document.getElementById('weak-dot').style.display = hasWrong ? 'inline-block' : 'none';
+  }
+
+  /* ═══════════════════════════════════════════
+     PERSISTENT STATS
+  ═══════════════════════════════════════════ */
+  function loadStats() {
+    try { globalStats = JSON.parse(localStorage.getItem('cs252_stats') || '{}'); }
+    catch(e) { globalStats = {}; }
+  }
+
+  function saveStats() {
+    localStorage.setItem('cs252_stats', JSON.stringify(globalStats));
+  }
+
+  function recordAnswer(sid, isCorrect) {
+    if (!globalStats[sid]) globalStats[sid] = { wrong: 0, seen: 0 };
+    globalStats[sid].seen++;
+    if (!isCorrect) globalStats[sid].wrong++;
+    saveStats();
+  }
+
+  function clearStats() {
+    if (!confirm('Clear all history? This cannot be undone.')) return;
+    globalStats = {};
+    saveStats();
+    updateWeakDot();
+    buildWeakPane();
+  }
+
+  /* ═══════════════════════════════════════════
+     UTILITIES
+  ═══════════════════════════════════════════ */
+  function show(id) { document.getElementById(id).style.display = 'block'; }
+  function hide(id) { document.getElementById(id).style.display = 'none';  }
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+  }
+
+  function triggerDancer() {
+    const el = document.getElementById('dancer');
+    el.style.display = 'block';
+    el.style.animation = 'none';
+    el.offsetHeight; // force reflow to restart animation
+    el.style.animation = 'dance 1.5s ease-in-out forwards';
+    setTimeout(() => { el.style.display = 'none'; }, 1500);
+  }
+
+  function escAttr(s) { return s.replace(/'/g,"&#39;").replace(/"/g,'&quot;'); }
+
+  function parseText(raw) {
+    if (!raw) return '';
+    const esc = raw.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    return esc
+      .replace(/```[\w]*\n?([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+      .replace(/`([^`\n]+)`/g, '<code>$1</code>');
+  }
+
+  document.addEventListener('keydown', e => {
+    if (activeTab !== 'quiz') return;
+    if (document.getElementById('card').style.display === 'none') return;
+    if (['1','2','3','4'].includes(e.key)) pick(parseInt(e.key) - 1);
+    else if ((e.key === 'Enter' || e.key === ' ') && answered) {
+      e.preventDefault();
+      nextQuestion();
+    }
+  });
+
+  init();
+</script>
+</body>
+</html>
