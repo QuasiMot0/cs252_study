@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pdftotext \"/Users/anthonymollenkopf_/Desktop/CS252_Study_Things/252 _graded.pdf\" -)",
+      "Bash(pdftotext \"/Users/anthonymollenkopf_/Desktop/CS252_Study_Things/CS252 Lab 4_ Introduction to Threads.pdf\" -)",
+      "Bash(pdftotext \"/Users/anthonymollenkopf_/Desktop/CS252_Study_Things/CS252-LB01-Malloc-separate-free-alloc-hdr-multiple-free-lists-optimized.pdf\" -)",
+      "Bash(pdftotext \"/Users/anthonymollenkopf_/Desktop/CS252_Study_Things/HW1-Solutions.pdf\" -)",
+      "Bash(pdftotext \"/Users/anthonymollenkopf_/Desktop/CS252_Study_Things/LAB 2 - Shell Scripting - Password Checker, Backup, Process Info.pdf\" -)",
+      "Bash(pdftotext \"/Users/anthonymollenkopf_/Desktop/CS252_Study_Things/Lab 2 Quiz Example Question.pdf\" -)",
+      "Bash(pdftotext \"/Users/anthonymollenkopf_/Desktop/CS252_Study_Things/Lab 5 Building a HTTP Server Part 1.pdf\" -)",
+      "Bash(pdftotext \"/Users/anthonymollenkopf_/Desktop/CS252_Study_Things/Lab 5 Building a HTTP Server Part 2.pdf\" -)",
+      "Bash(pdftotext \"/Users/anthonymollenkopf_/Desktop/CS252_Study_Things/Lab 5_ Building a HTTP Server.pdf\" -)",
+      "Bash(pdftotext \"/Users/anthonymollenkopf_/Desktop/CS252_Study_Things/Lab1 Quiz Example Questions.pdf\" -)",
+      "Bash(pdftotext \"/Users/anthonymollenkopf_/Desktop/CS252_Study_Things/lab3_quiz.pdf\" -)",
+      "Bash(pdftotext \"/Users/anthonymollenkopf_/Desktop/CS252_Study_Things/Lab4.pdf\" -)",
+      "Bash(pdftotext \"/Users/anthonymollenkopf_/Desktop/CS252_Study_Things/lab5-slides.pdf\" -)",
+      "Bash(textutil -convert txt -stdout \"/Users/anthonymollenkopf_/Desktop/CS252_Study_Things/CS252 Midterm Exam Fall 2025 Solutions.docx\")",
+      "Bash(pdfinfo \"/Users/anthonymollenkopf_/Desktop/CS252_Study_Things/CS252-Slides-Sprin2026.pdf\")",
+      "Bash(pdftotext \"/Users/anthonymollenkopf_/Desktop/CS252_Study_Things/CS252-Slides-Sprin2026.pdf\" -)",
+      "Bash(grep -E \"^\\(Course Organization|Unit|Chapter|Part |Section|\\\\d+\\\\.|[A-Z][A-Z ]{5,}$\\)\")",
+      "Bash(awk 'NR>400 && NR<900')",
+      "Bash(awk 'NR>3000 && NR<3200')",
+      "Bash(grep -n \"^[A-Z][A-Za-z ]*$\\\\|^Chapter\\\\|^Part\\\\|^Section\\\\|^Unit\")",
+      "Bash(pdftotext -layout \"/Users/anthonymollenkopf_/Desktop/CS252_Study_Things/CS252-Slides-Sprin2026.pdf\" -)",
+      "Bash(grep -n \"^[[:space:]]*[0-9]\\\\+$\")",
+      "Bash(pdftotext -f 1 -l 20 \"/Users/anthonymollenkopf_/Desktop/CS252_Study_Things/CS252-Slides-Sprin2026.pdf\" -)",
+      "Bash(pdftotext -f 200 -l 220 \"/Users/anthonymollenkopf_/Desktop/CS252_Study_Things/CS252-Slides-Sprin2026.pdf\" -)",
+      "Bash(awk 'NR==3500,NR==3650 {print NR\": \"$0}')",
+      "Bash(awk 'NR>=1 && NR<=5000 {print NR\": \"$0}')",
+      "Read(//tmp/**)",
+      "Bash(pdftotext \"/Users/anthonymollenkopf_/Desktop/CS252_Study_Things/CS252-Slides-Sprin2026.pdf\" /tmp/slides.txt)",
+      "Bash(pdftotext -f 160 -l 175 \"/Users/anthonymollenkopf_/Desktop/CS252_Study_Things/CS252-Slides-Sprin2026.pdf\" -)",
+      "Bash(pdftotext -f 145 -l 160 \"/Users/anthonymollenkopf_/Desktop/CS252_Study_Things/CS252-Slides-Sprin2026.pdf\" -)",
+      "Bash(grep -n \"^CS252:\\\\|^[0-9]\\\\+\\\\.\\\\s\\\\|^[A-Z][A-Z][A-Z ]*$\")"
+    ]
+  }
+}

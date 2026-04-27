@@ -256,6 +256,58 @@
   }
   .practice-btn:hover { background: #4a6cf7; color: #fff; }
 
+  /* ── Report button ── */
+  #report-btn {
+    font-size: 0.72rem; color: #bbb; background: none;
+    border: 1px solid #e0e0e0; border-radius: 5px;
+    padding: 2px 8px; cursor: pointer; transition: all 0.15s;
+  }
+  #report-btn:hover { color: #dc3545; border-color: #dc3545; }
+
+  /* ── Report modal ── */
+  #report-modal {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45); z-index: 1000;
+    align-items: center; justify-content: center;
+  }
+  #report-modal.open { display: flex; }
+  #report-box {
+    background: #fff; border-radius: 12px; padding: 26px;
+    width: min(500px, 92vw); max-height: 85vh; overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  }
+  #report-box h3 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+  #report-q-label {
+    font-size: 0.78rem; color: #888; margin-bottom: 16px;
+    padding-bottom: 12px; border-bottom: 1px solid #f0f0f0;
+  }
+  .report-reasons { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+  .report-reasons label {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 0.9rem; cursor: pointer; padding: 10px 12px;
+    border: 2px solid #e2e4e9; border-radius: 8px; transition: all 0.12s;
+  }
+  .report-reasons label:hover { border-color: #4a6cf7; background: #f0f3ff; }
+  .report-reasons input[type=radio] { margin-top: 2px; flex-shrink: 0; accent-color: #4a6cf7; }
+  .report-reasons label.selected { border-color: #4a6cf7; background: #f0f3ff; }
+  #report-desc {
+    width: 100%; border: 2px solid #e2e4e9; border-radius: 8px;
+    padding: 10px 12px; font-size: 0.88rem; font-family: inherit;
+    resize: vertical; min-height: 80px; margin-bottom: 16px;
+    transition: border-color 0.15s;
+  }
+  #report-desc:focus { outline: none; border-color: #4a6cf7; }
+  #report-desc::placeholder { color: #bbb; }
+  #report-modal-btns { display: flex; gap: 10px; }
+  #report-modal-btns button {
+    flex: 1; padding: 10px; border: none; border-radius: 8px;
+    font-size: 0.88rem; font-weight: 600; cursor: pointer;
+  }
+  #report-submit-btn { background: #4a6cf7; color: #fff; }
+  #report-submit-btn:hover { background: #3a5ce5; }
+  #report-cancel-btn { background: #f0f0f0; color: #555; }
+  #report-cancel-btn:hover { background: #e0e0e0; }
+
   /* ── Dancing guy ── */
   #dancer {
     position: fixed; top: 50%; left: 50%;
@@ -279,6 +331,25 @@
 </head>
 <body>
 <div id="dancer">🕺</div>
+
+<!-- Report modal -->
+<div id="report-modal" onclick="if(event.target===this)closeReport()">
+  <div id="report-box">
+    <h3>Report an Issue</h3>
+    <p id="report-q-label"></p>
+    <div class="report-reasons" id="report-reasons">
+      <label><input type="radio" name="report-reason" value="Question is wrong"> Question is wrong</label>
+      <label><input type="radio" name="report-reason" value="Answer is too easy to guess based on length"> Answer is too easy to guess based on length</label>
+      <label><input type="radio" name="report-reason" value="Out of scope"> Out of scope</label>
+      <label><input type="radio" name="report-reason" value="Something else"> Something else</label>
+    </div>
+    <textarea id="report-desc" placeholder="Describe the issue in more detail (optional)…"></textarea>
+    <div id="report-modal-btns">
+      <button id="report-submit-btn" onclick="submitReport()">Open GitHub Issue</button>
+      <button id="report-cancel-btn" onclick="closeReport()">Cancel</button>
+    </div>
+  </div>
+</div>
 <div id="app">
 
   <header>
@@ -320,6 +391,7 @@
       <div id="meta">
         <span id="q-number"></span>
         <span id="q-tag"></span>
+        <button id="report-btn" onclick="openReport()">Report</button>
       </div>
       <div id="question"></div>
       <div id="options"></div>
@@ -800,6 +872,64 @@
       [arr[i], arr[j]] = [arr[j], arr[i]];
     }
   }
+
+  /* ═══════════════════════════════════════════
+     REPORT
+  ═══════════════════════════════════════════ */
+  const GITHUB_REPO = 'https://github.com/QuasiMot0/cs252_study';
+
+  function openReport() {
+    const q = questions[idx];
+    document.getElementById('report-q-label').textContent =
+      `Question ${idx + 1} of ${questions.length} · ${q.subtopic_id}`;
+    document.querySelectorAll('#report-reasons input').forEach(r => r.checked = false);
+    document.querySelectorAll('#report-reasons label').forEach(l => l.classList.remove('selected'));
+    document.getElementById('report-desc').value = '';
+    document.getElementById('report-modal').classList.add('open');
+  }
+
+  function closeReport() {
+    document.getElementById('report-modal').classList.remove('open');
+  }
+
+  function submitReport() {
+    const q      = questions[idx];
+    const reason = document.querySelector('#report-reasons input:checked');
+    if (!reason) { alert('Please select a reason.'); return; }
+    const desc     = document.getElementById('report-desc').value.trim();
+    const labels   = ['A','B','C','D'];
+    const optLines = q.options.map((o, i) =>
+      `  ${labels[i]}) ${o}${i === q.answer_index ? '  ← marked correct' : ''}`).join('\n');
+
+    const body = `Fix a reported question in questions.json.
+
+## Reported Issue
+- **Question ${idx + 1}** (subtopic: \`${q.subtopic_id}\`, difficulty: ${q.difficulty})
+- **Reason:** ${reason.value}${desc ? `\n- **Description:** ${desc}` : ''}
+
+## Question Data
+**Question:** ${q.question}
+
+**Options:**
+${optLines}
+
+**Explanation:** ${q.explanation}
+
+---
+Please update this question in questions.json to address the reported issue. Match the question by its exact text above.`;
+
+    const title = encodeURIComponent(`[Report] Q${idx + 1} (${q.subtopic_id}): ${reason.value}`);
+    window.open(`${GITHUB_REPO}/issues/new?title=${title}&body=${encodeURIComponent(body)}`, '_blank');
+    closeReport();
+  }
+
+  // Highlight selected radio label
+  document.addEventListener('change', e => {
+    if (e.target.name === 'report-reason') {
+      document.querySelectorAll('#report-reasons label').forEach(l => l.classList.remove('selected'));
+      e.target.closest('label').classList.add('selected');
+    }
+  });
 
   function triggerDancer() {
     const el = document.getElementById('dancer');

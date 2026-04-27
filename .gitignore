@@ -1,0 +1,10 @@
+# Course materials (not part of the app)
+*.pdf
+*.docx
+materials.md
+
+# macOS
+.DS_Store
+
+# Vercel local config
+.vercel
