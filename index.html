@@ -316,6 +316,162 @@
   #report-cancel-btn { background: #f0f0f0; color: #555; }
   #report-cancel-btn:hover { background: #e0e0e0; }
 
+  /* ── Timer ── */
+  #timer-wrap { margin-bottom: 14px; display: none; }
+  #timer-label { font-size: 0.82rem; font-weight: 700; text-align: right; margin-bottom: 5px; color: #555; }
+  #timer-bar-wrap { width: 100%; height: 6px; background: #e2e4e9; border-radius: 3px; overflow: hidden; }
+  #timer-bar { height: 100%; width: 100%; background: #28a745; border-radius: 3px; }
+  #timer-toggle {
+    font-size: 0.78rem; background: none; border: 1px solid #ccc;
+    border-radius: 6px; padding: 4px 10px; cursor: pointer; color: #666;
+    transition: all 0.15s; white-space: nowrap;
+  }
+  #timer-toggle.on { border-color: #dc3545; color: #dc3545; background: #fff5f5; }
+
+  /* ─────────────────────────────────────────
+     EXAM PANE
+  ───────────────────────────────────────── */
+  #exam-pane { display: none; }
+
+  .exam-section { margin-bottom: 22px; }
+  .exam-section-label {
+    font-size: 0.78rem; font-weight: 700; color: #555;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
+  }
+  .exam-section-label a {
+    font-weight: 400; cursor: pointer; color: #4a6cf7;
+    text-transform: none; letter-spacing: 0; font-size: 0.78rem; text-decoration: none;
+  }
+  .exam-section-label a:hover { text-decoration: underline; }
+
+  .chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    padding: 7px 16px; border: 2px solid #e2e4e9; border-radius: 20px;
+    font-size: 0.85rem; font-weight: 600; cursor: pointer; background: #fff;
+    color: #555; transition: all 0.15s; user-select: none;
+  }
+  .chip.sel { border-color: #4a6cf7; background: #f0f3ff; color: #4a6cf7; }
+  .chip.diff-easy.sel  { border-color: #28a745; background: #d4edda; color: #155724; }
+  .chip.diff-med.sel   { border-color: #f0ad4e; background: #fef3cd; color: #856404; }
+  .chip.diff-hard.sel  { border-color: #dc3545; background: #fde8e8; color: #c0392b; }
+
+  .unit-check-list { display: flex; flex-direction: column; gap: 6px; max-height: 220px; overflow-y: auto; }
+  .unit-check {
+    display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+    border: 2px solid #e2e4e9; border-radius: 8px; cursor: pointer;
+    background: #fff; transition: all 0.15s; user-select: none;
+  }
+  .unit-check.sel { border-color: #4a6cf7; background: #f0f3ff; }
+  .unit-check-box {
+    width: 18px; height: 18px; border: 2px solid #ccc; border-radius: 4px;
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; color: #fff;
+  }
+  .unit-check.sel .unit-check-box { background: #4a6cf7; border-color: #4a6cf7; }
+  .unit-check-name { flex: 1; font-size: 0.88rem; font-weight: 600; color: #333; }
+  .unit-check-cnt  { font-size: 0.78rem; color: #aaa; }
+
+  #exam-avail { font-size: 0.85rem; color: #888; text-align: center; margin-bottom: 12px; min-height: 1.2em; }
+  #start-exam-btn {
+    width: 100%; padding: 14px; background: #4a6cf7; color: #fff;
+    border: none; border-radius: 10px; font-size: 1.05rem; font-weight: 700;
+    cursor: pointer; transition: background 0.15s;
+  }
+  #start-exam-btn:hover:not(:disabled) { background: #3a5ce5; }
+  #start-exam-btn:disabled { background: #a0aee0; cursor: not-allowed; }
+
+  /* Exam in-progress */
+  #exam-header {
+    background: #fff; border-radius: 10px; padding: 13px 18px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 10px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  #exam-progress-text { font-size: 0.88rem; color: #666; font-weight: 600; }
+  #exam-timer {
+    font-size: 1.45rem; font-weight: 700; color: #333;
+    font-variant-numeric: tabular-nums; min-width: 74px; text-align: center;
+  }
+  #exam-timer.warn { color: #f0ad4e; }
+  #exam-timer.crit { color: #dc3545; }
+  #submit-exam-btn {
+    padding: 7px 14px; background: #dc3545; color: #fff;
+    border: none; border-radius: 7px; font-size: 0.82rem; font-weight: 700;
+    cursor: pointer; white-space: nowrap; transition: background 0.15s;
+  }
+  #submit-exam-btn:hover { background: #c82333; }
+
+  #exam-grid {
+    display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px;
+    background: #fff; border-radius: 10px; padding: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  }
+  .egdot {
+    width: 30px; height: 30px; border-radius: 6px; border: 2px solid #e2e4e9;
+    font-size: 0.7rem; font-weight: 700; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    background: #f8f9fa; color: #999; transition: all 0.12s; flex-shrink: 0;
+  }
+  .egdot.answered { background: #e8ebff; border-color: #4a6cf7; color: #4a6cf7; }
+  .egdot.flagged  { background: #fff3cd; border-color: #f0ad4e; color: #856404; }
+  .egdot.current  { box-shadow: 0 0 0 2px #4a6cf7; }
+
+  #exam-card-body {
+    background: #fff; border-radius: 12px; padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 12px;
+  }
+  #exam-q-meta { font-size: 0.78rem; color: #aaa; margin-bottom: 12px; }
+  #exam-question { font-size: 1.05rem; line-height: 1.6; margin-bottom: 20px; }
+  #exam-question pre, #exam-card-body pre {
+    background: #f0f0f0; border-radius: 6px; padding: 12px; margin: 10px 0;
+    overflow-x: auto; font-size: 0.88rem; line-height: 1.5;
+  }
+  #exam-question code, #exam-card-body code {
+    background: #f0f0f0; padding: 2px 5px; border-radius: 4px; font-size: 0.9em;
+    font-family: "SFMono-Regular", Consolas, monospace;
+  }
+  #exam-question pre code, #exam-card-body pre code { background: none; padding: 0; }
+  #exam-options { display: flex; flex-direction: column; gap: 10px; }
+
+  #exam-nav { display: flex; gap: 8px; align-items: center; }
+  .enav-btn {
+    padding: 10px 16px; border: 2px solid #e2e4e9; border-radius: 8px;
+    font-size: 0.88rem; font-weight: 600; cursor: pointer;
+    background: #fff; color: #555; transition: all 0.15s; white-space: nowrap;
+  }
+  .enav-btn:hover:not(:disabled) { border-color: #4a6cf7; color: #4a6cf7; }
+  .enav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  #exam-flag-btn.flagged { border-color: #f0ad4e; color: #856404; background: #fff3cd; }
+  #exam-next-nav { margin-left: auto; }
+
+  /* Exam results review */
+  .exam-review-item {
+    background: #fff; border-radius: 10px; margin-bottom: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07); overflow: hidden;
+  }
+  .exam-review-hdr {
+    display: flex; align-items: center; gap: 8px; padding: 9px 14px;
+    background: #f8f9fa; border-bottom: 1px solid #eee;
+  }
+  .exam-review-num { font-size: 0.82rem; font-weight: 700; color: #555; }
+  .exam-review-tag { flex: 1; font-size: 0.75rem; color: #aaa; }
+  .exam-review-verdict { font-size: 1rem; font-weight: 700; }
+  .exam-review-verdict.cv { color: #28a745; }
+  .exam-review-verdict.cw { color: #dc3545; }
+  .exam-review-q   { padding: 12px 14px 6px; font-size: 0.9rem; line-height: 1.5; color: #333; }
+  .exam-review-choices { padding: 4px 14px 10px; display: flex; flex-direction: column; gap: 5px; }
+  .erc {
+    padding: 6px 10px; border-radius: 6px; font-size: 0.84rem;
+    background: #f8f9fa; color: #555;
+  }
+  .erc.rcorrect { background: #d4edda; color: #155724; font-weight: 600; }
+  .erc.rwrong   { background: #f8d7da; color: #721c24; }
+  .exam-review-exp {
+    margin: 0 14px 14px; padding: 10px 12px; background: #fffbea;
+    border-left: 4px solid #f0ad4e; border-radius: 0 8px 8px 0;
+    font-size: 0.84rem; line-height: 1.5; color: #555;
+  }
+
   /* ── Dancing guy ── */
   #dancer {
     position: fixed; top: 50%; left: 50%;
@@ -365,6 +521,7 @@
     <h1>CS252 Quiz</h1>
     <div id="header-right">
       <button id="back-btn" onclick="goBack()">&#8592; Filter</button>
+      <button id="timer-toggle" onclick="toggleTimer()">&#9201; Timer: Off</button>
       <span id="score-display"></span>
     </div>
   </header>
@@ -375,6 +532,7 @@
     <button class="tab"        id="tab-weak"  onclick="switchTab('weak')">
       Weak Areas <span class="dot" id="weak-dot" style="display:none"></span>
     </button>
+    <button class="tab"        id="tab-exam"  onclick="switchTab('exam')">Exam</button>
   </div>
 
   <div id="progress-bar"><div id="progress-fill" style="width:0%"></div></div>
@@ -402,6 +560,10 @@
         <span id="q-tag"></span>
         <button id="report-btn" onclick="openReport()">Report</button>
       </div>
+      <div id="timer-wrap">
+        <div id="timer-label">60s</div>
+        <div id="timer-bar-wrap"><div id="timer-bar"></div></div>
+      </div>
       <div id="question"></div>
       <div id="options"></div>
       <button id="submit-btn" onclick="submitAnswer()">Submit Answer</button>
@@ -416,6 +578,7 @@
         <div class="done-pct" id="done-pct"></div>
         <p class="done-detail" id="done-detail"></p>
         <div class="done-btns">
+          <button id="retry-missed-btn" class="btn-primary" onclick="retryMissed()" style="display:none">Retry Missed (0)</button>
           <button class="btn-primary"   onclick="retryFilter()">Retry Same Set</button>
           <button class="btn-secondary" onclick="goBack()">Change Filter</button>
         </div>
@@ -433,6 +596,82 @@
     </div>
     <div id="weak-content"></div>
   </div>
+
+  <!-- ══════════ EXAM PANE ══════════ -->
+  <div id="exam-pane">
+
+    <!-- Setup screen -->
+    <div id="exam-setup">
+
+      <div class="exam-section">
+        <div class="exam-section-label">Difficulty</div>
+        <div class="chip-row" id="diff-chips">
+          <div class="chip diff-easy sel" data-diff="easy"   onclick="toggleDiff(this)">Easy</div>
+          <div class="chip diff-med  sel" data-diff="medium" onclick="toggleDiff(this)">Medium</div>
+          <div class="chip diff-hard sel" data-diff="hard"   onclick="toggleDiff(this)">Hard</div>
+        </div>
+      </div>
+
+      <div class="exam-section">
+        <div class="exam-section-label">
+          <span>Sections</span>
+          <a id="section-toggle-all" onclick="toggleAllSections()">Deselect All</a>
+        </div>
+        <div class="unit-check-list" id="unit-check-list"></div>
+      </div>
+
+      <div class="exam-section">
+        <div class="exam-section-label">Number of Questions</div>
+        <div class="chip-row" id="qcount-chips">
+          <div class="chip"     data-count="10"  onclick="selectCount(this)">10</div>
+          <div class="chip sel" data-count="20"  onclick="selectCount(this)">20</div>
+          <div class="chip"     data-count="30"  onclick="selectCount(this)">30</div>
+          <div class="chip"     data-count="50"  onclick="selectCount(this)">50</div>
+          <div class="chip"     data-count="all" onclick="selectCount(this)">All</div>
+        </div>
+      </div>
+
+      <div class="exam-section">
+        <div class="exam-section-label">Time Limit</div>
+        <div class="chip-row" id="timelimit-chips">
+          <div class="chip"     data-mins="15" onclick="selectTime(this)">15 min</div>
+          <div class="chip"     data-mins="30" onclick="selectTime(this)">30 min</div>
+          <div class="chip sel" data-mins="45" onclick="selectTime(this)">45 min</div>
+          <div class="chip"     data-mins="60" onclick="selectTime(this)">60 min</div>
+          <div class="chip"     data-mins="90" onclick="selectTime(this)">90 min</div>
+          <div class="chip"     data-mins="0"  onclick="selectTime(this)">No Limit</div>
+        </div>
+      </div>
+
+      <div id="exam-avail"></div>
+      <button id="start-exam-btn" onclick="startExam()">Start Exam</button>
+
+    </div><!-- end exam-setup -->
+
+    <!-- In-progress exam -->
+    <div id="exam-in-progress" style="display:none">
+      <div id="exam-header">
+        <div id="exam-progress-text"></div>
+        <div id="exam-timer">--:--</div>
+        <button id="submit-exam-btn" onclick="confirmSubmitExam()">Submit</button>
+      </div>
+      <div id="exam-grid"></div>
+      <div id="exam-card-body">
+        <div id="exam-q-meta"></div>
+        <div id="exam-question"></div>
+        <div id="exam-options"></div>
+      </div>
+      <div id="exam-nav">
+        <button class="enav-btn" id="exam-prev-btn" onclick="examNav(-1)">&#8592; Prev</button>
+        <button class="enav-btn" id="exam-flag-btn" onclick="examToggleFlag()">&#9873; Flag</button>
+        <button class="enav-btn" id="exam-next-nav" onclick="examNav(1)">Next &#8594;</button>
+      </div>
+    </div><!-- end exam-in-progress -->
+
+    <!-- Results -->
+    <div id="exam-results" style="display:none"></div>
+
+  </div><!-- end exam-pane -->
 
 </div><!-- end app -->
 
@@ -453,9 +692,33 @@
   // Per-session tracking (resets each quiz)
   let seenBySubtopic  = {};
   let wrongBySubtopic = {};
+  let sessionWrongIds = new Set();  // question IDs answered wrong this session
+  let lastMissedIds   = new Set();  // snapshot used by "retry missed"
+
+  // Timer
+  let timerMode     = false;
+  let timerInterval = null;
+  let timeLeft      = 0;
+  const TIMER_SECS  = 60;
 
   // Persistent stats (localStorage)
-  let globalStats = {};  // { [subtopic_id]: { wrong, seen } }
+  let globalStats   = {};  // { [subtopic_id]: { wrong, seen } }
+  let questionStats = {};  // { [question_id]: { wrong, seen } }
+
+  // Exam setup settings (persist across tab switches)
+  let examDiffs    = new Set(['easy','medium','hard']);
+  let examSections = new Set();
+  let examCount    = 20;
+  let examTimeMins = 45;
+  let examSetupBuilt = false;
+
+  // Exam in-progress state
+  let examQuestions = [];
+  let examAnswers   = [];
+  let examFlagged   = new Set();
+  let examIdx       = 0;
+  let examTimeLeft  = 0;
+  let examInterval  = null;
 
   /* ═══════════════════════════════════════════
      INIT
@@ -495,23 +758,34 @@
     activeTab = tab;
     document.getElementById('tab-quiz').classList.toggle('active', tab === 'quiz');
     document.getElementById('tab-weak').classList.toggle('active', tab === 'weak');
+    document.getElementById('tab-exam').classList.toggle('active', tab === 'exam');
 
     if (tab === 'quiz') {
       show('quiz-pane');
       hide('weak-pane');
-      // restore progress bar & score if mid-quiz
+      hide('exam-pane');
       const quizActive = document.getElementById('card').style.display !== 'none';
       document.getElementById('progress-bar').style.opacity = '1';
       if (!quizActive) {
         document.getElementById('score-display').textContent = '';
         document.getElementById('back-btn').style.display = 'none';
       }
-    } else {
+    } else if (tab === 'weak') {
       hide('quiz-pane');
       show('weak-pane');
+      hide('exam-pane');
       document.getElementById('progress-bar').style.opacity = '0';
       document.getElementById('score-display').textContent = '';
+      document.getElementById('back-btn').style.display = 'none';
       buildWeakPane();
+    } else {
+      hide('quiz-pane');
+      hide('weak-pane');
+      show('exam-pane');
+      document.getElementById('progress-bar').style.opacity = '0';
+      document.getElementById('score-display').textContent = '';
+      document.getElementById('back-btn').style.display = 'none';
+      if (!examSetupBuilt) { buildExamSetup(); examSetupBuilt = true; }
     }
   }
 
@@ -593,14 +867,17 @@
       const unit   = topicsData.units.find(u => u.id === filter.id);
       const subIds = new Set(unit.topics.flatMap(t => t.subtopics.map(s => s.id)));
       questions = allQuestions.filter(q => subIds.has(q.subtopic_id));
+    } else if (filter.type === 'missed') {
+      questions = allQuestions.filter(q => lastMissedIds.has(q.id));
     } else {
       questions = allQuestions.filter(q => q.subtopic_id === filter.id);
     }
 
-    shuffle(questions);
+    questions = weightedShuffle(questions);
     idx = 0; correct = 0; answered = false;
     seenBySubtopic  = {};
     wrongBySubtopic = {};
+    sessionWrongIds = new Set();
 
     // Make sure we're on the quiz tab
     if (activeTab !== 'quiz') switchTab('quiz');
@@ -651,6 +928,7 @@
     document.getElementById('progress-fill').style.width =
       (idx / questions.length * 100).toFixed(1) + '%';
     updateScore();
+    startTimer();
   }
 
   function pick(i) {
@@ -665,6 +943,7 @@
 
   function submitAnswer() {
     if (answered || selectedIdx === -1) return;
+    stopTimer();
     answered = true;
 
     const i   = selectedIdx;
@@ -687,7 +966,7 @@
       wrongBySubtopic[sid] = (wrongBySubtopic[sid] || 0) + 1;
     }
 
-    recordAnswer(sid, isCorrect);
+    recordAnswer(sid, q.id, isCorrect);
     updateWeakDot();
     updateScore();
 
@@ -726,6 +1005,15 @@
       `${correct} of ${questions.length} correct — ${activeFilter.label}`;
 
     buildSummaryRows(document.getElementById('session-summary'), wrongBySubtopic, seenBySubtopic, true);
+
+    const retryBtn = document.getElementById('retry-missed-btn');
+    if (sessionWrongIds.size > 0) {
+      retryBtn.textContent  = `Retry Missed (${sessionWrongIds.size})`;
+      retryBtn.style.display = 'inline-block';
+    } else {
+      retryBtn.style.display = 'none';
+    }
+
     show('done');
   }
 
@@ -862,24 +1150,32 @@
      PERSISTENT STATS
   ═══════════════════════════════════════════ */
   function loadStats() {
-    try { globalStats = JSON.parse(localStorage.getItem('cs252_stats') || '{}'); }
-    catch(e) { globalStats = {}; }
+    try { globalStats   = JSON.parse(localStorage.getItem('cs252_stats')  || '{}'); } catch(e) { globalStats   = {}; }
+    try { questionStats = JSON.parse(localStorage.getItem('cs252_qstats') || '{}'); } catch(e) { questionStats = {}; }
   }
 
   function saveStats() {
-    localStorage.setItem('cs252_stats', JSON.stringify(globalStats));
+    localStorage.setItem('cs252_stats',  JSON.stringify(globalStats));
+    localStorage.setItem('cs252_qstats', JSON.stringify(questionStats));
   }
 
-  function recordAnswer(sid, isCorrect) {
-    if (!globalStats[sid]) globalStats[sid] = { wrong: 0, seen: 0 };
+  function recordAnswer(sid, qid, isCorrect) {
+    if (!globalStats[sid])   globalStats[sid]   = { wrong: 0, seen: 0 };
+    if (!questionStats[qid]) questionStats[qid] = { wrong: 0, seen: 0 };
     globalStats[sid].seen++;
-    if (!isCorrect) globalStats[sid].wrong++;
+    questionStats[qid].seen++;
+    if (!isCorrect) {
+      globalStats[sid].wrong++;
+      questionStats[qid].wrong++;
+      sessionWrongIds.add(qid);
+    }
     saveStats();
   }
 
   function clearStats() {
     if (!confirm('Clear all history? This cannot be undone.')) return;
-    globalStats = {};
+    globalStats   = {};
+    questionStats = {};
     saveStats();
     updateWeakDot();
     buildWeakPane();
@@ -896,6 +1192,430 @@
       const j = Math.floor(Math.random() * (i + 1));
       [arr[i], arr[j]] = [arr[j], arr[i]];
     }
+  }
+
+  // Spaced-repetition weighted shuffle: questions with higher error rate surface first.
+  function weightedShuffle(arr) {
+    return arr
+      .map(q => {
+        const s = questionStats[q.id];
+        let w = 1.0;
+        if (s && s.seen > 0) {
+          const r = s.wrong / s.seen;
+          w = r === 0 ? 0.35 : r < 0.3 ? 0.75 : r < 0.6 ? 1.6 : 2.8;
+        }
+        return { q, key: w * Math.random() };
+      })
+      .sort((a, b) => b.key - a.key)
+      .map(x => x.q);
+  }
+
+  /* ═══════════════════════════════════════════
+     TIMER
+  ═══════════════════════════════════════════ */
+  function toggleTimer() {
+    timerMode = !timerMode;
+    const btn = document.getElementById('timer-toggle');
+    btn.textContent = timerMode ? '⏱ Timer: On' : '⏱ Timer: Off';
+    btn.classList.toggle('on', timerMode);
+  }
+
+  function startTimer() {
+    stopTimer();
+    if (!timerMode) return;
+    timeLeft = TIMER_SECS;
+    const wrap  = document.getElementById('timer-wrap');
+    const label = document.getElementById('timer-label');
+    const bar   = document.getElementById('timer-bar');
+    wrap.style.display      = 'block';
+    label.textContent       = timeLeft + 's';
+    bar.style.transition    = 'none';
+    bar.style.width         = '100%';
+    bar.style.background    = '#28a745';
+    bar.offsetHeight;  // force reflow so next transition starts clean
+    bar.style.transition    = 'width 1s linear, background 0.5s';
+
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      label.textContent  = timeLeft + 's';
+      bar.style.width    = (timeLeft / TIMER_SECS * 100) + '%';
+      if (timeLeft <= 10)      bar.style.background = '#dc3545';
+      else if (timeLeft <= 20) bar.style.background = '#f0ad4e';
+      if (timeLeft <= 0) onTimerExpire();
+    }, 1000);
+  }
+
+  function stopTimer() {
+    clearInterval(timerInterval);
+    timerInterval = null;
+    document.getElementById('timer-wrap').style.display = 'none';
+  }
+
+  function onTimerExpire() {
+    stopTimer();
+    if (answered) return;
+    answered = true;
+
+    const q   = questions[idx];
+    const sid = q.subtopic_id;
+    seenBySubtopic[sid]  = (seenBySubtopic[sid]  || 0) + 1;
+    wrongBySubtopic[sid] = (wrongBySubtopic[sid] || 0) + 1;
+
+    document.querySelectorAll('.opt').forEach((b, j) => {
+      b.disabled = true;
+      if (j === q.answer_index) b.classList.add('correct');
+      else if (j === selectedIdx) b.classList.add('wrong');
+    });
+
+    recordAnswer(sid, q.id, false);
+    updateWeakDot();
+    updateScore();
+
+    const expEl = document.getElementById('explanation');
+    expEl.innerHTML = '<strong>⏱ Time\'s up!</strong> ' + parseText(q.explanation);
+    expEl.style.display = 'block';
+    document.getElementById('submit-btn').style.display = 'none';
+    document.getElementById('next-btn').style.display   = 'block';
+    document.getElementById('next-btn').focus();
+  }
+
+  /* ═══════════════════════════════════════════
+     RETRY MISSED
+  ═══════════════════════════════════════════ */
+  function retryMissed() {
+    if (!sessionWrongIds.size) return;
+    lastMissedIds = new Set(sessionWrongIds);
+    startQuiz({ type: 'missed', id: null, label: 'Missed Questions', total: lastMissedIds.size });
+  }
+
+  /* ═══════════════════════════════════════════
+     PRACTICE EXAM
+  ═══════════════════════════════════════════ */
+
+  /* ── Setup UI ── */
+  function buildExamSetup() {
+    const qCount = {};
+    for (const q of allQuestions) qCount[q.subtopic_id] = (qCount[q.subtopic_id] || 0) + 1;
+
+    const list = document.getElementById('unit-check-list');
+    list.innerHTML = '';
+    for (const unit of topicsData.units) {
+      const unitTotal = unit.topics.flatMap(t => t.subtopics)
+        .reduce((s, sub) => s + (qCount[sub.id] || 0), 0);
+      if (!unitTotal) continue;
+      examSections.add(unit.id);
+      const el = document.createElement('div');
+      el.className = 'unit-check sel';
+      el.dataset.unitId = unit.id;
+      el.onclick = () => toggleExamSection(el, unit.id);
+      el.innerHTML = `
+        <div class="unit-check-box">&#10003;</div>
+        <span class="unit-check-name">${unit.title}</span>
+        <span class="unit-check-cnt">${unitTotal} q</span>`;
+      list.appendChild(el);
+    }
+    updateExamAvail();
+  }
+
+  function toggleDiff(el) {
+    const d = el.dataset.diff;
+    if (examDiffs.has(d)) {
+      if (examDiffs.size === 1) return;
+      examDiffs.delete(d);
+      el.classList.remove('sel');
+    } else {
+      examDiffs.add(d);
+      el.classList.add('sel');
+    }
+    updateExamAvail();
+  }
+
+  function toggleExamSection(el, unitId) {
+    if (examSections.has(unitId)) {
+      if (examSections.size === 1) return;
+      examSections.delete(unitId);
+      el.classList.remove('sel');
+      el.querySelector('.unit-check-box').innerHTML = '';
+    } else {
+      examSections.add(unitId);
+      el.classList.add('sel');
+      el.querySelector('.unit-check-box').innerHTML = '&#10003;';
+    }
+    updateSectionToggleLabel();
+    updateExamAvail();
+  }
+
+  function toggleAllSections() {
+    const chips = [...document.querySelectorAll('#unit-check-list .unit-check')];
+    const allSel = chips.every(c => examSections.has(c.dataset.unitId));
+    chips.forEach((c, i) => {
+      const uid = c.dataset.unitId;
+      if (allSel && i > 0) {
+        examSections.delete(uid);
+        c.classList.remove('sel');
+        c.querySelector('.unit-check-box').innerHTML = '';
+      } else if (!allSel) {
+        examSections.add(uid);
+        c.classList.add('sel');
+        c.querySelector('.unit-check-box').innerHTML = '&#10003;';
+      }
+    });
+    updateSectionToggleLabel();
+    updateExamAvail();
+  }
+
+  function updateSectionToggleLabel() {
+    const chips = [...document.querySelectorAll('#unit-check-list .unit-check')];
+    const allSel = chips.every(c => examSections.has(c.dataset.unitId));
+    document.getElementById('section-toggle-all').textContent = allSel ? 'Deselect All' : 'Select All';
+  }
+
+  function selectCount(el) {
+    document.querySelectorAll('#qcount-chips .chip').forEach(c => c.classList.remove('sel'));
+    el.classList.add('sel');
+    examCount = el.dataset.count === 'all' ? 'all' : parseInt(el.dataset.count);
+    updateExamAvail();
+  }
+
+  function selectTime(el) {
+    document.querySelectorAll('#timelimit-chips .chip').forEach(c => c.classList.remove('sel'));
+    el.classList.add('sel');
+    examTimeMins = parseInt(el.dataset.mins);
+    updateExamAvail();
+  }
+
+  function getExamPool() {
+    return allQuestions.filter(q => {
+      const info = subtopicMap[q.subtopic_id];
+      return info && examSections.has(info.unitId) && examDiffs.has(q.difficulty);
+    });
+  }
+
+  function updateExamAvail() {
+    const pool = getExamPool();
+    const want = examCount === 'all' ? pool.length : Math.min(examCount, pool.length);
+    const el   = document.getElementById('exam-avail');
+    el.textContent = pool.length
+      ? `${pool.length} questions available · ${want} will be selected`
+      : 'No questions match — adjust filters above';
+    document.getElementById('start-exam-btn').disabled = pool.length === 0;
+  }
+
+  /* ── Start exam ── */
+  function startExam() {
+    const pool = getExamPool();
+    if (!pool.length) return;
+    const shuffled  = weightedShuffle(pool);
+    examQuestions   = examCount === 'all' ? shuffled : shuffled.slice(0, examCount);
+    examAnswers     = new Array(examQuestions.length).fill(-1);
+    examFlagged     = new Set();
+    examIdx         = 0;
+
+    document.getElementById('exam-setup').style.display        = 'none';
+    document.getElementById('exam-in-progress').style.display  = 'block';
+    document.getElementById('exam-results').style.display      = 'none';
+
+    buildExamGrid();
+    showExamQuestion();
+    startExamTimer();
+  }
+
+  /* ── Exam timer ── */
+  function startExamTimer() {
+    clearInterval(examInterval);
+    if (examTimeMins === 0) {
+      examTimeLeft = Infinity;
+      document.getElementById('exam-timer').textContent = '&#8734;';
+      return;
+    }
+    examTimeLeft = examTimeMins * 60;
+    renderExamTimer();
+    examInterval = setInterval(() => {
+      examTimeLeft--;
+      renderExamTimer();
+      if (examTimeLeft <= 0) { clearInterval(examInterval); autoSubmitExam(); }
+    }, 1000);
+  }
+
+  function renderExamTimer() {
+    if (examTimeLeft === Infinity) return;
+    const m  = Math.floor(examTimeLeft / 60);
+    const s  = examTimeLeft % 60;
+    const el = document.getElementById('exam-timer');
+    el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    el.className   = examTimeLeft <= 60 ? 'crit' : examTimeLeft <= 300 ? 'warn' : '';
+  }
+
+  /* ── Question grid ── */
+  function buildExamGrid() {
+    const grid = document.getElementById('exam-grid');
+    grid.innerHTML = '';
+    examQuestions.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.className = 'egdot';
+      dot.id        = `egdot-${i}`;
+      dot.textContent = i + 1;
+      dot.onclick   = () => { examIdx = i; showExamQuestion(); };
+      grid.appendChild(dot);
+    });
+    refreshExamGrid();
+  }
+
+  function refreshExamGrid() {
+    examQuestions.forEach((_, i) => {
+      const dot = document.getElementById(`egdot-${i}`);
+      if (!dot) return;
+      dot.className = 'egdot'
+        + (examAnswers[i] !== -1 ? ' answered' : '')
+        + (examFlagged.has(i)    ? ' flagged'  : '')
+        + (i === examIdx          ? ' current'  : '');
+    });
+  }
+
+  /* ── Show question ── */
+  function showExamQuestion() {
+    const q = examQuestions[examIdx];
+    document.getElementById('exam-progress-text').textContent =
+      `Question ${examIdx + 1} of ${examQuestions.length}`;
+    document.getElementById('exam-q-meta').textContent =
+      `${q.subtopic_id} · ${q.difficulty}`;
+    document.getElementById('exam-question').innerHTML = parseText(q.question);
+
+    const opts = document.getElementById('exam-options');
+    opts.innerHTML = '';
+    ['A','B','C','D'].forEach((lbl, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt' + (examAnswers[examIdx] === i ? ' selected' : '');
+      btn.innerHTML = `<strong>${lbl}.</strong> ${parseText(q.options[i])}`;
+      btn.onclick   = () => examPick(i);
+      opts.appendChild(btn);
+    });
+
+    document.getElementById('exam-flag-btn').classList.toggle('flagged', examFlagged.has(examIdx));
+    document.getElementById('exam-prev-btn').disabled = examIdx === 0;
+    const lastQ = examIdx === examQuestions.length - 1;
+    const nextBtn = document.getElementById('exam-next-nav');
+    nextBtn.disabled    = lastQ;
+    nextBtn.textContent = lastQ ? 'Last ✓' : 'Next →';
+
+    refreshExamGrid();
+  }
+
+  function examPick(i) {
+    examAnswers[examIdx] = i;
+    document.querySelectorAll('#exam-options .opt').forEach((b, j) =>
+      b.classList.toggle('selected', j === i));
+    refreshExamGrid();
+  }
+
+  function examNav(dir) {
+    const next = examIdx + dir;
+    if (next < 0 || next >= examQuestions.length) return;
+    examIdx = next;
+    showExamQuestion();
+  }
+
+  function examToggleFlag() {
+    if (examFlagged.has(examIdx)) examFlagged.delete(examIdx);
+    else examFlagged.add(examIdx);
+    document.getElementById('exam-flag-btn').classList.toggle('flagged', examFlagged.has(examIdx));
+    refreshExamGrid();
+  }
+
+  /* ── Submit ── */
+  function confirmSubmitExam() {
+    const unanswered = examAnswers.filter(a => a === -1).length;
+    const flagged    = examFlagged.size;
+    let msg = 'Submit the exam?';
+    if (unanswered > 0) msg = `${unanswered} unanswered question${unanswered !== 1 ? 's' : ''}. Submit anyway?`;
+    else if (flagged > 0) msg = `${flagged} flagged question${flagged !== 1 ? 's' : ''} still marked for review. Submit anyway?`;
+    if (!confirm(msg)) return;
+    submitExam(false);
+  }
+
+  function autoSubmitExam() { submitExam(true); }
+
+  function submitExam(timedOut) {
+    clearInterval(examInterval);
+    const timeUsedSecs = examTimeMins > 0 && examTimeLeft !== Infinity
+      ? examTimeMins * 60 - Math.max(0, examTimeLeft)
+      : null;
+
+    examQuestions.forEach((q, i) => {
+      recordAnswer(q.subtopic_id, q.id, examAnswers[i] === q.answer_index);
+    });
+    updateWeakDot();
+
+    buildExamResults(timedOut, timeUsedSecs);
+    document.getElementById('exam-in-progress').style.display = 'none';
+    document.getElementById('exam-results').style.display     = 'block';
+  }
+
+  /* ── Results ── */
+  function buildExamResults(timedOut, timeUsedSecs) {
+    const total   = examQuestions.length;
+    const numRight = examQuestions.filter((q, i) => examAnswers[i] === q.answer_index).length;
+    const pct     = Math.round(numRight / total * 100);
+    const pctCls  = pct >= 80 ? 'great' : pct >= 60 ? 'ok' : 'poor';
+
+    let timeStr = '';
+    if (timeUsedSecs !== null) {
+      const m = Math.floor(timeUsedSecs / 60), s = timeUsedSecs % 60;
+      timeStr = ` &middot; ${m}m ${s}s`;
+    }
+
+    const labels = ['A','B','C','D'];
+    const reviewHTML = examQuestions.map((q, i) => {
+      const ans    = examAnswers[i];
+      const ca     = q.answer_index;
+      const isRight = ans === ca;
+      const choices = q.options.map((o, j) =>
+        `<div class="erc${j === ca ? ' rcorrect' : ''}${j === ans && !isRight ? ' rwrong' : ''}">
+           <strong>${labels[j]}.</strong> ${parseText(o)}
+         </div>`).join('');
+      return `
+        <div class="exam-review-item">
+          <div class="exam-review-hdr">
+            <span class="exam-review-num">Q${i + 1}</span>
+            <span class="exam-review-tag">${q.subtopic_id} &middot; ${q.difficulty}${examFlagged.has(i) ? ' &middot; &#9873;' : ''}</span>
+            <span class="exam-review-verdict ${isRight ? 'cv' : 'cw'}">${isRight ? '✓' : '✗'}</span>
+          </div>
+          <div class="exam-review-q">${parseText(q.question)}</div>
+          <div class="exam-review-choices">${choices}</div>
+          <div class="exam-review-exp">${parseText(q.explanation)}</div>
+        </div>`;
+    }).join('');
+
+    document.getElementById('exam-results').innerHTML = `
+      <div class="done-hero">
+        <h2>${timedOut ? "Time's Up!" : 'Exam Complete'}</h2>
+        <div class="done-pct ${pctCls}">${pct}%</div>
+        <p class="done-detail">${numRight} of ${total} correct${timeStr}</p>
+        <div class="done-btns">
+          <button class="btn-primary"   onclick="retakeExam()">Retake</button>
+          <button class="btn-secondary" onclick="backToExamSetup()">New Exam</button>
+          <button class="btn-secondary" onclick="switchTab('quiz')">Practice</button>
+        </div>
+      </div>
+      <div style="padding:0 0 24px">
+        <div class="summary-section-header" style="padding:16px 0 12px">
+          Question Review <span class="badge">${total - numRight} wrong</span>
+        </div>
+        ${reviewHTML}
+      </div>`;
+  }
+
+  function retakeExam() {
+    document.getElementById('exam-results').style.display = 'none';
+    startExam();
+  }
+
+  function backToExamSetup() {
+    clearInterval(examInterval);
+    document.getElementById('exam-in-progress').style.display = 'none';
+    document.getElementById('exam-results').style.display     = 'none';
+    document.getElementById('exam-setup').style.display       = 'block';
+    updateExamAvail();
   }
 
   /* ═══════════════════════════════════════════
@@ -993,6 +1713,13 @@
   }
 
   document.addEventListener('keydown', e => {
+    if (activeTab === 'exam') {
+      if (document.getElementById('exam-in-progress').style.display === 'none') return;
+      if (['1','2','3','4'].includes(e.key)) { e.preventDefault(); examPick(parseInt(e.key) - 1); }
+      else if (e.key === 'ArrowLeft')  { e.preventDefault(); examNav(-1); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); examNav(1);  }
+      return;
+    }
     if (activeTab !== 'quiz') return;
     if (document.getElementById('card').style.display === 'none') return;
     if (['1','2','3','4'].includes(e.key)) {
