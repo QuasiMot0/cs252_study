@@ -472,6 +472,61 @@
     font-size: 0.84rem; line-height: 1.5; color: #555;
   }
 
+  /* ─────────────────────────────────────────
+     STUDY PANE
+  ───────────────────────────────────────── */
+  #study-pane { display: none; }
+  #study-content {
+    display: none; background: #fff; border-radius: 12px;
+    padding: 28px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .study-back-btn {
+    display: inline-block; margin-bottom: 20px;
+    font-size: 0.82rem; color: #4a6cf7; background: none;
+    border: 1px solid #4a6cf7; border-radius: 6px;
+    padding: 4px 10px; cursor: pointer;
+  }
+  .study-back-btn:hover { background: #f0f3ff; }
+  .study-back-btn[style*="background:#4a6cf7"]:hover { background: #3a5ce5 !important; }
+  .study-link-btn {
+    font-size: 0.75rem; padding: 3px 9px; background: #e8f5e9;
+    color: #155724; border: none; border-radius: 6px;
+    cursor: pointer; font-weight: 600; flex-shrink: 0;
+  }
+  .study-link-btn:hover { background: #28a745; color: #fff; }
+
+  /* Markdown-rendered content */
+  .md h2 {
+    font-size: 1.1rem; font-weight: 700; margin: 22px 0 10px;
+    color: #1a1a2e; border-bottom: 2px solid #e2e4e9; padding-bottom: 5px;
+  }
+  .md h2:first-child { margin-top: 0; }
+  .md h3 { font-size: 0.98rem; font-weight: 700; margin: 16px 0 7px; color: #333; }
+  .md p  { margin-bottom: 10px; line-height: 1.65; font-size: 0.93rem; }
+  .md ul, .md ol { margin: 6px 0 10px 20px; }
+  .md li  { margin-bottom: 4px; line-height: 1.5; font-size: 0.93rem; }
+  .md pre {
+    background: #f0f0f0; border-radius: 6px; padding: 12px; margin: 10px 0;
+    overflow-x: auto; font-size: 0.88rem; line-height: 1.5;
+  }
+  .md code {
+    background: #f0f0f0; padding: 2px 5px; border-radius: 4px;
+    font-size: 0.9em; font-family: "SFMono-Regular", Consolas, monospace;
+  }
+  .md pre code { background: none; padding: 0; }
+  .md table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.87rem; }
+  .md th {
+    background: #f8f9fa; font-weight: 700; padding: 7px 11px;
+    border: 1px solid #e2e4e9; text-align: left;
+  }
+  .md td { padding: 6px 11px; border: 1px solid #e2e4e9; }
+  .md tr:nth-child(even) td { background: #fafbff; }
+  .md blockquote {
+    border-left: 4px solid #4a6cf7; margin: 10px 0; padding: 8px 14px;
+    background: #f0f3ff; border-radius: 0 6px 6px 0;
+    color: #333; font-style: italic; font-size: 0.92rem;
+  }
+
   /* ── Dancing guy ── */
   #dancer {
     position: fixed; top: 50%; left: 50%;
@@ -492,6 +547,7 @@
     100% { transform: translate(-50%, -50%) scale(0.3)  rotate(0deg);   opacity: 0; }
   }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/marked@9/marked.min.js"></script>
 </head>
 <body>
 <div id="dancer">🕺</div>
@@ -533,6 +589,7 @@
       Weak Areas <span class="dot" id="weak-dot" style="display:none"></span>
     </button>
     <button class="tab"        id="tab-exam"  onclick="switchTab('exam')">Exam</button>
+    <button class="tab"        id="tab-study" onclick="switchTab('study')">Study</button>
   </div>
 
   <div id="progress-bar"><div id="progress-fill" style="width:0%"></div></div>
@@ -673,6 +730,12 @@
 
   </div><!-- end exam-pane -->
 
+  <!-- ══════════ STUDY PANE ══════════ -->
+  <div id="study-pane">
+    <div id="study-nav"></div>
+    <div id="study-content"></div>
+  </div>
+
 </div><!-- end app -->
 
 <script>
@@ -759,11 +822,13 @@
     document.getElementById('tab-quiz').classList.toggle('active', tab === 'quiz');
     document.getElementById('tab-weak').classList.toggle('active', tab === 'weak');
     document.getElementById('tab-exam').classList.toggle('active', tab === 'exam');
+    document.getElementById('tab-study').classList.toggle('active', tab === 'study');
 
     if (tab === 'quiz') {
       show('quiz-pane');
       hide('weak-pane');
       hide('exam-pane');
+      hide('study-pane');
       const quizActive = document.getElementById('card').style.display !== 'none';
       document.getElementById('progress-bar').style.opacity = '1';
       if (!quizActive) {
@@ -774,18 +839,29 @@
       hide('quiz-pane');
       show('weak-pane');
       hide('exam-pane');
+      hide('study-pane');
       document.getElementById('progress-bar').style.opacity = '0';
       document.getElementById('score-display').textContent = '';
       document.getElementById('back-btn').style.display = 'none';
       buildWeakPane();
-    } else {
+    } else if (tab === 'exam') {
       hide('quiz-pane');
       hide('weak-pane');
       show('exam-pane');
+      hide('study-pane');
       document.getElementById('progress-bar').style.opacity = '0';
       document.getElementById('score-display').textContent = '';
       document.getElementById('back-btn').style.display = 'none';
       if (!examSetupBuilt) { buildExamSetup(); examSetupBuilt = true; }
+    } else if (tab === 'study') {
+      hide('quiz-pane');
+      hide('weak-pane');
+      hide('exam-pane');
+      show('study-pane');
+      document.getElementById('progress-bar').style.opacity = '0';
+      document.getElementById('score-display').textContent = '';
+      document.getElementById('back-btn').style.display = 'none';
+      buildStudyNav();
     }
   }
 
@@ -1087,6 +1163,7 @@
           <span class="summary-stat ${statClass}">${wrong}/${seen}</span>
           <button class="practice-btn" onclick="startQuiz({type:'sub',id:'${sid}',
             label:'${escAttr(subTitle)}',total:999})">Practice</button>
+          <button class="study-link-btn" onclick="switchTab('study');loadStudyPage('${sid}')">Notes</button>
         `;
         card.appendChild(row);
       }
@@ -1730,6 +1807,102 @@
       else if (selectedIdx !== -1) submitAnswer();
     }
   });
+
+  /* ═══════════════════════════════════════════
+     STUDY PANE
+  ═══════════════════════════════════════════ */
+  let studyNavBuilt = false;
+  let studySubOrder = [];   // flat ordered list of all subtopic IDs
+
+  function buildStudyNav() {
+    if (studyNavBuilt) return;
+    studyNavBuilt = true;
+    studySubOrder = topicsData.units.flatMap(u => u.topics.flatMap(t => t.subtopics.map(s => s.id)));
+    const nav = document.getElementById('study-nav');
+    nav.innerHTML = '';
+    for (const unit of topicsData.units) {
+      const item = document.createElement('div');
+      item.className = 'unit-item';
+      const hdr = document.createElement('div');
+      hdr.className = 'unit-header';
+      hdr.innerHTML = `
+        <span class="unit-toggle" id="stoggle-${unit.id}">&#9658;</span>
+        <span class="unit-name">${unit.title}</span>
+      `;
+      hdr.addEventListener('click', () => toggleStudyUnit(unit.id));
+      const subsDiv = document.createElement('div');
+      subsDiv.className = 'unit-subs';
+      subsDiv.id = 'ssubs-' + unit.id;
+      subsDiv.style.display = 'none';
+      for (const topic of unit.topics) {
+        for (const sub of topic.subtopics) {
+          const row = document.createElement('div');
+          row.className = 'sub-item';
+          row.style.cursor = 'pointer';
+          row.innerHTML = `<span class="sub-name">${sub.title}</span>`;
+          row.addEventListener('click', () => loadStudyPage(sub.id));
+          subsDiv.appendChild(row);
+        }
+      }
+      item.appendChild(hdr);
+      item.appendChild(subsDiv);
+      nav.appendChild(item);
+    }
+  }
+
+  function toggleStudyUnit(unitId) {
+    const subs = document.getElementById('ssubs-' + unitId);
+    const tog  = document.getElementById('stoggle-' + unitId);
+    const open = subs.style.display === 'none';
+    subs.style.display = open ? 'block' : 'none';
+    tog.classList.toggle('open', open);
+  }
+
+  function subTopicPath(subId) {
+    const m = subId.match(/^sub-(\d+)-(\d+)-(\d+)$/);
+    if (!m) return null;
+    return `textbook/unit-${m[1]}/topic-${m[1]}-${m[2]}/${subId}.md`;
+  }
+
+  async function loadStudyPage(subId) {
+    const path = subTopicPath(subId);
+    if (!path) return;
+    const content = document.getElementById('study-content');
+    const nav     = document.getElementById('study-nav');
+    content.innerHTML = '<div style="padding:40px;text-align:center;color:#888">Loading…</div>';
+    nav.style.display     = 'none';
+    content.style.display = 'block';
+    content.scrollTop = 0;
+
+    const curIdx  = studySubOrder.indexOf(subId);
+    const prevId  = curIdx > 0                         ? studySubOrder[curIdx - 1] : null;
+    const nextId  = curIdx < studySubOrder.length - 1  ? studySubOrder[curIdx + 1] : null;
+    const prevInfo = prevId ? subtopicMap[prevId] : null;
+    const nextInfo = nextId ? subtopicMap[nextId] : null;
+
+    const navBar = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:8px">
+        <button class="study-back-btn" style="margin:0" onclick="showStudyNav()">&#8592; All Topics</button>
+        <div style="display:flex;gap:8px">
+          ${prevId ? `<button class="study-back-btn" style="margin:0" onclick="loadStudyPage('${prevId}')" title="${escAttr(prevInfo?.subTitle||'')}">&#8592; Prev</button>` : ''}
+          ${nextId ? `<button class="study-back-btn" style="margin:0;background:#4a6cf7;color:#fff;border-color:#4a6cf7" onclick="loadStudyPage('${nextId}')" title="${escAttr(nextInfo?.subTitle||'')}">Next &#8594;</button>` : ''}
+        </div>
+      </div>`;
+
+    try {
+      const res      = await fetch(path);
+      const text     = await res.text();
+      const stripped = text.replace(/^---[\s\S]*?---\n/, '');
+      content.innerHTML = navBar + `<div class="md">${marked.parse(stripped)}</div>` + navBar;
+    } catch(e) {
+      content.innerHTML = navBar + `<p style="color:#dc3545;margin-top:8px">Failed to load notes for this topic.</p>`;
+    }
+  }
+
+  function showStudyNav() {
+    document.getElementById('study-content').style.display = 'none';
+    document.getElementById('study-nav').style.display     = 'block';
+  }
 
   init();
 </script>

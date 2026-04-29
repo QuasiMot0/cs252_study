@@ -1,0 +1,1132 @@
+{
+  "sub-1-1-1": {
+    "title": "Memory sections: text, data, BSS, heap, stack, shared libs",
+    "unit_id": "unit-1",
+    "unit_title": "Program Memory Layout & x86-64 Assembly",
+    "topic_id": "topic-1-1",
+    "topic_title": "Program Memory Layout",
+    "file_path": "textbook/unit-1/topic-1-1/sub-1-1-1.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-1-1-2": {
+    "title": "Address spaces and process isolation",
+    "unit_id": "unit-1",
+    "unit_title": "Program Memory Layout & x86-64 Assembly",
+    "topic_id": "topic-1-1",
+    "topic_title": "Program Memory Layout",
+    "file_path": "textbook/unit-1/topic-1-1/sub-1-1-2.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-1-1-3": {
+    "title": "Memory gaps, SEGV signals, and core dumps",
+    "unit_id": "unit-1",
+    "unit_title": "Program Memory Layout & x86-64 Assembly",
+    "topic_id": "topic-1-1",
+    "topic_title": "Program Memory Layout",
+    "file_path": "textbook/unit-1/topic-1-1/sub-1-1-3.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-1-1-4": {
+    "title": "Where variables live: global/static/local/heap example walkthrough",
+    "unit_id": "unit-1",
+    "unit_title": "Program Memory Layout & x86-64 Assembly",
+    "topic_id": "topic-1-1",
+    "topic_title": "Program Memory Layout",
+    "file_path": "textbook/unit-1/topic-1-1/sub-1-1-4.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-1-2-1": {
+    "title": "CPU registers: argument registers vs callee-saved registers, calling conventions",
+    "unit_id": "unit-1",
+    "unit_title": "Program Memory Layout & x86-64 Assembly",
+    "topic_id": "topic-1-2",
+    "topic_title": "x86-64 Assembly Language",
+    "file_path": "textbook/unit-1/topic-1-2/sub-1-2-1.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-1-2-2": {
+    "title": "Addressing modes: immediate, register, indirect, direct memory",
+    "unit_id": "unit-1",
+    "unit_title": "Program Memory Layout & x86-64 Assembly",
+    "topic_id": "topic-1-2",
+    "topic_title": "x86-64 Assembly Language",
+    "file_path": "textbook/unit-1/topic-1-2/sub-1-2-2.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-1-2-3": {
+    "title": "x86-64 instruction types: mov, add, cmp, test, push/pop (q suffix = 64-bit)",
+    "unit_id": "unit-1",
+    "unit_title": "Program Memory Layout & x86-64 Assembly",
+    "topic_id": "topic-1-2",
+    "topic_title": "x86-64 Assembly Language",
+    "file_path": "textbook/unit-1/topic-1-2/sub-1-2-3.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-1-2-4": {
+    "title": "Flags register and conditional jumps: JE, JNE, JGE, JLE, etc.",
+    "unit_id": "unit-1",
+    "unit_title": "Program Memory Layout & x86-64 Assembly",
+    "topic_id": "topic-1-2",
+    "topic_title": "x86-64 Assembly Language",
+    "file_path": "textbook/unit-1/topic-1-2/sub-1-2-4.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-1-2-5": {
+    "title": "Translating C if/else and while loops to assembly",
+    "unit_id": "unit-1",
+    "unit_title": "Program Memory Layout & x86-64 Assembly",
+    "topic_id": "topic-1-2",
+    "topic_title": "x86-64 Assembly Language",
+    "file_path": "textbook/unit-1/topic-1-2/sub-1-2-5.md",
+    "est_minutes": 6,
+    "status": "written"
+  },
+  "sub-1-2-6": {
+    "title": "Defining global variables in assembly: .data, .comm directive",
+    "unit_id": "unit-1",
+    "unit_title": "Program Memory Layout & x86-64 Assembly",
+    "topic_id": "topic-1-2",
+    "topic_title": "x86-64 Assembly Language",
+    "file_path": "textbook/unit-1/topic-1-2/sub-1-2-6.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-2-1-1": {
+    "title": "ELF, COFF, and a.out executable formats: structure and purpose",
+    "unit_id": "unit-2",
+    "unit_title": "Executables, Linking & Libraries",
+    "topic_id": "topic-2-1",
+    "topic_title": "Executable File Formats & the Compilation Pipeline",
+    "file_path": "textbook/unit-2/topic-2-1/sub-2-1-1.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-2-1-2": {
+    "title": "Compilation pipeline: preprocessor \u2192 compiler \u2192 assembler \u2192 linker",
+    "unit_id": "unit-2",
+    "unit_title": "Executables, Linking & Libraries",
+    "topic_id": "topic-2-1",
+    "topic_title": "Executable File Formats & the Compilation Pipeline",
+    "file_path": "textbook/unit-2/topic-2-1/sub-2-1-2.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-2-1-3": {
+    "title": "Static libraries (.a): creation with ar, linking behavior",
+    "unit_id": "unit-2",
+    "unit_title": "Executables, Linking & Libraries",
+    "topic_id": "topic-2-1",
+    "topic_title": "Executable File Formats & the Compilation Pipeline",
+    "file_path": "textbook/unit-2/topic-2-1/sub-2-1-3.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-2-1-4": {
+    "title": "Shared libraries (.so): advantages over static, runtime linker, LD_LIBRARY_PATH",
+    "unit_id": "unit-2",
+    "unit_title": "Executables, Linking & Libraries",
+    "topic_id": "topic-2-1",
+    "topic_title": "Executable File Formats & the Compilation Pipeline",
+    "file_path": "textbook/unit-2/topic-2-1/sub-2-1-4.md",
+    "est_minutes": 6,
+    "status": "written"
+  },
+  "sub-2-1-5": {
+    "title": "Dynamic loading at runtime: dlopen(), dlsym(), dlclose()",
+    "unit_id": "unit-2",
+    "unit_title": "Executables, Linking & Libraries",
+    "topic_id": "topic-2-1",
+    "topic_title": "Executable File Formats & the Compilation Pipeline",
+    "file_path": "textbook/unit-2/topic-2-1/sub-2-1-5.md",
+    "est_minutes": 6,
+    "status": "written"
+  },
+  "sub-3-1-1": {
+    "title": "Pointer declaration, dereferencing (*), address-of (&), and NULL",
+    "unit_id": "unit-3",
+    "unit_title": "Pointers & the C Memory Model",
+    "topic_id": "topic-3-1",
+    "topic_title": "Pointer Fundamentals",
+    "file_path": "textbook/unit-3/topic-3-1/sub-3-1-1.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-3-1-2": {
+    "title": "Pointer arithmetic, array-pointer equivalence, and indexing",
+    "unit_id": "unit-3",
+    "unit_title": "Pointers & the C Memory Model",
+    "topic_id": "topic-3-1",
+    "topic_title": "Pointer Fundamentals",
+    "file_path": "textbook/unit-3/topic-3-1/sub-3-1-2.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-3-1-3": {
+    "title": "sizeof operator: pointer size always 8 bytes, type sizes",
+    "unit_id": "unit-3",
+    "unit_title": "Pointers & the C Memory Model",
+    "topic_id": "topic-3-1",
+    "topic_title": "Pointer Fundamentals",
+    "file_path": "textbook/unit-3/topic-3-1/sub-3-1-3.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-3-1-4": {
+    "title": "2D arrays: contiguous, jagged (int**), and pointer-based implementations",
+    "unit_id": "unit-3",
+    "unit_title": "Pointers & the C Memory Model",
+    "topic_id": "topic-3-1",
+    "topic_title": "Pointer Fundamentals",
+    "file_path": "textbook/unit-3/topic-3-1/sub-3-1-4.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-3-1-5": {
+    "title": "Function pointers: declaration, typedef, use in callbacks and generic sort",
+    "unit_id": "unit-3",
+    "unit_title": "Pointers & the C Memory Model",
+    "topic_id": "topic-3-1",
+    "topic_title": "Pointer Fundamentals",
+    "file_path": "textbook/unit-3/topic-3-1/sub-3-1-5.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-3-1-6": {
+    "title": "Common pointer errors: null deref, dangling pointer, uninitialized pointer",
+    "unit_id": "unit-3",
+    "unit_title": "Pointers & the C Memory Model",
+    "topic_id": "topic-3-1",
+    "topic_title": "Pointer Fundamentals",
+    "file_path": "textbook/unit-3/topic-3-1/sub-3-1-6.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-4-1-1": {
+    "title": "Memory layout revisited: where the heap lives, heap growth direction",
+    "unit_id": "unit-4",
+    "unit_title": "Building Your Own Malloc",
+    "topic_id": "topic-4-1",
+    "topic_title": "Heap Management & OS Memory Requests",
+    "file_path": "textbook/unit-4/topic-4-1/sub-4-1-1.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-4-1-2": {
+    "title": "sbrk(n) mechanics: extending/shrinking the heap, ordering constraint, why it's not enough alone",
+    "unit_id": "unit-4",
+    "unit_title": "Building Your Own Malloc",
+    "topic_id": "topic-4-1",
+    "topic_title": "Heap Management & OS Memory Requests",
+    "file_path": "textbook/unit-4/topic-4-1/sub-4-1-2.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-4-1-3": {
+    "title": "ARENA_SIZE chunks: lazy allocation, when to request a new chunk, handling sbrk failure",
+    "unit_id": "unit-4",
+    "unit_title": "Building Your Own Malloc",
+    "topic_id": "topic-4-1",
+    "topic_title": "Heap Management & OS Memory Requests",
+    "file_path": "textbook/unit-4/topic-4-1/sub-4-1-3.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-4-2-1": {
+    "title": "Implicit free list: traversing all blocks (allocated + free) to find a fit",
+    "unit_id": "unit-4",
+    "unit_title": "Building Your Own Malloc",
+    "topic_id": "topic-4-2",
+    "topic_title": "Free List Strategies & Placement Policies",
+    "file_path": "textbook/unit-4/topic-4-2/sub-4-2-1.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-4-2-2": {
+    "title": "Explicit free list: linked list of only free blocks, next/prev pointers in metadata",
+    "unit_id": "unit-4",
+    "unit_title": "Building Your Own Malloc",
+    "topic_id": "topic-4-2",
+    "topic_title": "Free List Strategies & Placement Policies",
+    "file_path": "textbook/unit-4/topic-4-2/sub-4-2-2.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-4-2-3": {
+    "title": "Segregated free lists: N_LISTS size-class buckets, sentinel nodes, circular doubly-linked lists",
+    "unit_id": "unit-4",
+    "unit_title": "Building Your Own Malloc",
+    "topic_id": "topic-4-2",
+    "topic_title": "Free List Strategies & Placement Policies",
+    "file_path": "textbook/unit-4/topic-4-2/sub-4-2-3.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-4-2-4": {
+    "title": "First-fit vs best-fit placement: time vs fragmentation trade-off, last-list fallback",
+    "unit_id": "unit-4",
+    "unit_title": "Building Your Own Malloc",
+    "topic_id": "topic-4-2",
+    "topic_title": "Free List Strategies & Placement Policies",
+    "file_path": "textbook/unit-4/topic-4-2/sub-4-2-4.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-4-3-1": {
+    "title": "Header struct fields: size, left_size, allocated bit, next/prev pointers; actual vs allocable vs request size",
+    "unit_id": "unit-4",
+    "unit_title": "Building Your Own Malloc",
+    "topic_id": "topic-4-3",
+    "topic_title": "Block Metadata, Boundary Tags & Alignment",
+    "file_path": "textbook/unit-4/topic-4-3/sub-4-3-1.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-4-3-2": {
+    "title": "Boundary tags (footer): O(1) neighbor lookup using left_size and size fields",
+    "unit_id": "unit-4",
+    "unit_title": "Building Your Own Malloc",
+    "topic_id": "topic-4-3",
+    "topic_title": "Block Metadata, Boundary Tags & Alignment",
+    "file_path": "textbook/unit-4/topic-4-3/sub-4-3-2.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-4-3-3": {
+    "title": "Alignment: rounding request to next multiple of 8, minimum block size (16 bytes on 64-bit), allocated-bit packing in size field",
+    "unit_id": "unit-4",
+    "unit_title": "Building Your Own Malloc",
+    "topic_id": "topic-4-3",
+    "topic_title": "Block Metadata, Boundary Tags & Alignment",
+    "file_path": "textbook/unit-4/topic-4-3/sub-4-3-3.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-4-3-4": {
+    "title": "Pointer arithmetic in malloc: casting to char* for byte offsets, computing neighbor addresses",
+    "unit_id": "unit-4",
+    "unit_title": "Building Your Own Malloc",
+    "topic_id": "topic-4-3",
+    "topic_title": "Block Metadata, Boundary Tags & Alignment",
+    "file_path": "textbook/unit-4/topic-4-3/sub-4-3-4.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-4-4-1": {
+    "title": "Block splitting: minimum remainder size, allocating the right (higher) half for determinism",
+    "unit_id": "unit-4",
+    "unit_title": "Building Your Own Malloc",
+    "topic_id": "topic-4-4",
+    "topic_title": "Block Splitting, Coalescing & Fenceposts",
+    "file_path": "textbook/unit-4/topic-4-4/sub-4-4-1.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-4-4-2": {
+    "title": "Coalescing: 4 cases (neither/right only/left only/both free), updating free-list membership after coalesce",
+    "unit_id": "unit-4",
+    "unit_title": "Building Your Own Malloc",
+    "topic_id": "topic-4-4",
+    "topic_title": "Block Splitting, Coalescing & Fenceposts",
+    "file_path": "textbook/unit-4/topic-4-4/sub-4-4-2.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-4-4-3": {
+    "title": "Fenceposts: why they're needed, placement at chunk edges, removing fenceposts when coalescing adjacent OS chunks",
+    "unit_id": "unit-4",
+    "unit_title": "Building Your Own Malloc",
+    "topic_id": "topic-4-4",
+    "topic_title": "Block Splitting, Coalescing & Fenceposts",
+    "file_path": "textbook/unit-4/topic-4-4/sub-4-4-3.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-4-4-4": {
+    "title": "realloc() semantics: grow-in-place vs copy, freeing original on move, NULL input behavior",
+    "unit_id": "unit-4",
+    "unit_title": "Building Your Own Malloc",
+    "topic_id": "topic-4-4",
+    "topic_title": "Block Splitting, Coalescing & Fenceposts",
+    "file_path": "textbook/unit-4/topic-4-4/sub-4-4-4.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-4-5-1": {
+    "title": "Internal vs external fragmentation: definitions, causes, and which strategies reduce each",
+    "unit_id": "unit-4",
+    "unit_title": "Building Your Own Malloc",
+    "topic_id": "topic-4-5",
+    "topic_title": "Fragmentation & Memory Errors",
+    "file_path": "textbook/unit-4/topic-4-5/sub-4-5-1.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-4-5-2": {
+    "title": "Memory leaks: definition, detection, long-lived process impact",
+    "unit_id": "unit-4",
+    "unit_title": "Building Your Own Malloc",
+    "topic_id": "topic-4-5",
+    "topic_title": "Fragmentation & Memory Errors",
+    "file_path": "textbook/unit-4/topic-4-5/sub-4-5-2.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-4-5-3": {
+    "title": "Premature free and use-after-free: setting p=NULL after free as mitigation",
+    "unit_id": "unit-4",
+    "unit_title": "Building Your Own Malloc",
+    "topic_id": "topic-4-5",
+    "topic_title": "Fragmentation & Memory Errors",
+    "file_path": "textbook/unit-4/topic-4-5/sub-4-5-3.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-4-5-4": {
+    "title": "Double free: how it corrupts free-list metadata, magic-number detection technique",
+    "unit_id": "unit-4",
+    "unit_title": "Building Your Own Malloc",
+    "topic_id": "topic-4-5",
+    "topic_title": "Fragmentation & Memory Errors",
+    "file_path": "textbook/unit-4/topic-4-5/sub-4-5-4.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-4-5-5": {
+    "title": "Wild free: freeing a pointer not returned by malloc, freeing a pointer into the middle of a block",
+    "unit_id": "unit-4",
+    "unit_title": "Building Your Own Malloc",
+    "topic_id": "topic-4-5",
+    "topic_title": "Fragmentation & Memory Errors",
+    "file_path": "textbook/unit-4/topic-4-5/sub-4-5-5.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-4-5-6": {
+    "title": "Memory smashing: writing past end of allocation, how it corrupts adjacent block headers",
+    "unit_id": "unit-4",
+    "unit_title": "Building Your Own Malloc",
+    "topic_id": "topic-4-5",
+    "topic_title": "Fragmentation & Memory Errors",
+    "file_path": "textbook/unit-4/topic-4-5/sub-4-5-6.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-4-5-7": {
+    "title": "Heap check and debugging allocator: magic numbers, boundary validation, gdb integration",
+    "unit_id": "unit-4",
+    "unit_title": "Building Your Own Malloc",
+    "topic_id": "topic-4-5",
+    "topic_title": "Fragmentation & Memory Errors",
+    "file_path": "textbook/unit-4/topic-4-5/sub-4-5-7.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-5-1-1": {
+    "title": "Compiling with -g, launching gdb, run/break/next/step/continue/print commands",
+    "unit_id": "unit-5",
+    "unit_title": "Debugging with gdb",
+    "topic_id": "topic-5-1",
+    "topic_title": "Using gdb for Systems Programs",
+    "file_path": "textbook/unit-5/topic-5-1/sub-5-1-1.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-5-1-2": {
+    "title": "Post-mortem debugging: gdb with a core file, bt (backtrace) command",
+    "unit_id": "unit-5",
+    "unit_title": "Debugging with gdb",
+    "topic_id": "topic-5-1",
+    "topic_title": "Using gdb for Systems Programs",
+    "file_path": "textbook/unit-5/topic-5-1/sub-5-1-2.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-6-1-1": {
+    "title": "Inode structure: metadata fields, direct/indirect block pointers, block size math",
+    "unit_id": "unit-6",
+    "unit_title": "OS Fundamentals, File System & Processes",
+    "topic_id": "topic-6-1",
+    "topic_title": "Unix File System",
+    "file_path": "textbook/unit-6/topic-6-1/sub-6-1-1.md",
+    "est_minutes": 6,
+    "status": "written"
+  },
+  "sub-6-1-2": {
+    "title": "Hard links and reference counting: when a file is actually deleted",
+    "unit_id": "unit-6",
+    "unit_title": "OS Fundamentals, File System & Processes",
+    "topic_id": "topic-6-1",
+    "topic_title": "Unix File System",
+    "file_path": "textbook/unit-6/topic-6-1/sub-6-1-2.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-6-1-3": {
+    "title": "File permissions: rwx bits, owner/group/other, chmod octal notation",
+    "unit_id": "unit-6",
+    "unit_title": "OS Fundamentals, File System & Processes",
+    "topic_id": "topic-6-1",
+    "topic_title": "Unix File System",
+    "file_path": "textbook/unit-6/topic-6-1/sub-6-1-3.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-6-2-1": {
+    "title": "Open file table: per-process fd table \u2192 system open file table \u2192 inode table",
+    "unit_id": "unit-6",
+    "unit_title": "OS Fundamentals, File System & Processes",
+    "topic_id": "topic-6-2",
+    "topic_title": "Open File Table & File Descriptors",
+    "file_path": "textbook/unit-6/topic-6-2/sub-6-2-1.md",
+    "est_minutes": 6,
+    "status": "written"
+  },
+  "sub-6-2-2": {
+    "title": "open() flags: O_RDONLY, O_WRONLY, O_CREAT, O_TRUNC, O_APPEND; return value",
+    "unit_id": "unit-6",
+    "unit_title": "OS Fundamentals, File System & Processes",
+    "topic_id": "topic-6-2",
+    "topic_title": "Open File Table & File Descriptors",
+    "file_path": "textbook/unit-6/topic-6-2/sub-6-2-2.md",
+    "est_minutes": 6,
+    "status": "written"
+  },
+  "sub-6-2-3": {
+    "title": "File descriptor inheritance across fork(): shared offset behavior",
+    "unit_id": "unit-6",
+    "unit_title": "OS Fundamentals, File System & Processes",
+    "topic_id": "topic-6-2",
+    "topic_title": "Open File Table & File Descriptors",
+    "file_path": "textbook/unit-6/topic-6-2/sub-6-2-3.md",
+    "est_minutes": 6,
+    "status": "written"
+  },
+  "sub-6-3-1": {
+    "title": "Process properties: PID, arguments (argc/argv), environment variables, current directory, UID",
+    "unit_id": "unit-6",
+    "unit_title": "OS Fundamentals, File System & Processes",
+    "topic_id": "topic-6-3",
+    "topic_title": "Processes",
+    "file_path": "textbook/unit-6/topic-6-3/sub-6-3-1.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-6-3-2": {
+    "title": "Environment variables: getenv/setenv, PATH, HOME, USER; environ array",
+    "unit_id": "unit-6",
+    "unit_title": "OS Fundamentals, File System & Processes",
+    "topic_id": "topic-6-3",
+    "topic_title": "Processes",
+    "file_path": "textbook/unit-6/topic-6-3/sub-6-3-2.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-6-3-3": {
+    "title": "stdin/stdout/stderr: fd 0/1/2, > and < redirection, 2>&1 semantics",
+    "unit_id": "unit-6",
+    "unit_title": "OS Fundamentals, File System & Processes",
+    "topic_id": "topic-6-3",
+    "topic_title": "Processes",
+    "file_path": "textbook/unit-6/topic-6-3/sub-6-3-3.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-7-1-1": {
+    "title": "Variables, command substitution $(), and quoting rules",
+    "unit_id": "unit-7",
+    "unit_title": "Shell Scripting (Bash)",
+    "topic_id": "topic-7-1",
+    "topic_title": "Bash Fundamentals",
+    "file_path": "textbook/unit-7/topic-7-1/sub-7-1-1.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-7-1-2": {
+    "title": "Control flow: if/then/else/fi, while/do/done, for loops",
+    "unit_id": "unit-7",
+    "unit_title": "Shell Scripting (Bash)",
+    "topic_id": "topic-7-1",
+    "topic_title": "Bash Fundamentals",
+    "file_path": "textbook/unit-7/topic-7-1/sub-7-1-2.md",
+    "est_minutes": 6,
+    "status": "written"
+  },
+  "sub-7-1-3": {
+    "title": "Regular expressions in bash: grep/sed/awk patterns for validation",
+    "unit_id": "unit-7",
+    "unit_title": "Shell Scripting (Bash)",
+    "topic_id": "topic-7-1",
+    "topic_title": "Bash Fundamentals",
+    "file_path": "textbook/unit-7/topic-7-1/sub-7-1-3.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-7-1-4": {
+    "title": "Script arguments ($1, $2, $#, $@), exit codes, and test/[ ] expressions",
+    "unit_id": "unit-7",
+    "unit_title": "Shell Scripting (Bash)",
+    "topic_id": "topic-7-1",
+    "topic_title": "Bash Fundamentals",
+    "file_path": "textbook/unit-7/topic-7-1/sub-7-1-4.md",
+    "est_minutes": 6,
+    "status": "written"
+  },
+  "sub-8-1-1": {
+    "title": "Shell design: three parts \u2014 parser, executor, subsystems (wildcarding, subshells, env expansion)",
+    "unit_id": "unit-8",
+    "unit_title": "Building Your Own Shell",
+    "topic_id": "topic-8-1",
+    "topic_title": "Shell Architecture & Lexical Analysis with Flex",
+    "file_path": "textbook/unit-8/topic-8-1/sub-8-1-1.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-8-1-2": {
+    "title": "Flex lexer: token types (WORD, GREAT, GREATGREAT, PIPE, AMPERSAND, etc.), longest-match rule",
+    "unit_id": "unit-8",
+    "unit_title": "Building Your Own Shell",
+    "topic_id": "topic-8-1",
+    "topic_title": "Shell Architecture & Lexical Analysis with Flex",
+    "file_path": "textbook/unit-8/topic-8-1/sub-8-1-2.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-8-1-3": {
+    "title": "Flex start conditions (WORD_STATE): building multi-character tokens, unput() to push back delimiters",
+    "unit_id": "unit-8",
+    "unit_title": "Building Your Own Shell",
+    "topic_id": "topic-8-1",
+    "topic_title": "Shell Architecture & Lexical Analysis with Flex",
+    "file_path": "textbook/unit-8/topic-8-1/sub-8-1-3.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-8-2-1": {
+    "title": "Yacc grammar rules for shell commands: cmd_and_args, pipe_list, io_modifier, command_line",
+    "unit_id": "unit-8",
+    "unit_title": "Building Your Own Shell",
+    "topic_id": "topic-8-2",
+    "topic_title": "Parsing with Yacc/Bison",
+    "file_path": "textbook/unit-8/topic-8-2/sub-8-2-1.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-8-2-2": {
+    "title": "Parse tree construction and how the executor walks it to run commands",
+    "unit_id": "unit-8",
+    "unit_title": "Building Your Own Shell",
+    "topic_id": "topic-8-2",
+    "topic_title": "Parsing with Yacc/Bison",
+    "file_path": "textbook/unit-8/topic-8-2/sub-8-2-2.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-8-3-1": {
+    "title": "fork() return value: 0 in child, child PID in parent, -1 on error; what is copied vs shared",
+    "unit_id": "unit-8",
+    "unit_title": "Building Your Own Shell",
+    "topic_id": "topic-8-3",
+    "topic_title": "Process Creation: fork, exec, wait",
+    "file_path": "textbook/unit-8/topic-8-3/sub-8-3-1.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-8-3-2": {
+    "title": "execvp() and family: argument array format (NULL-terminated), when code after exec() runs",
+    "unit_id": "unit-8",
+    "unit_title": "Building Your Own Shell",
+    "topic_id": "topic-8-3",
+    "topic_title": "Process Creation: fork, exec, wait",
+    "file_path": "textbook/unit-8/topic-8-3/sub-8-3-2.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-8-3-3": {
+    "title": "wait() vs waitpid(): blocking, WNOHANG flag, exit status extraction with WEXITSTATUS",
+    "unit_id": "unit-8",
+    "unit_title": "Building Your Own Shell",
+    "topic_id": "topic-8-3",
+    "topic_title": "Process Creation: fork, exec, wait",
+    "file_path": "textbook/unit-8/topic-8-3/sub-8-3-3.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-8-4-1": {
+    "title": "dup2(oldfd, newfd): redirect stdin/stdout/stderr; closing original fd after dup2",
+    "unit_id": "unit-8",
+    "unit_title": "Building Your Own Shell",
+    "topic_id": "topic-8-4",
+    "topic_title": "I/O Redirection & dup2",
+    "file_path": "textbook/unit-8/topic-8-4/sub-8-4-1.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-8-4-2": {
+    "title": "Redirection operators: > (truncate), >> (append), < (input), 2> (stderr), 2>&1, >&",
+    "unit_id": "unit-8",
+    "unit_title": "Building Your Own Shell",
+    "topic_id": "topic-8-4",
+    "topic_title": "I/O Redirection & dup2",
+    "file_path": "textbook/unit-8/topic-8-4/sub-8-4-2.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-8-4-3": {
+    "title": "Order of redirections matters: why 2>&1 > file differs from > file 2>&1",
+    "unit_id": "unit-8",
+    "unit_title": "Building Your Own Shell",
+    "topic_id": "topic-8-4",
+    "topic_title": "I/O Redirection & dup2",
+    "file_path": "textbook/unit-8/topic-8-4/sub-8-4-3.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-8-5-1": {
+    "title": "pipe() syscall: fd[0] = read end, fd[1] = write end; must close unused ends",
+    "unit_id": "unit-8",
+    "unit_title": "Building Your Own Shell",
+    "topic_id": "topic-8-5",
+    "topic_title": "Pipes & Multi-Command Pipelines",
+    "file_path": "textbook/unit-8/topic-8-5/sub-8-5-1.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-8-5-2": {
+    "title": "Chaining N commands with pipes: prevPipe pattern, fork per command, closing fd[1] in parent",
+    "unit_id": "unit-8",
+    "unit_title": "Building Your Own Shell",
+    "topic_id": "topic-8-5",
+    "topic_title": "Pipes & Multi-Command Pipelines",
+    "file_path": "textbook/unit-8/topic-8-5/sub-8-5-2.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-8-5-3": {
+    "title": "Blocking on read() when write end is still open: deadlock scenario when close() is missed",
+    "unit_id": "unit-8",
+    "unit_title": "Building Your Own Shell",
+    "topic_id": "topic-8-5",
+    "topic_title": "Pipes & Multi-Command Pipelines",
+    "file_path": "textbook/unit-8/topic-8-5/sub-8-5-3.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-8-6-1": {
+    "title": "SIGINT (Ctrl-C) handling: default vs custom handler, signal() vs sigaction()",
+    "unit_id": "unit-8",
+    "unit_title": "Building Your Own Shell",
+    "topic_id": "topic-8-6",
+    "topic_title": "Signal Handling, Zombies & Job Control",
+    "file_path": "textbook/unit-8/topic-8-6/sub-8-6-1.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-8-6-2": {
+    "title": "Zombie processes: what they are, why they exist, how SIGCHLD + waitpid(-1,WNOHANG) reaps them",
+    "unit_id": "unit-8",
+    "unit_title": "Building Your Own Shell",
+    "topic_id": "topic-8-6",
+    "topic_title": "Signal Handling, Zombies & Job Control",
+    "file_path": "textbook/unit-8/topic-8-6/sub-8-6-2.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-8-6-3": {
+    "title": "Background (&) vs foreground processes: when parent calls waitpid vs skips it; isatty() for non-interactive mode",
+    "unit_id": "unit-8",
+    "unit_title": "Building Your Own Shell",
+    "topic_id": "topic-8-6",
+    "topic_title": "Signal Handling, Zombies & Job Control",
+    "file_path": "textbook/unit-8/topic-8-6/sub-8-6-3.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-8-6-4": {
+    "title": "Exit status $?: how the shell stores and exposes the last command's exit code",
+    "unit_id": "unit-8",
+    "unit_title": "Building Your Own Shell",
+    "topic_id": "topic-8-6",
+    "topic_title": "Signal Handling, Zombies & Job Control",
+    "file_path": "textbook/unit-8/topic-8-6/sub-8-6-4.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-8-7-1": {
+    "title": "Wildcard/glob expansion: readdir() + regex matching, sorting results, hidden files (dot-files)",
+    "unit_id": "unit-8",
+    "unit_title": "Building Your Own Shell",
+    "topic_id": "topic-8-7",
+    "topic_title": "Shell Expansions",
+    "file_path": "textbook/unit-8/topic-8-7/sub-8-7-1.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-8-7-2": {
+    "title": "Subdirectory wildcard expansion: recursive expandWildcard() with prefix/suffix approach",
+    "unit_id": "unit-8",
+    "unit_title": "Building Your Own Shell",
+    "topic_id": "topic-8-7",
+    "topic_title": "Shell Expansions",
+    "file_path": "textbook/unit-8/topic-8-7/sub-8-7-2.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-8-7-3": {
+    "title": "Subshell/backtick expansion: fork \u2192 exec \u2192 read pipe output \u2192 myunputc() in reverse into lexer",
+    "unit_id": "unit-8",
+    "unit_title": "Building Your Own Shell",
+    "topic_id": "topic-8-7",
+    "topic_title": "Shell Expansions",
+    "file_path": "textbook/unit-8/topic-8-7/sub-8-7-3.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-8-7-4": {
+    "title": "Environment variable expansion ($VAR) and tilde expansion (~) at lex/parse time",
+    "unit_id": "unit-8",
+    "unit_title": "Building Your Own Shell",
+    "topic_id": "topic-8-7",
+    "topic_title": "Shell Expansions",
+    "file_path": "textbook/unit-8/topic-8-7/sub-8-7-4.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-8-8-1": {
+    "title": "cd, setenv, unsetenv, exit: why builtins can't be forked (must change shell's own state)",
+    "unit_id": "unit-8",
+    "unit_title": "Building Your Own Shell",
+    "topic_id": "topic-8-8",
+    "topic_title": "Shell Builtins",
+    "file_path": "textbook/unit-8/topic-8-8/sub-8-8-1.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-8-8-2": {
+    "title": "source builtin: YY_BUFFER_STATE switching to parse a file without losing current lex buffer",
+    "unit_id": "unit-8",
+    "unit_title": "Building Your Own Shell",
+    "topic_id": "topic-8-8",
+    "topic_title": "Shell Builtins",
+    "file_path": "textbook/unit-8/topic-8-8/sub-8-8-2.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-9-1-1": {
+    "title": "Kernel vs user mode: permissions, why user programs can't directly access hardware",
+    "unit_id": "unit-9",
+    "unit_title": "OS Internals & CPU Scheduling",
+    "topic_id": "topic-9-1",
+    "topic_title": "Kernel & User Mode",
+    "file_path": "textbook/unit-9/topic-9-1/sub-9-1-1.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-9-1-2": {
+    "title": "Interrupts: hardware vs software interrupts, ISR, returning from interrupt",
+    "unit_id": "unit-9",
+    "unit_title": "OS Internals & CPU Scheduling",
+    "topic_id": "topic-9-1",
+    "topic_title": "Kernel & User Mode",
+    "file_path": "textbook/unit-9/topic-9-1/sub-9-1-2.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-9-1-3": {
+    "title": "System calls: software interrupt mechanism, syscall table, security enforcement in handler",
+    "unit_id": "unit-9",
+    "unit_title": "OS Internals & CPU Scheduling",
+    "topic_id": "topic-9-1",
+    "topic_title": "Kernel & User Mode",
+    "file_path": "textbook/unit-9/topic-9-1/sub-9-1-3.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-9-2-1": {
+    "title": "Scheduling algorithms: FIFO, round-robin, preemptive vs non-preemptive",
+    "unit_id": "unit-9",
+    "unit_title": "OS Internals & CPU Scheduling",
+    "topic_id": "topic-9-2",
+    "topic_title": "CPU Scheduling",
+    "file_path": "textbook/unit-9/topic-9-2/sub-9-2-1.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-9-2-2": {
+    "title": "Time quantum choice: trade-offs between context-switch overhead and responsiveness",
+    "unit_id": "unit-9",
+    "unit_title": "OS Internals & CPU Scheduling",
+    "topic_id": "topic-9-2",
+    "topic_title": "CPU Scheduling",
+    "file_path": "textbook/unit-9/topic-9-2/sub-9-2-2.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-10-1-1": {
+    "title": "What a thread is: shared vs private state (heap/globals shared, stack/registers private)",
+    "unit_id": "unit-10",
+    "unit_title": "Threads & Synchronization",
+    "topic_id": "topic-10-1",
+    "topic_title": "Thread Basics",
+    "file_path": "textbook/unit-10/topic-10-1/sub-10-1-1.md",
+    "est_minutes": 6,
+    "status": "written"
+  },
+  "sub-10-1-2": {
+    "title": "pthread_create(), pthread_join(), thread function signature",
+    "unit_id": "unit-10",
+    "unit_title": "Threads & Synchronization",
+    "topic_id": "topic-10-1",
+    "topic_title": "Thread Basics",
+    "file_path": "textbook/unit-10/topic-10-1/sub-10-1-2.md",
+    "est_minutes": 6,
+    "status": "written"
+  },
+  "sub-10-1-3": {
+    "title": "Threads vs processes: advantages and disadvantages (creation cost, isolation, shared memory)",
+    "unit_id": "unit-10",
+    "unit_title": "Threads & Synchronization",
+    "topic_id": "topic-10-1",
+    "topic_title": "Thread Basics",
+    "file_path": "textbook/unit-10/topic-10-1/sub-10-1-3.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-10-2-1": {
+    "title": "Race conditions: non-deterministic interleaving, lost update problem",
+    "unit_id": "unit-10",
+    "unit_title": "Threads & Synchronization",
+    "topic_id": "topic-10-2",
+    "topic_title": "Race Conditions & Mutual Exclusion",
+    "file_path": "textbook/unit-10/topic-10-2/sub-10-2-1.md",
+    "est_minutes": 6,
+    "status": "written"
+  },
+  "sub-10-2-2": {
+    "title": "Mutex locks: pthread_mutex_lock/unlock, critical sections, mutual exclusion guarantee",
+    "unit_id": "unit-10",
+    "unit_title": "Threads & Synchronization",
+    "topic_id": "topic-10-2",
+    "topic_title": "Race Conditions & Mutual Exclusion",
+    "file_path": "textbook/unit-10/topic-10-2/sub-10-2-2.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-10-2-3": {
+    "title": "Spin locks: busy-wait implementation, pthread_yield(), when to prefer spinlock vs mutex",
+    "unit_id": "unit-10",
+    "unit_title": "Threads & Synchronization",
+    "topic_id": "topic-10-2",
+    "topic_title": "Race Conditions & Mutual Exclusion",
+    "file_path": "textbook/unit-10/topic-10-2/sub-10-2-3.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-10-2-4": {
+    "title": "Atomic operations and mutex implementation with test-and-set hardware instruction",
+    "unit_id": "unit-10",
+    "unit_title": "Threads & Synchronization",
+    "topic_id": "topic-10-2",
+    "topic_title": "Race Conditions & Mutual Exclusion",
+    "file_path": "textbook/unit-10/topic-10-2/sub-10-2-4.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-10-3-1": {
+    "title": "Semaphores: sem_wait/sem_post, counting semaphore vs binary (mutex) semaphore",
+    "unit_id": "unit-10",
+    "unit_title": "Threads & Synchronization",
+    "topic_id": "topic-10-3",
+    "topic_title": "Semaphores & Classical Problems",
+    "file_path": "textbook/unit-10/topic-10-3/sub-10-3-1.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-10-3-2": {
+    "title": "Bounded buffer (producer-consumer): _emptySem and _fullSem pattern",
+    "unit_id": "unit-10",
+    "unit_title": "Threads & Synchronization",
+    "topic_id": "topic-10-3",
+    "topic_title": "Semaphores & Classical Problems",
+    "file_path": "textbook/unit-10/topic-10-3/sub-10-3-2.md",
+    "est_minutes": 6,
+    "status": "written"
+  },
+  "sub-10-3-3": {
+    "title": "Read-write locks: multiple concurrent readers, exclusive writer",
+    "unit_id": "unit-10",
+    "unit_title": "Threads & Synchronization",
+    "topic_id": "topic-10-3",
+    "topic_title": "Semaphores & Classical Problems",
+    "file_path": "textbook/unit-10/topic-10-3/sub-10-3-3.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-10-4-1": {
+    "title": "Deadlock: 4 conditions (mutual exclusion, hold-and-wait, no preemption, circular wait), detection as cycle in resource graph",
+    "unit_id": "unit-10",
+    "unit_title": "Threads & Synchronization",
+    "topic_id": "topic-10-4",
+    "topic_title": "Deadlock & Condition Variables",
+    "file_path": "textbook/unit-10/topic-10-4/sub-10-4-1.md",
+    "est_minutes": 6,
+    "status": "written"
+  },
+  "sub-10-4-2": {
+    "title": "Deadlock prevention: resource ordering, lock hierarchy",
+    "unit_id": "unit-10",
+    "unit_title": "Threads & Synchronization",
+    "topic_id": "topic-10-4",
+    "topic_title": "Deadlock & Condition Variables",
+    "file_path": "textbook/unit-10/topic-10-4/sub-10-4-2.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-10-4-3": {
+    "title": "Condition variables: pthread_cond_wait/signal/broadcast, spurious wakeups, use with mutex",
+    "unit_id": "unit-10",
+    "unit_title": "Threads & Synchronization",
+    "topic_id": "topic-10-4",
+    "topic_title": "Deadlock & Condition Variables",
+    "file_path": "textbook/unit-10/topic-10-4/sub-10-4-3.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-10-5-1": {
+    "title": "Stack-based buffer overflow: overwriting return address, little-endian encoding",
+    "unit_id": "unit-10",
+    "unit_title": "Threads & Synchronization",
+    "topic_id": "topic-10-5",
+    "topic_title": "Buffer Overflow & Security (Thread Lab Context)",
+    "file_path": "textbook/unit-10/topic-10-5/sub-10-5-1.md",
+    "est_minutes": 6,
+    "status": "written"
+  },
+  "sub-11-1-1": {
+    "title": "IP addressing: IPv4 dotted notation, public vs private addresses, packet routing",
+    "unit_id": "unit-11",
+    "unit_title": "Networking & Socket Programming",
+    "topic_id": "topic-11-1",
+    "topic_title": "Internet & TCP/IP Fundamentals",
+    "file_path": "textbook/unit-11/topic-11-1/sub-11-1-1.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-11-1-2": {
+    "title": "TCP: reliability, flow control, connection-oriented (3-way handshake), vs UDP",
+    "unit_id": "unit-11",
+    "unit_title": "Networking & Socket Programming",
+    "topic_id": "topic-11-1",
+    "topic_title": "Internet & TCP/IP Fundamentals",
+    "file_path": "textbook/unit-11/topic-11-1/sub-11-1-2.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-11-1-3": {
+    "title": "NAT: port mapping, how private hosts reach the internet",
+    "unit_id": "unit-11",
+    "unit_title": "Networking & Socket Programming",
+    "topic_id": "topic-11-1",
+    "topic_title": "Internet & TCP/IP Fundamentals",
+    "file_path": "textbook/unit-11/topic-11-1/sub-11-1-3.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-11-2-1": {
+    "title": "Server socket lifecycle: socket() \u2192 bind() \u2192 listen() \u2192 accept() \u2192 read/write \u2192 close()",
+    "unit_id": "unit-11",
+    "unit_title": "Networking & Socket Programming",
+    "topic_id": "topic-11-2",
+    "topic_title": "Socket API",
+    "file_path": "textbook/unit-11/topic-11-2/sub-11-2-1.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-11-2-2": {
+    "title": "Client socket lifecycle: socket() \u2192 connect() \u2192 read/write \u2192 close()",
+    "unit_id": "unit-11",
+    "unit_title": "Networking & Socket Programming",
+    "topic_id": "topic-11-2",
+    "topic_title": "Socket API",
+    "file_path": "textbook/unit-11/topic-11-2/sub-11-2-2.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-11-2-3": {
+    "title": "Iterative vs concurrent server designs: thread-per-request, thread pool",
+    "unit_id": "unit-11",
+    "unit_title": "Networking & Socket Programming",
+    "topic_id": "topic-11-2",
+    "topic_title": "Socket API",
+    "file_path": "textbook/unit-11/topic-11-2/sub-11-2-3.md",
+    "est_minutes": 8,
+    "status": "written"
+  },
+  "sub-11-3-1": {
+    "title": "HTTP GET request format: request line, headers, blank line; response: status line + headers + body",
+    "unit_id": "unit-11",
+    "unit_title": "Networking & Socket Programming",
+    "topic_id": "topic-11-3",
+    "topic_title": "HTTP Protocol & Web Server",
+    "file_path": "textbook/unit-11/topic-11-3/sub-11-3-1.md",
+    "est_minutes": 6,
+    "status": "written"
+  },
+  "sub-11-3-2": {
+    "title": "HTTP status codes: 200 OK, 301/302 redirect, 404 Not Found, 401 Unauthorized",
+    "unit_id": "unit-11",
+    "unit_title": "Networking & Socket Programming",
+    "topic_id": "topic-11-3",
+    "topic_title": "HTTP Protocol & Web Server",
+    "file_path": "textbook/unit-11/topic-11-3/sub-11-3-2.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-11-3-3": {
+    "title": "HTTP Basic Auth: Base64 encoding, WWW-Authenticate / Authorization headers (RFC 7617)",
+    "unit_id": "unit-11",
+    "unit_title": "Networking & Socket Programming",
+    "topic_id": "topic-11-3",
+    "topic_title": "HTTP Protocol & Web Server",
+    "file_path": "textbook/unit-11/topic-11-3/sub-11-3-3.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-11-3-4": {
+    "title": "Persistent connections and keep-alive; content-type detection by file extension",
+    "unit_id": "unit-11",
+    "unit_title": "Networking & Socket Programming",
+    "topic_id": "topic-11-3",
+    "topic_title": "HTTP Protocol & Web Server",
+    "file_path": "textbook/unit-11/topic-11-3/sub-11-3-4.md",
+    "est_minutes": 6,
+    "status": "written"
+  },
+  "sub-11-3-5": {
+    "title": "CGI-BIN: fork/exec with QUERY_STRING and REQUEST_METHOD env vars, capturing stdout",
+    "unit_id": "unit-11",
+    "unit_title": "Networking & Socket Programming",
+    "topic_id": "topic-11-3",
+    "topic_title": "HTTP Protocol & Web Server",
+    "file_path": "textbook/unit-11/topic-11-3/sub-11-3-5.md",
+    "est_minutes": 4,
+    "status": "written"
+  },
+  "sub-11-3-6": {
+    "title": "Directory traversal security: path normalization, preventing ../../ escapes",
+    "unit_id": "unit-11",
+    "unit_title": "Networking & Socket Programming",
+    "topic_id": "topic-11-3",
+    "topic_title": "HTTP Protocol & Web Server",
+    "file_path": "textbook/unit-11/topic-11-3/sub-11-3-6.md",
+    "est_minutes": 6,
+    "status": "written"
+  }
+}
