@@ -10491,7 +10491,7 @@
       "The new thread shares the existing heap with all other threads",
       "The heap is split equally between the old and new thread"
     ],
-    "answer_index": 1,
+    "answer_index": 2,
     "explanation": "Thread creation does NOT copy the heap. The new thread immediately shares the existing heap. This is a key difference from fork(), which uses copy-on-write for the address space.",
     "source": "CS252-Slides-Sprin2026.pdf:p396"
   },
