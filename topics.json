@@ -1163,6 +1163,152 @@
           ]
         }
       ]
+    },
+    {
+      "id": "unit-12",
+      "title": "Introduction to SQL",
+      "topics": [
+        {
+          "id": "topic-12-1",
+          "title": "Relational Database Concepts & MySQL CLI",
+          "subtopics": [
+            {
+              "id": "sub-12-1-1",
+              "title": "Relational databases: tables, rows, columns, and primary/foreign keys",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p615-620"
+              ]
+            },
+            {
+              "id": "sub-12-1-2",
+              "title": "MySQL command-line client: connecting, running queries, semicolon terminator",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p615-618"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "topic-12-2",
+          "title": "SQL Queries",
+          "subtopics": [
+            {
+              "id": "sub-12-2-1",
+              "title": "SELECT/FROM/WHERE: projecting columns and filtering rows",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p618-622"
+              ]
+            },
+            {
+              "id": "sub-12-2-2",
+              "title": "LIKE operator: % (any chars) and _ (single char) wildcards, case sensitivity",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p622-624"
+              ]
+            },
+            {
+              "id": "sub-12-2-3",
+              "title": "Multi-table joins: matching foreign keys in WHERE clause, Cartesian product trap",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p624-628"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "topic-12-3",
+          "title": "Data Modification & Table Creation",
+          "subtopics": [
+            {
+              "id": "sub-12-3-1",
+              "title": "INSERT INTO, UPDATE SET WHERE, DELETE FROM WHERE",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p628-632"
+              ]
+            },
+            {
+              "id": "sub-12-3-2",
+              "title": "CREATE TABLE: column types CHAR, VARCHAR, DECIMAL, DATE; NOT NULL and PRIMARY KEY",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p630-634"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unit-13",
+      "title": "Software Engineering & Design Patterns",
+      "topics": [
+        {
+          "id": "topic-13-1",
+          "title": "Software Process",
+          "subtopics": [
+            {
+              "id": "sub-13-1-1",
+              "title": "Joel's Test: 12-point checklist for evaluating a software team's practices",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p636-644"
+              ]
+            },
+            {
+              "id": "sub-13-1-2",
+              "title": "Extreme Programming (XP): iterative, small team, planning/coding/designing/testing rules",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p644-652"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "topic-13-2",
+          "title": "Refactoring & Code Smells",
+          "subtopics": [
+            {
+              "id": "sub-13-2-1",
+              "title": "Structural smells: long methods, long parameter lists, large class, duplicated code",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p652-660"
+              ]
+            },
+            {
+              "id": "sub-13-2-2",
+              "title": "Naming smells: type in name, uncommunicative name, inconsistent names, dead code, speculative generality",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p656-664"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "topic-13-3",
+          "title": "Design Patterns",
+          "subtopics": [
+            {
+              "id": "sub-13-3-1",
+              "title": "Design Patterns overview: GoF95, intent vs implementation, why patterns matter",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p664-668"
+              ]
+            },
+            {
+              "id": "sub-13-3-2",
+              "title": "Proxy pattern: surrogate object controlling access; lazy init, access control, remote proxy",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p668-676"
+              ]
+            },
+            {
+              "id": "sub-13-3-3",
+              "title": "Command pattern: encapsulating an action as an object; undo, queuing, logging",
+              "sources": [
+                "CS252-Slides-Sprin2026.pdf:p676-685"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

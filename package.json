@@ -1,0 +1,24 @@
+{
+  "name": "cs252_study_things",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/QuasiMot0/cs252_study.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/QuasiMot0/cs252_study/issues"
+  },
+  "homepage": "https://github.com/QuasiMot0/cs252_study#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.59.1"
+  }
+}
