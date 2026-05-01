@@ -620,6 +620,79 @@
     color: #333; font-style: italic; font-size: 0.92rem;
   }
 
+  /* ── Search ── */
+  #search-input {
+    width: 100%; padding: 10px 14px;
+    border: 2px solid #dde2ee; border-radius: 8px;
+    font-size: 0.95rem; font-family: inherit; color: #1a2236;
+    background: #fff; outline: none;
+    transition: border-color 0.15s;
+    margin-bottom: 16px;
+  }
+  #search-input:focus { border-color: #4a6cf7; }
+  #search-input::placeholder { color: #aab; }
+  #search-results { display: none; }
+  #study-search-input {
+    width: 100%; padding: 10px 14px;
+    border: 2px solid #dde2ee; border-radius: 8px;
+    font-size: 0.95rem; font-family: inherit; color: #1a2236;
+    background: #fff; outline: none;
+    transition: border-color 0.15s;
+    margin-bottom: 14px;
+    display: none;
+  }
+  #study-search-input:focus { border-color: #4a6cf7; }
+  #study-search-input::placeholder { color: #aab; }
+  .study-search-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px; background: #fff; border-radius: 8px;
+    margin-bottom: 6px; box-shadow: 0 2px 6px rgba(26,34,54,0.06);
+    cursor: pointer; transition: background 0.15s;
+    border-left: 3px solid transparent;
+  }
+  .study-search-item:hover { background: #f7f8fd; border-left-color: #4a6cf7; }
+  .study-search-unit { font-size: 0.72rem; color: #8892aa; text-transform: uppercase; letter-spacing: 0.06em; flex-shrink: 0; }
+  .study-search-no-results { text-align: center; padding: 28px; color: #8892aa; font-size: 0.9rem; }
+  .search-all-btn {
+    width: 100%; padding: 12px 16px; margin-bottom: 14px;
+    background: linear-gradient(135deg, #1a2236 0%, #3a56d4 100%);
+    color: #fff; border: none; border-radius: 10px;
+    font-size: 0.95rem; font-weight: 600; cursor: pointer; text-align: left;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: opacity 0.15s;
+  }
+  .search-all-btn:hover { opacity: 0.9; }
+  .search-result-item {
+    display: flex; align-items: center;
+    background: #fff; border-radius: 8px; margin-bottom: 6px;
+    box-shadow: 0 1px 4px rgba(26,34,54,0.07); padding: 10px 14px; gap: 10px;
+  }
+  .search-result-item .sub-name { flex: 1; font-size: 0.88rem; color: #3a4560; }
+  .search-result-item .sub-count { font-size: 0.78rem; color: #aab; white-space: nowrap; }
+  #search-no-results { text-align: center; padding: 28px; color: #8892aa; font-size: 0.9rem; display: none; }
+
+  /* ── Sidebar overlay (mobile) ── */
+  #sidebar-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45); z-index: 199;
+  }
+  #sidebar-overlay.open { display: block; }
+  #hamburger {
+    display: none; font-size: 1.3rem; background: none; border: none;
+    cursor: pointer; color: #1a2236; padding: 4px 6px; line-height: 1; flex-shrink: 0;
+  }
+  @media (max-width: 768px) {
+    #hamburger { display: block; }
+    #sidebar {
+      position: fixed; left: -224px; top: 0; z-index: 200;
+      height: 100vh; transition: left 0.25s ease;
+    }
+    #sidebar.open { left: 0; }
+    #main-content { padding: 16px 16px; }
+    #main-content > * { max-width: 100%; }
+    #card, #done, #exam-card-body, #study-content { padding: 18px; }
+  }
+
   /* ── Dancing guy ── */
   #dancer {
     position: fixed; top: 50%; left: 50%;
@@ -665,6 +738,7 @@
     </div>
   </div>
 </div>
+<div id="sidebar-overlay" onclick="closeSidebar()"></div>
 <div id="layout">
 
   <!-- ══════════ SIDEBAR ══════════ -->
@@ -696,6 +770,7 @@
   <!-- ══════════ MAIN CONTENT ══════════ -->
   <div id="main-content">
     <div id="content-header">
+      <button id="hamburger" onclick="toggleSidebar()">&#9776;</button>
       <button id="back-btn" onclick="goBack()">&#8592; Filter</button>
       <span id="score-display"></span>
     </div>
@@ -709,6 +784,13 @@
 
     <!-- Filter screen -->
     <div id="filter-screen">
+      <input id="search-input" type="text" placeholder="Search questions, topics, explanations…" oninput="handleSearch(this.value)" autocomplete="off">
+      <div id="search-results">
+        <div id="search-all-wrap"></div>
+        <div id="search-result-list"></div>
+        <div id="search-no-results">No questions matched your search.</div>
+      </div>
+      <div id="filter-normal">
       <p class="filter-title">Select a question set</p>
       <button id="all-btn" onclick="startQuiz(null)">
         <span>All Questions</span>
@@ -719,7 +801,8 @@
       </button>
       <p class="filter-title">By Unit</p>
       <div id="unit-list"></div>
-    </div>
+      </div><!-- end filter-normal -->
+    </div><!-- end filter-screen -->
 
     <!-- Quiz card -->
     <div id="card">
@@ -734,6 +817,7 @@
       </div>
       <div id="question"></div>
       <div id="options"></div>
+      <p id="key-hint" style="display:none; font-size:0.75rem; color:#8892aa; text-align:center; margin-top:8px;">1–4 to select  ·  Enter to submit / next</p>
       <button id="submit-btn" onclick="submitAnswer()">Submit Answer</button>
       <div id="explanation"></div>
       <button id="next-btn" onclick="nextQuestion()">Next &#8594;</button>
@@ -855,6 +939,8 @@
       <h2>Textbook</h2>
       <p>Browse notes and reference material organized by unit.</p>
     </div>
+    <input id="study-search-input" type="text" placeholder="Search topics…" oninput="handleStudySearch(this.value)" autocomplete="off">
+    <div id="study-search-results" style="display:none"></div>
     <div id="study-nav"></div>
     <div id="study-content"></div>
   </div>
@@ -946,6 +1032,7 @@
   ═══════════════════════════════════════════ */
   function switchTab(tab) {
     activeTab = tab;
+    closeSidebar();
     ['quiz','weak','exam','study'].forEach(t =>
       document.getElementById('tab-' + t).classList.toggle('active', t === tab)
     );
@@ -988,6 +1075,10 @@
       document.getElementById('score-display').textContent = '';
       document.getElementById('back-btn').style.display = 'none';
       buildStudyNav();
+      // Only show search if we're on the nav (not mid-page)
+      if (document.getElementById('study-content').style.display !== 'block') {
+        document.getElementById('study-search-input').style.display = 'block';
+      }
     }
   }
 
@@ -1073,6 +1164,9 @@
       questions = allQuestions.filter(q => subIds.has(q.subtopic_id));
     } else if (filter.type === 'missed') {
       questions = allQuestions.filter(q => lastMissedIds.has(q.id));
+    } else if (filter.type === 'search') {
+      const idSet = new Set(filter.ids);
+      questions = allQuestions.filter(q => idSet.has(q.id));
     } else {
       questions = allQuestions.filter(q => q.subtopic_id === filter.id);
     }
@@ -1106,6 +1200,7 @@
     document.getElementById('back-btn').style.display = 'none';
     document.getElementById('score-display').textContent = '';
     document.getElementById('progress-fill').style.width = '0%';
+    document.getElementById('key-hint').style.display = 'none';
     refreshAllBadges();
     show('filter-screen');
   }
@@ -1132,6 +1227,7 @@
     document.getElementById('explanation').style.display = 'none';
     document.getElementById('submit-btn').style.display  = 'none';
     document.getElementById('next-btn').style.display    = 'none';
+    document.getElementById('key-hint').style.display    = 'block';
     document.getElementById('progress-fill').style.width =
       (idx / questions.length * 100).toFixed(1) + '%';
     updateScore();
@@ -1397,13 +1493,17 @@
 
   function recordAnswer(sid, qid, isCorrect) {
     if (!globalStats[sid])   globalStats[sid]   = { wrong: 0, seen: 0 };
-    if (!questionStats[qid]) questionStats[qid] = { wrong: 0, seen: 0 };
+    if (!questionStats[qid]) questionStats[qid] = { wrong: 0, seen: 0, streak: 0 };
+    if (questionStats[qid].streak === undefined) questionStats[qid].streak = 0;
     globalStats[sid].seen++;
     questionStats[qid].seen++;
     if (!isCorrect) {
       globalStats[sid].wrong++;
       questionStats[qid].wrong++;
+      questionStats[qid].streak = 0;
       sessionWrongIds.add(qid);
+    } else {
+      questionStats[qid].streak++;
     }
     saveStats();
   }
@@ -1433,15 +1533,18 @@
     }
   }
 
-  // Spaced-repetition weighted shuffle: questions with higher error rate surface first.
+  // Spaced-repetition weighted shuffle: streak-based weights surface weak questions first.
   function weightedShuffle(arr) {
     return arr
       .map(q => {
         const s = questionStats[q.id];
         let w = 1.0;
         if (s && s.seen > 0) {
-          const r = s.wrong / s.seen;
-          w = r === 0 ? 0.35 : r < 0.3 ? 0.75 : r < 0.6 ? 1.6 : 2.8;
+          const streak = s.streak || 0;
+          if (streak === 0) w = 3.0;       // answered wrong most recently
+          else if (streak === 1) w = 1.2;  // correct once
+          else if (streak === 2) w = 0.6;  // correct twice
+          else w = 0.15;                   // streak 3+ = mastered
         }
         return { q, key: w * Math.random() };
       })
@@ -1969,6 +2072,11 @@
   }
 
   document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      if (document.getElementById('report-modal').classList.contains('open')) {
+        closeReport(); return;
+      }
+    }
     if (activeTab === 'exam') {
       if (document.getElementById('exam-in-progress').style.display === 'none') return;
       if (['1','2','3','4'].includes(e.key)) { e.preventDefault(); examPick(parseInt(e.key) - 1); }
@@ -2050,7 +2158,9 @@
     content.innerHTML = '<div style="padding:40px;text-align:center;color:#888">Loading…</div>';
     nav.style.display     = 'none';
     content.style.display = 'block';
-    document.getElementById('study-pane-header').style.display = 'none';
+    document.getElementById('study-pane-header').style.display  = 'none';
+    document.getElementById('study-search-input').style.display = 'none';
+    document.getElementById('study-search-results').style.display = 'none';
     content.scrollTop = 0;
 
     const curIdx  = studySubOrder.indexOf(subId);
@@ -2079,9 +2189,139 @@
   }
 
   function showStudyNav() {
-    document.getElementById('study-content').style.display = 'none';
-    document.getElementById('study-nav').style.display     = 'block';
-    document.getElementById('study-pane-header').style.display = 'block';
+    document.getElementById('study-content').style.display      = 'none';
+    document.getElementById('study-nav').style.display          = 'block';
+    document.getElementById('study-pane-header').style.display  = 'block';
+    document.getElementById('study-search-input').style.display = 'block';
+  }
+
+  /* ═══════════════════════════════════════════
+     MOBILE SIDEBAR
+  ═══════════════════════════════════════════ */
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebar-overlay').classList.toggle('open');
+  }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebar-overlay').classList.remove('open');
+  }
+
+  /* ═══════════════════════════════════════════
+     SEARCH
+  ═══════════════════════════════════════════ */
+  function handleSearch(query) {
+    const q = query.trim().toLowerCase();
+    const resultsDiv  = document.getElementById('search-results');
+    const normalDiv   = document.getElementById('filter-normal');
+    const allWrap     = document.getElementById('search-all-wrap');
+    const resultList  = document.getElementById('search-result-list');
+    const noResults   = document.getElementById('search-no-results');
+
+    if (!q) {
+      resultsDiv.style.display = 'none';
+      normalDiv.style.display  = 'block';
+      return;
+    }
+
+    resultsDiv.style.display = 'block';
+    normalDiv.style.display  = 'none';
+
+    // Find matching questions
+    const matchedQs = allQuestions.filter(question => {
+      const haystack = [
+        question.question,
+        ...(question.options || []),
+        question.explanation || '',
+      ].join(' ').toLowerCase();
+      const subInfo = subtopicMap[question.subtopic_id];
+      const subTitle = subInfo ? subInfo.subTitle.toLowerCase() : '';
+      return haystack.includes(q) || subTitle.includes(q);
+    });
+
+    if (matchedQs.length === 0) {
+      allWrap.innerHTML  = '';
+      resultList.innerHTML = '';
+      noResults.style.display = 'block';
+      return;
+    }
+    noResults.style.display = 'none';
+
+    const matchedIds = matchedQs.map(mq => mq.id);
+
+    // "Start all N matches" button
+    allWrap.innerHTML = '';
+    const allBtn = document.createElement('button');
+    allBtn.className = 'search-all-btn';
+    allBtn.innerHTML = `<span>Start all ${matchedQs.length} match${matchedQs.length !== 1 ? 'es' : ''}</span><span class="q-count" style="opacity:0.75">${matchedQs.length} questions</span>`;
+    allBtn.onclick = () => startQuiz({ type: 'search', ids: matchedIds, label: `Search: "${query.trim()}"`, total: matchedIds.length });
+    allWrap.appendChild(allBtn);
+
+    // Group by subtopic
+    const bySubtopic = {};
+    for (const mq of matchedQs) {
+      const sid = mq.subtopic_id;
+      if (!bySubtopic[sid]) bySubtopic[sid] = [];
+      bySubtopic[sid].push(mq.id);
+    }
+
+    resultList.innerHTML = '';
+    for (const sid of Object.keys(bySubtopic)) {
+      const info = subtopicMap[sid] || { subTitle: sid };
+      const ids  = bySubtopic[sid];
+      const row  = document.createElement('div');
+      row.className = 'search-result-item';
+      row.innerHTML = `
+        <span class="sub-name">${info.subTitle}</span>
+        <span class="sub-count">${ids.length} q</span>
+        <button class="start-btn sm" onclick="startQuiz({type:'search',ids:${JSON.stringify(ids)},label:'${escAttr(info.subTitle)} (search)',total:${ids.length}})">Start</button>
+      `;
+      resultList.appendChild(row);
+    }
+  }
+
+  function handleStudySearch(query) {
+    const q          = query.trim().toLowerCase();
+    const nav        = document.getElementById('study-nav');
+    const resultsDiv = document.getElementById('study-search-results');
+
+    if (!q) {
+      resultsDiv.style.display = 'none';
+      nav.style.display        = 'block';
+      return;
+    }
+
+    nav.style.display        = 'none';
+    resultsDiv.style.display = 'block';
+    resultsDiv.innerHTML     = '';
+
+    // Search subtopic titles across all units
+    const matches = [];
+    for (const unit of topicsData.units) {
+      for (const topic of unit.topics) {
+        for (const sub of topic.subtopics) {
+          if (sub.title.toLowerCase().includes(q) || unit.title.toLowerCase().includes(q)) {
+            matches.push({ sub, unitTitle: unit.title });
+          }
+        }
+      }
+    }
+
+    if (matches.length === 0) {
+      resultsDiv.innerHTML = `<div class="study-search-no-results">No topics match "<strong>${escAttr(query.trim())}</strong>"</div>`;
+      return;
+    }
+
+    for (const { sub, unitTitle } of matches) {
+      const row = document.createElement('div');
+      row.className = 'study-search-item';
+      row.innerHTML = `
+        <span class="sub-name" style="flex:1">${sub.title}</span>
+        <span class="study-search-unit">${unitTitle}</span>
+      `;
+      row.addEventListener('click', () => loadStudyPage(sub.id));
+      resultsDiv.appendChild(row);
+    }
   }
 
   init();
