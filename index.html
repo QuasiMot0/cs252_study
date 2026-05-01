@@ -110,6 +110,12 @@
   .sub-item:hover { background: #fafbff; }
   .sub-name  { flex: 1; font-size: 0.85rem; color: #444; line-height: 1.4; }
   .sub-count { font-size: 0.78rem; color: #aaa; white-space: nowrap; margin-right: 4px; }
+  .done-badge {
+    font-size: 0.72rem; font-weight: 700;
+    background: #d4edda; color: #155724;
+    border-radius: 10px; padding: 2px 8px;
+    white-space: nowrap; flex-shrink: 0;
+  }
 
   /* ─────────────────────────────────────────
      QUIZ CARD
@@ -604,7 +610,10 @@
       <p class="filter-title">Select a question set</p>
       <button id="all-btn" onclick="startQuiz(null)">
         <span>All Questions</span>
-        <span class="q-count" id="all-count"></span>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="done-badge" data-fkey="all" style="display:none"></span>
+          <span class="q-count" id="all-count"></span>
+        </div>
       </button>
       <p class="filter-title">By Unit</p>
       <div id="unit-list"></div>
@@ -746,6 +755,7 @@
   let topicsData   = {};
   let subtopicMap  = {};   // subtopic_id -> { unitId, unitTitle, subTitle }
   let questions    = [];
+  let completionStats = {};
   let idx = 0, correct = 0;
   let answered    = false;
   let selectedIdx = -1;
@@ -788,6 +798,7 @@
   ═══════════════════════════════════════════ */
   async function init() {
     loadStats();
+    loadCompletions();
     try {
       const [qs, ts] = await Promise.all([
         fetch('questions.json').then(r => r.json()),
@@ -890,6 +901,7 @@
         <span class="unit-toggle" id="toggle-${unit.id}">&#9658;</span>
         <span class="unit-name">${unit.title}</span>
         <span class="unit-count">${unitTotal} q</span>
+        <span class="done-badge" data-fkey="unit:${unit.id}" style="display:none"></span>
         <button class="start-btn" onclick="event.stopPropagation();
           startQuiz({type:'unit',id:'${unit.id}',label:'${escAttr(unit.title)}',total:${unitTotal}})">Start</button>
       `;
@@ -909,6 +921,7 @@
           row.innerHTML = `
             <span class="sub-name">${sub.title}</span>
             <span class="sub-count">${cnt} q</span>
+            <span class="done-badge" data-fkey="sub:${sub.id}" style="display:none"></span>
             <button class="start-btn sm" onclick="startQuiz({type:'sub',id:'${sub.id}',
               label:'${escAttr(sub.title)}',total:${cnt}})">Start</button>
           `;
@@ -920,6 +933,7 @@
       item.appendChild(subsDiv);
       list.appendChild(item);
     }
+    refreshAllBadges();
   }
 
   function toggleUnit(unitId) {
@@ -976,6 +990,7 @@
     document.getElementById('back-btn').style.display = 'none';
     document.getElementById('score-display').textContent = '';
     document.getElementById('progress-fill').style.width = '0%';
+    refreshAllBadges();
     show('filter-screen');
   }
 
@@ -1070,6 +1085,7 @@
      DONE + SESSION SUMMARY
   ═══════════════════════════════════════════ */
   function showDone() {
+    saveCompletion();
     hide('card');
     document.getElementById('progress-fill').style.width = '100%';
 
@@ -1236,6 +1252,33 @@
     localStorage.setItem('cs252_qstats', JSON.stringify(questionStats));
   }
 
+  function loadCompletions() {
+    try { completionStats = JSON.parse(localStorage.getItem('cs252_completions') || '{}'); } catch(e) { completionStats = {}; }
+  }
+
+  function saveCompletions() {
+    localStorage.setItem('cs252_completions', JSON.stringify(completionStats));
+  }
+
+  function saveCompletion() {
+    if (!activeFilter || activeFilter.type === 'missed') return;
+    const key = activeFilter.type === 'all' ? 'all' : `${activeFilter.type}:${activeFilter.id}`;
+    completionStats[key] = { correct, total: questions.length };
+    saveCompletions();
+  }
+
+  function refreshAllBadges() {
+    document.querySelectorAll('[data-fkey]').forEach(el => {
+      const c = completionStats[el.dataset.fkey];
+      if (c) {
+        el.textContent   = `${c.correct}/${c.total}`;
+        el.style.display = '';
+      } else {
+        el.style.display = 'none';
+      }
+    });
+  }
+
   function recordAnswer(sid, qid, isCorrect) {
     if (!globalStats[sid])   globalStats[sid]   = { wrong: 0, seen: 0 };
     if (!questionStats[qid]) questionStats[qid] = { wrong: 0, seen: 0 };
@@ -1251,11 +1294,14 @@
 
   function clearStats() {
     if (!confirm('Clear all history? This cannot be undone.')) return;
-    globalStats   = {};
-    questionStats = {};
+    globalStats      = {};
+    questionStats    = {};
+    completionStats  = {};
     saveStats();
+    saveCompletions();
     updateWeakDot();
     buildWeakPane();
+    refreshAllBadges();
   }
 
   /* ═══════════════════════════════════════════
