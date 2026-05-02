@@ -961,6 +961,7 @@
   let idx = 0, correct = 0;
   let answered    = false;
   let selectedIdx = -1;
+  let shuffledOrder = [0, 1, 2, 3];
   let activeFilter = null;
   let activeTab    = 'quiz';
 
@@ -988,8 +989,9 @@
   let examSetupBuilt = false;
 
   // Exam in-progress state
-  let examQuestions = [];
-  let examAnswers   = [];
+  let examQuestions      = [];
+  let examAnswers        = [];
+  let examShuffledOrders = [];
   let examFlagged   = new Set();
   let examIdx       = 0;
   let examTimeLeft  = 0;
@@ -1214,12 +1216,13 @@
     document.getElementById('q-tag').textContent    = `${q.subtopic_id} · ${q.difficulty}`;
     document.getElementById('question').innerHTML   = parseText(q.question);
 
+    shuffledOrder = [0, 1, 2, 3].sort(() => Math.random() - 0.5);
     const opts = document.getElementById('options');
     opts.innerHTML = '';
     ['A','B','C','D'].forEach((lbl, i) => {
       const btn = document.createElement('button');
       btn.className = 'opt';
-      btn.innerHTML = `<strong>${lbl}.</strong> ${parseText(q.options[i])}`;
+      btn.innerHTML = `<strong>${lbl}.</strong> ${parseText(q.options[shuffledOrder[i]])}`;
       btn.onclick   = () => pick(i);
       opts.appendChild(btn);
     });
@@ -1257,11 +1260,11 @@
     document.querySelectorAll('.opt').forEach((b, j) => {
       b.disabled = true;
       b.classList.remove('selected');
-      if (j === q.answer_index)                 b.classList.add('correct');
-      else if (j === i && i !== q.answer_index) b.classList.add('wrong');
+      if (shuffledOrder[j] === q.answer_index)                 b.classList.add('correct');
+      else if (j === i && shuffledOrder[i] !== q.answer_index) b.classList.add('wrong');
     });
 
-    const isCorrect = (i === q.answer_index);
+    const isCorrect = (shuffledOrder[i] === q.answer_index);
     if (isCorrect) {
       correct++;
       triggerDancer();
@@ -1605,7 +1608,7 @@
 
     document.querySelectorAll('.opt').forEach((b, j) => {
       b.disabled = true;
-      if (j === q.answer_index) b.classList.add('correct');
+      if (shuffledOrder[j] === q.answer_index) b.classList.add('correct');
       else if (j === selectedIdx) b.classList.add('wrong');
     });
 
@@ -1748,10 +1751,11 @@
     const pool = getExamPool();
     if (!pool.length) return;
     const shuffled  = weightedShuffle(pool);
-    examQuestions   = examCount === 'all' ? shuffled : shuffled.slice(0, examCount);
-    examAnswers     = new Array(examQuestions.length).fill(-1);
-    examFlagged     = new Set();
-    examIdx         = 0;
+    examQuestions      = examCount === 'all' ? shuffled : shuffled.slice(0, examCount);
+    examAnswers        = new Array(examQuestions.length).fill(-1);
+    examShuffledOrders = examQuestions.map(() => [0,1,2,3].sort(() => Math.random() - 0.5));
+    examFlagged        = new Set();
+    examIdx            = 0;
 
     document.getElementById('exam-setup').style.display        = 'none';
     document.getElementById('exam-in-progress').style.display  = 'block';
@@ -1824,12 +1828,13 @@
       `${q.subtopic_id} · ${q.difficulty}`;
     document.getElementById('exam-question').innerHTML = parseText(q.question);
 
+    const order = examShuffledOrders[examIdx];
     const opts = document.getElementById('exam-options');
     opts.innerHTML = '';
     ['A','B','C','D'].forEach((lbl, i) => {
       const btn = document.createElement('button');
       btn.className = 'opt' + (examAnswers[examIdx] === i ? ' selected' : '');
-      btn.innerHTML = `<strong>${lbl}.</strong> ${parseText(q.options[i])}`;
+      btn.innerHTML = `<strong>${lbl}.</strong> ${parseText(q.options[order[i]])}`;
       btn.onclick   = () => examPick(i);
       opts.appendChild(btn);
     });
@@ -1885,7 +1890,8 @@
       : null;
 
     examQuestions.forEach((q, i) => {
-      recordAnswer(q.subtopic_id, q.id, examAnswers[i] === q.answer_index);
+      const pickedOriginal = examAnswers[i] === -1 ? -1 : examShuffledOrders[i][examAnswers[i]];
+      recordAnswer(q.subtopic_id, q.id, pickedOriginal === q.answer_index);
     });
     updateWeakDot();
 
@@ -1897,7 +1903,10 @@
   /* ── Results ── */
   function buildExamResults(timedOut, timeUsedSecs) {
     const total   = examQuestions.length;
-    const numRight = examQuestions.filter((q, i) => examAnswers[i] === q.answer_index).length;
+    const numRight = examQuestions.filter((q, i) => {
+      const picked = examAnswers[i] === -1 ? -1 : examShuffledOrders[i][examAnswers[i]];
+      return picked === q.answer_index;
+    }).length;
     const pct     = Math.round(numRight / total * 100);
     const pctCls  = pct >= 80 ? 'great' : pct >= 60 ? 'ok' : 'poor';
 
@@ -1909,12 +1918,13 @@
 
     const labels = ['A','B','C','D'];
     const reviewHTML = examQuestions.map((q, i) => {
-      const ans    = examAnswers[i];
-      const ca     = q.answer_index;
-      const isRight = ans === ca;
-      const choices = q.options.map((o, j) =>
-        `<div class="erc${j === ca ? ' rcorrect' : ''}${j === ans && !isRight ? ' rwrong' : ''}">
-           <strong>${labels[j]}.</strong> ${parseText(o)}
+      const ans     = examAnswers[i];
+      const order   = examShuffledOrders[i];
+      const pickedOriginal = ans === -1 ? -1 : order[ans];
+      const isRight = pickedOriginal === q.answer_index;
+      const choices = order.map((origIdx, j) =>
+        `<div class="erc${origIdx === q.answer_index ? ' rcorrect' : ''}${j === ans && !isRight ? ' rwrong' : ''}">
+           <strong>${labels[j]}.</strong> ${parseText(q.options[origIdx])}
          </div>`).join('');
       return `
         <div class="exam-review-item">
