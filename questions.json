@@ -6892,7 +6892,7 @@
       "Undefined — fp must be initialized with &add"
     ],
     "answer_index": 2,
-    "explanation": "Function names decay to function pointers automatically (like arrays decay to pointers). fp = add assigns the address of add to fp. fp(3, 4) calls add(3, 4) which returns 7. fp(&add) is also valid but not required.",
+    "explanation": "Function names decay to function pointers automatically (like arrays decay to pointers). fp = add assigns the address of add to fp. fp(3, 4) calls add(3, 4) which returns 7. `int (*fp)(int, int) = &add` is also valid but not required.",
     "source": "CS252-Slides-Sprin2026.pdf:p68"
   },
   {
