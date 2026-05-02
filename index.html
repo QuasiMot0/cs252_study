@@ -2077,6 +2077,7 @@
         closeReport(); return;
       }
     }
+    if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
     if (activeTab === 'exam') {
       if (document.getElementById('exam-in-progress').style.display === 'none') return;
       if (['1','2','3','4'].includes(e.key)) { e.preventDefault(); examPick(parseInt(e.key) - 1); }

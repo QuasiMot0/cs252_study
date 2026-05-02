@@ -4007,7 +4007,7 @@
     "question": "```c\nconst char *msg = \"Hello\";  // global\n```\nWhere is the string literal \"Hello\" stored, and where is the pointer `msg` stored?",
     "options": [
       "Both in the data segment",
-      "\"Hello\" in the text/rodata segment",
+      "\"Hello\" in the text/rodata segment; msg in the data segment",
       "\"Hello\" in the heap; msg on the stack",
       "Both in the BSS segment"
     ],
