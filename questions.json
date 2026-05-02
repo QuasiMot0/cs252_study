@@ -6966,12 +6966,12 @@
     "type": "analysis",
     "question": "What is the difference between calling a function directly and calling via a function pointer?",
     "options": [
-      "Function pointer calls are always slower due to extra indirection",
-      "Direct: fixed call instruction; indirect: register call (call *`%rax`)",
-      "Function pointer calls cannot pass arguments",
-      "Identical machine code — compiler optimizes the pointer away"
+      "Direct emits `call symbol` resolved at link time; indirect emits `call *%rax` resolved at runtime",
+      "Direct calls are always inlined; function pointer calls never are",
+      "Identical machine code — the compiler resolves the pointer at link time",
+      "Direct uses the stack; function pointer calls use registers for the address"
     ],
-    "answer_index": 1,
+    "answer_index": 0,
     "explanation": "Direct calls emit `call symbol` (the address is resolved at link time). Function pointer calls emit `call *%rax` (the address is loaded from a register at runtime). The indirection prevents static branch prediction and may inhibit inlining.",
     "source": "CS252-Slides-Sprin2026.pdf:p68"
   },
