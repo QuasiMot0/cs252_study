@@ -4502,10 +4502,10 @@
     "type": "recall",
     "question": "In the x86-64 calling convention, which register holds the first integer/pointer argument to a function?",
     "options": [
-      "%rax",
-      "%rdi",
-      "%rsi",
-      "%rdx"
+      "`%rax`",
+      "`%rdi`",
+      "`%rsi`",
+      "`%rdx`"
     ],
     "answer_index": 1,
     "explanation": "The x86-64 System V ABI passes the first six integer/pointer arguments in: %rdi, %rsi, %rdx, %rcx, %r8, %r9 (in that order). %rax holds the return value.",
@@ -4518,10 +4518,10 @@
     "type": "recall",
     "question": "In the x86-64 calling convention, which register holds the function return value?",
     "options": [
-      "%rdi",
-      "%rbp",
-      "%rax",
-      "%rsp"
+      "`%rdi`",
+      "`%rbp`",
+      "`%rax`",
+      "`%rsp`"
     ],
     "answer_index": 2,
     "explanation": "%rax holds the return value for integer, pointer, and most scalar types. For large structs, a pointer to the return area is passed in %rdi and %rax returns that pointer.",
@@ -4534,10 +4534,10 @@
     "type": "application",
     "question": "Which registers are callee-saved (must be preserved across a function call) in the x86-64 System V ABI?",
     "options": [
-      "%rdi, %rsi, %rdx, %rcx, %r8, %r9",
-      "%rbx, %rbp, %r12, %r13, %r14, %r15",
-      "%rax, %rdi, %rsp",
-      "%r10, %r11, %rcx, %rdx"
+      "`%rdi, %rsi, %rdx, %rcx, %r8, %r9`",
+      "`%rbx, %rbp, %r12, %r13, %r14, %r15`",
+      "`%rax, %rdi, %rsp`",
+      "`%r10, %r11, %rcx, %rdx`"
     ],
     "answer_index": 1,
     "explanation": "Callee-saved registers (%rbx, %rbp, %r12–%r15) must be saved and restored by any function that uses them. Caller-saved registers (%rdi, %rsi, %rdx, %rcx, %r8, %r9, %r10, %r11, %rax) may be clobbered by a call.",
@@ -4550,10 +4550,10 @@
     "type": "application",
     "question": "What is the x86-64 register for the stack pointer?",
     "options": [
-      "%rbp",
-      "%rsp",
-      "%rsi",
-      "%r15"
+      "`%rbp`",
+      "`%rsp`",
+      "`%rsi`",
+      "`%r15`"
     ],
     "answer_index": 1,
     "explanation": "%rsp (Stack Pointer) always points to the top of the current stack. push and pop instructions implicitly use %rsp. call saves the return address and decrements %rsp; ret pops and jumps to it.",
@@ -4566,10 +4566,10 @@
     "type": "application",
     "question": "A C function `int add(int a, int b)` is called as `add(3, 7)`. Before the first instruction of add() executes, what values are in %edi and %esi?",
     "options": [
-      "%edi=7, %esi=3",
-      "%edi=3, %esi=7",
-      "%edi=0, %esi=0 (arguments pushed on stack)",
-      "%edi=10 (sum), %esi=undefined"
+      "`%edi`=7, `%esi`=3",
+      "`%edi`=3, `%esi`=7",
+      "`%edi`=0, `%esi`=0 (arguments pushed on stack)",
+      "`%edi`=10 (sum), `%esi`=undefined"
     ],
     "answer_index": 1,
     "explanation": "The first argument (3) goes into %rdi/%edi; the second argument (7) goes into %rsi/%esi. The 32-bit aliases %edi and %esi are used for int parameters on x86-64.",
@@ -4614,8 +4614,8 @@
     "type": "analysis",
     "question": "Function foo() calls bar(). foo() uses %r12 for a loop counter. Is foo() required to save %r12 before calling bar()?",
     "options": [
-      "Yes — %r12 is caller-saved, so foo() must save it before any call",
-      "No — %r12 is callee-saved; bar() must preserve it if bar() uses it",
+      "Yes — `%r12` is caller-saved, so foo() must save it before any call",
+      "No — `%r12` is callee-saved; bar() must preserve it if bar() uses it",
       "Yes — all registers must be saved before a function call",
       "No — the compiler automatically inserts save/restore for all registers"
     ],
@@ -4633,7 +4633,7 @@
       "The values of all caller-saved registers",
       "The saved return address (instruction following the call)",
       "The first argument to the called function",
-      "The current %rbp frame pointer value"
+      "The current `%rbp` frame pointer value"
     ],
     "answer_index": 1,
     "explanation": "call pushes the return address (IP of the next instruction) onto the stack and then jumps to the target. ret pops this address and jumps to it. The hardware does not automatically save any registers.",
@@ -4646,10 +4646,10 @@
     "type": "analysis",
     "question": "A function uses %rbx to hold a local value across a call. The function's prologue must include `pushq %rbx`. Why?",
     "options": [
-      "pushq %rbx passes %rbx as an argument to the called function",
-      "%rbx is callee-saved",
-      "pushq %rbx aligns the stack to 16 bytes as required by the ABI",
-      "%rbx always holds the return value; must be saved before overwriting"
+      "pushq `%rbx` passes `%rbx` as an argument to the called function",
+      "`%rbx` is callee-saved",
+      "pushq `%rbx` aligns the stack to 16 bytes as required by the ABI",
+      "`%rbx` always holds the return value; must be saved before overwriting"
     ],
     "answer_index": 1,
     "explanation": "%rbx is callee-saved. Any function that modifies %rbx must save the caller's value on entry (push) and restore it before returning (pop). Failure to do so means the caller's %rbx is silently corrupted after the call.",
@@ -4662,10 +4662,10 @@
     "type": "recall",
     "question": "In x86-64, what does `movq $42, %rax` do?",
     "options": [
-      "Reads the value at memory address 42 into %rax",
-      "Loads the immediate constant 42 into %rax",
-      "Stores %rax into the variable named 42",
-      "Compares 42 to %rax"
+      "Reads the value at memory address 42 into `%rax`",
+      "Loads the immediate constant 42 into `%rax`",
+      "Stores `%rax` into the variable named 42",
+      "Compares 42 to `%rax`"
     ],
     "answer_index": 1,
     "explanation": "The $ prefix denotes an immediate value (a literal constant). movq $42, %rax loads the constant 42 into register %rax.",
@@ -4678,10 +4678,10 @@
     "type": "recall",
     "question": "What does `movq (%rax), %rbx` do?",
     "options": [
-      "Copies %rax into %rbx",
-      "Loads the value at address (%rax) into %rbx",
-      "Stores %rbx at the address in %rax",
-      "Computes %rax + %rbx and stores the result in %rbx"
+      "Copies `%rax` into `%rbx`",
+      "Loads the value at address (`%rax`) into `%rbx`",
+      "Stores `%rbx` at the address in `%rax`",
+      "Computes `%rax` + `%rbx` and stores the result in `%rbx`"
     ],
     "answer_index": 1,
     "explanation": "Parentheses in AT&T syntax denote register indirect (memory) addressing. (%rax) means 'the memory address contained in %rax'. movq (%rax), %rbx loads 8 bytes from that address into %rbx.",
@@ -4694,10 +4694,10 @@
     "type": "application",
     "question": "What does `movq 8(%rsp), %rax` do?",
     "options": [
-      "Loads 8 into %rax",
-      "Loads the 8-byte value at address (%rsp + 8) into %rax",
-      "Stores %rax at address (%rsp + 8)",
-      "Adds 8 to %rsp and stores the result in %rax"
+      "Loads 8 into `%rax`",
+      "Loads the 8-byte value at address (`%rsp` + 8) into `%rax`",
+      "Stores `%rax` at address (`%rsp` + 8)",
+      "Adds 8 to `%rsp` and stores the result in `%rax`"
     ],
     "answer_index": 1,
     "explanation": "displacement(%register) is the base+displacement addressing mode. 8(%rsp) means 'the address %rsp + 8'. movq loads 8 bytes from that address into %rax — commonly used to access stack variables or saved arguments.",
@@ -4710,10 +4710,10 @@
     "type": "application",
     "question": "What C operation does `movq (%rdi,%rsi,8), %rax` implement?",
     "options": [
-      "rax = rdi + rsi * 8",
-      "rax = *(long*)(rdi + rsi * 8)",
-      "rax = *(long*)rdi + *(long*)rsi * 8",
-      "rax = rdi[rsi] where rdi is an int* array"
+      "`rax = rdi + rsi * 8`",
+      "`rax = *(long*)(rdi + rsi * 8)`",
+      "`rax = *(long*)rdi + *(long*)rsi * 8`",
+      "`rax = rdi[rsi] where rdi is an int* array`"
     ],
     "answer_index": 1,
     "explanation": "The scaled-index addressing mode (%base, %index, scale) computes base + index * scale as the effective address, then reads from it. With base=%rdi (array pointer), index=%rsi, scale=8 (sizeof(long)), this is array[index] for a long array.",
@@ -4726,9 +4726,9 @@
     "type": "application",
     "question": "What does `leaq 8(%rdi), %rax` do — and how does it differ from `movq 8(%rdi), %rax`?",
     "options": [
-      "Both load the value at address (%rdi+8); lea is faster",
-      "lea loads the ADDRESS (%rdi+8) into %rax without accessing memory",
-      "lea adds 8 to %rdi in place; movq copies %rdi+8 to %rax",
+      "Both load the value at address (`%rdi`+8); lea is faster",
+      "lea loads the ADDRESS (`%rdi`+8) into `%rax` without accessing memory",
+      "lea adds 8 to `%rdi` in place; movq copies `%rdi`+8 to `%rax`",
       "They are identical; the assembler treats them the same"
     ],
     "answer_index": 1,
@@ -4774,10 +4774,10 @@
     "type": "analysis",
     "question": "The instruction `leaq (%rdi,%rdi,2), %rax` computes what value in %rax?",
     "options": [
-      "%rdi + 2 (base + displacement)",
-      "%rdi * 2 (scale=2)",
-      "%rdi * 4 (scale=4)",
-      "%rdi + %rdi * 2"
+      "`%rdi` + 2 (base + displacement)",
+      "`%rdi` * 2 (scale=2)",
+      "`%rdi` * 4 (scale=4)",
+      "`%rdi` + `%rdi` * 2"
     ],
     "answer_index": 3,
     "explanation": "leaq (%base, %index, scale) computes base + index*scale. Here base=%rdi, index=%rdi, scale=2. Result = %rdi + %rdi*2 = 3*%rdi. This is a common compiler trick to multiply by 3 without a mul instruction.",
@@ -4790,10 +4790,10 @@
     "type": "analysis",
     "question": "What does `movq %rax, (%rdi)` do?",
     "options": [
-      "Loads from address %rax into %rdi",
-      "Writes %rax's value to the memory address held in %rdi",
-      "Copies %rdi into %rax",
-      "Loads the value at address (%rdi) into %rax"
+      "Loads from address `%rax` into `%rdi`",
+      "Writes `%rax`'s value to the memory address held in `%rdi`",
+      "Copies `%rdi` into `%rax`",
+      "Loads the value at address (`%rdi`) into `%rax`"
     ],
     "answer_index": 1,
     "explanation": "In AT&T syntax the source is on the left, destination on the right. (%rdi) is an indirect memory destination. This instruction writes the 8-byte value in %rax to the memory address stored in %rdi — equivalent to *ptr = value in C.",
@@ -4806,10 +4806,10 @@
     "type": "analysis",
     "question": "A C expression `arr[i] = val` where arr is a long*, i is in %rsi, val is in %rdx, and arr is in %rdi. Which instruction implements this assignment?",
     "options": [
-      "movq %rdx, (%rdi,%rsi)",
-      "movq %rdx, (%rdi,%rsi,8)",
-      "movq %rsi, (%rdi,%rdx,8)",
-      "movq (%rdi,%rsi,8), %rdx"
+      "`movq %rdx, (%rdi,%rsi)`",
+      "`movq %rdx, (%rdi,%rsi,8)`",
+      "`movq %rsi, (%rdi,%rdx,8)`",
+      "`movq (%rdi,%rsi,8), %rdx`"
     ],
     "answer_index": 1,
     "explanation": "arr[i] is at address arr + i * sizeof(long) = %rdi + %rsi*8. To store val (%rdx) there: movq %rdx, (%rdi,%rsi,8). Option A lacks the scale factor 8, accessing the wrong address. Option D is a load, not a store.",
@@ -4822,10 +4822,10 @@
     "type": "recall",
     "question": "What does `pushq %rbx` do in terms of %rsp and memory?",
     "options": [
-      "Decrements %rsp by 8 and stores %rbx at the new (%rsp)",
-      "Increments %rsp by 8 and stores %rbx at the old (%rsp)",
-      "Stores %rbx at (%rsp) without changing %rsp",
-      "Copies %rbx into %rsp"
+      "Decrements `%rsp` by 8 and stores `%rbx` at the new (`%rsp`)",
+      "Increments `%rsp` by 8 and stores `%rbx` at the old (`%rsp`)",
+      "Stores `%rbx` at (`%rsp`) without changing `%rsp`",
+      "Copies `%rbx` into `%rsp`"
     ],
     "answer_index": 0,
     "explanation": "push decrements %rsp by 8 (the operand size) first, then writes the register value to the new (%rsp). The stack grows downward, so decrement first.",
@@ -4838,10 +4838,10 @@
     "type": "recall",
     "question": "What does `addq %rsi, %rdi` do?",
     "options": [
-      "%rdi = %rdi - %rsi",
-      "%rdi = %rdi + %rsi",
-      "%rsi = %rdi + %rsi",
-      "Flags are set based on %rdi + %rsi, but neither is modified"
+      "`%rdi` = `%rdi` - `%rsi`",
+      "`%rdi` = `%rdi` + `%rsi`",
+      "`%rsi` = `%rdi` + `%rsi`",
+      "Flags are set based on `%rdi` + `%rsi`, but neither is modified"
     ],
     "answer_index": 1,
     "explanation": "addq src, dst computes dst = dst + src and updates the arithmetic flags. Here %rdi = %rdi + %rsi.",
@@ -4854,12 +4854,12 @@
     "type": "application",
     "question": "What is the difference between `cmpq %rsi, %rdi` and `subq %rsi, %rdi`?",
     "options": [
-      "They are identical instructions with different mnemonics",
-      "cmpq computes %rdi",
-      "cmpq compares unsigned values; subq compares signed values",
-      "cmpq subtracts %rdi from %rsi; subq subtracts %rsi from %rdi"
+      "Both compute `%rdi − %rsi` and set condition flags, but only `subq` stores the result back in `%rdi`",
+      "`cmpq` sets condition flags; `subq` performs the subtraction but does not set any flags",
+      "`cmpq` compares unsigned values; `subq` operates on signed values",
+      "`cmpq` computes `%rsi − %rdi`; `subq` computes `%rdi − %rsi`"
     ],
-    "answer_index": 1,
+    "answer_index": 0,
     "explanation": "cmpq a, b sets the flags based on b - a without storing the result. subq a, b also computes b - a but stores the result in b. cmpq is used before conditional jumps to compare without destroying the operand.",
     "source": "CS252-Slides-Sprin2026.pdf:p36"
   },
@@ -4870,10 +4870,10 @@
     "type": "application",
     "question": "What does `testq %rax, %rax` typically test?",
     "options": [
-      "Whether %rax equals zero — sets ZF=1 if %rax is 0",
-      "Whether %rax is negative — sets SF=1 if %rax < 0",
-      "Whether %rax overflows",
-      "Whether the low byte of %rax is all 1s"
+      "Whether `%rax` equals zero — sets ZF=1 if `%rax` is 0",
+      "Whether `%rax` is negative — sets SF=1 if `%rax` < 0",
+      "Whether `%rax` overflows",
+      "Whether the low byte of `%rax` is all 1s"
     ],
     "answer_index": 0,
     "explanation": "testq a, b computes a AND b and sets flags, discarding the result. testq %rax, %rax performs %rax AND %rax: if %rax is 0, ZF is set. It's the idiomatic way to check if a register is zero without cmpq $0, %rax.",
@@ -4886,10 +4886,10 @@
     "type": "application",
     "question": "After `popq %rbx`, what happened to %rsp?",
     "options": [
-      "%rsp was decremented by 8",
-      "%rsp was incremented by 8",
-      "%rsp is unchanged; only %rbx changed",
-      "%rsp was set to the old value of %rbx"
+      "`%rsp` was decremented by 8",
+      "`%rsp` was incremented by 8",
+      "`%rsp` is unchanged; only `%rbx` changed",
+      "`%rsp` was set to the old value of `%rbx`"
     ],
     "answer_index": 1,
     "explanation": "pop reads 8 bytes from (%rsp) into the destination register and then increments %rsp by 8. Stack grows down on push; shrinks (up) on pop.",
@@ -4902,10 +4902,10 @@
     "type": "application",
     "question": "What does `imulq %rcx, %rdx` compute?",
     "options": [
-      "%rdx = %rdx / %rcx (signed divide)",
-      "%rdx = %rdx * %rcx (signed multiply, lower 64 bits)",
-      "%rax = %rcx * %rdx (stores into %rax)",
-      "%rdx::%rax = %rcx * %rdx (128-bit result)"
+      "`%rdx` = `%rdx` / `%rcx` (signed divide)",
+      "`%rdx` = `%rdx` * `%rcx` (signed multiply, lower 64 bits)",
+      "`%rax` = `%rcx` * `%rdx` (stores into `%rax`)",
+      "`%rdx`::`%rax` = `%rcx` * `%rdx` (128-bit result)"
     ],
     "answer_index": 1,
     "explanation": "The two-operand form of imulq computes dst = dst * src (lower 64 bits of signed multiply). The one-operand form `imulq %rcx` puts the 128-bit result in %rdx:%rax. Two-operand form is more common for ordinary multiplication.",
@@ -4918,10 +4918,10 @@
     "type": "application",
     "question": "What does `xorq %rax, %rax` accomplish and why do compilers use it?",
     "options": [
-      "Toggles all bits of %rax — used for bitwise inversion",
-      "Zeroes %rax — shorter and faster encoding than movq $0, %rax",
-      "Copies %rax to itself — a no-op used for alignment",
-      "Sets all bits of %rax to 1"
+      "Toggles all bits of `%rax` — used for bitwise inversion",
+      "Zeroes `%rax` — shorter and faster encoding than movq $0, `%rax`",
+      "Copies `%rax` to itself — a no-op used for alignment",
+      "Sets all bits of `%rax` to 1"
     ],
     "answer_index": 1,
     "explanation": "XOR of any value with itself is 0. xorq %rax, %rax sets %rax to 0. Compilers prefer it because it produces a shorter instruction encoding than movq $0, %rax and also breaks false register dependencies.",
@@ -4934,10 +4934,10 @@
     "type": "analysis",
     "question": "After `movl $1, %eax`, what is the value of %rax (the full 64-bit register)?",
     "options": [
-      "0x0000000000000001 — movl zero-extends the upper 32 bits",
-      "0xFFFFFFFF00000001 — the upper 32 bits are unchanged",
+      "`0x0000000000000001` — movl zero-extends the upper 32 bits",
+      "`0xFFFFFFFF00000001` — the upper 32 bits are unchanged",
       "Undefined — you must use movq to set a 64-bit register",
-      "0x0000000100000001 — the lower 32 bits are duplicated"
+      "`0x0000000100000001` — the lower 32 bits are duplicated"
     ],
     "answer_index": 0,
     "explanation": "On x86-64, any write to a 32-bit register (%eax, %ebx, etc.) implicitly zero-extends the upper 32 bits of the full 64-bit register. This is a hardware rule. movl $1, %eax leaves %rax = 0x0000000000000001.",
@@ -4966,10 +4966,10 @@
     "type": "analysis",
     "question": "What is the result of executing `negq %rax` when %rax = 0x0000000000000005?",
     "options": [
-      "0xFFFFFFFFFFFFFFFA (bitwise NOT of 5)",
-      "0xFFFFFFFFFFFFFFFB (two's complement: -5)",
-      "0x0000000000000000 (all zeros)",
-      "0xFFFFFFFFFFFFFFFF (all ones)"
+      "`0xFFFFFFFFFFFFFFFA` (bitwise NOT of 5)",
+      "`0xFFFFFFFFFFFFFFFB` (two's complement: -5)",
+      "`0x0000000000000000` (all zeros)",
+      "`0xFFFFFFFFFFFFFFFF` (all ones)"
     ],
     "answer_index": 1,
     "explanation": "negq computes the two's complement negation: result = 0 - operand. For 5: two's complement of 5 = ~5 + 1 = 0xFFFFFFFFFFFFFFFA + 1 = 0xFFFFFFFFFFFFFFFB = -5 in signed representation.",
@@ -5078,9 +5078,9 @@
     "type": "analysis",
     "question": "After `cmpq $0, %rax` followed by `jg .Lpositive`, when does the jump NOT occur?",
     "options": [
-      "When %rax > 0 (signed)",
-      "When %rax == 0 or %rax < 0 (signed)",
-      "When %rax is an odd number",
+      "When `%rax` > 0 (signed)",
+      "When `%rax` == 0 or `%rax` < 0 (signed)",
+      "When `%rax` is an odd number",
       "When the carry flag is set"
     ],
     "answer_index": 1,
@@ -5110,10 +5110,10 @@
     "type": "analysis",
     "question": "```asm\ncmpq %rsi, %rdi\njge .Lskip\nmovq %rsi, %rdi\n.Lskip:\n```\nWhat C expression does this assembly implement?",
     "options": [
-      "if (rdi < rsi) rdi = rsi",
-      "if (rdi >= rsi) rdi = rsi;",
-      "if (rdi == rsi) rdi = rsi;",
-      "if (rdi > rsi) rdi = rsi;"
+      "`if (rdi < rsi) rdi = rsi`",
+      "`if (rdi >= rsi) rdi = rsi;`",
+      "`if (rdi == rsi) rdi = rsi;`",
+      "`if (rdi > rsi) rdi = rsi;`"
     ],
     "answer_index": 0,
     "explanation": "cmpq computes rdi - rsi; jge skips the movq if rdi >= rsi. The movq only executes when rdi < rsi, setting rdi = rsi. Combined: rdi = max(rdi, rsi). This is the idiom for computing the maximum of two values.",
@@ -5126,10 +5126,10 @@
     "type": "analysis",
     "question": "Which flag(s) does `jne` (Jump if Not Equal) check?",
     "options": [
-      "SF == 0",
-      "ZF == 0",
-      "CF == 0",
-      "SF != OF"
+      "`SF == 0`",
+      "`ZF == 0`",
+      "`CF == 0`",
+      "`SF != OF`"
     ],
     "answer_index": 1,
     "explanation": "jne branches when ZF=0 (the previous operation did not produce zero). Since cmpq sets ZF=1 only when the operands are equal (difference is 0), ZF=0 means they are not equal.",
@@ -5158,10 +5158,10 @@
     "type": "application",
     "question": "What assembly corresponds to:\n```c\nif (x > 0) y = 1; else y = -1;\n```\n(x in %rdi, y in %rax)",
     "options": [
-      "cmpq $0,%rdi / jg .Lp / movq $-1,%rax / jmp .done / .Lp: movq $1,%rax",
-      "testq %rdi, %rdi / sete %al / .Ldone:",
-      "addq $1, %rdi / cmpq %rdi, %rax",
-      "cmpq $0,%rdi / jl .Ln / movq $-1,%rax / jmp .done / .Ln: movq $1,%rax"
+      "`cmpq $0,%rdi` / `jg .Lp` / `movq $-1,%rax` / `jmp .done` / `.Lp: movq $1,%rax`",
+      "`testq %rdi, %rdi` / `sete %al` / `.Ldone:`",
+      "`addq $1, %rdi` / `cmpq %rdi, %rax`",
+      "`cmpq $0,%rdi` / `jl .Ln` / `movq $-1,%rax` / `jmp .done` / `.Ln: movq $1,%rax`"
     ],
     "answer_index": 0,
     "explanation": "Compare x to 0; if x > 0 (jg), jump to .Lpos and set y=1; else fall through and set y=-1, then jump to .Ldone. Option D has the condition inverted (jl leads to y=1 when x<0, which is wrong).",
@@ -5206,10 +5206,10 @@
     "type": "application",
     "question": "Identify the C code for this assembly snippet (i in %rcx, n in %rdi):\n```asm\n  movq $0, %rcx\n.Lloop:\n  cmpq %rdi, %rcx\n  jge .Lexit\n  ; ... body ...\n  addq $1, %rcx\n  jmp .Lloop\n.Lexit:\n```",
     "options": [
-      "do { body; i++; } while (i < n);",
-      "for (i = 0; i < n; i++) { body; }",
-      "while (i >= n) { body; i++; }",
-      "if (i < n) { body; }"
+      "`do { body; i++; } while (i < n);`",
+      "`for (i = 0; i < n; i++) { body; }`",
+      "`while (i >= n) { body; i++; }`",
+      "`if (i < n) { body; }`"
     ],
     "answer_index": 1,
     "explanation": "Initialize i=0; test i<n at top (jge exits when i>=n); body; i++; jump back. This is a standard for loop with i going from 0 to n-1.",
@@ -5238,9 +5238,9 @@
     "type": "analysis",
     "question": "Translate this C to the correct assembly (a in %rdi, b in %rsi, result in %rax):\n```c\nreturn (a < b) ? a : b;  // min(a,b)\n```",
     "options": [
-      "movq %rdi,%rax / cmpq %rsi,%rdi / jl .L / movq %rsi,%rax / .L: ret",
-      "movq %rsi,%rax / cmpq %rsi,%rdi / jge .L / movq %rdi,%rax / .L: ret",
-      "cmpq %rdi, %rsi / jl .Ldone / movq %rdi, %rax / .Ldone: ret",
+      "`movq %rdi,%rax` / `cmpq %rsi,%rdi` / `jl .L` / `movq %rsi,%rax` / `.L: ret`",
+      "`movq %rsi,%rax` / `cmpq %rsi,%rdi` / `jge .L` / `movq %rdi,%rax` / `.L: ret`",
+      "`cmpq %rdi, %rsi` / `jl .Ldone` / `movq %rdi, %rax` / `.Ldone: ret`",
       "Both A and B are correct"
     ],
     "answer_index": 3,
@@ -5270,10 +5270,10 @@
     "type": "analysis",
     "question": "What assembly idiom implements `x = (a > b) ? a : b` without a branch, using cmovg?",
     "options": [
-      "movq %rdi, %rax / cmpq %rsi, %rdi / cmovg %rsi, %rax",
-      "movq %rsi, %rax / cmpq %rsi, %rdi / cmovg %rdi, %rax",
-      "cmpq %rsi,%rdi; jg .L1; movq %rsi,%rax; jmp .L2; .L1: movq %rdi,%rax",
-      "cmovg %rdi, %rax / cmpq %rsi, %rdi"
+      "`movq %rdi, %rax` / `cmpq %rsi, %rdi` / `cmovg %rsi, %rax`",
+      "`movq %rsi, %rax` / `cmpq %rsi, %rdi` / `cmovg %rdi, %rax`",
+      "`cmpq %rsi,%rdi`; `jg .L1`; `movq %rsi,%rax`; `jmp .L2`; `.L1: movq %rdi,%rax`",
+      "`cmovg %rdi, %rax` / `cmpq %rsi, %rdi`"
     ],
     "answer_index": 1,
     "explanation": "Default %rax = b (%rsi). cmpq sets flags for a-b. cmovg (conditional move if greater) moves a (%rdi) into %rax only if a > b. If a <= b, %rax keeps b. Result: max(a,b). No branch — avoids branch misprediction penalties.",
@@ -5286,10 +5286,10 @@
     "type": "analysis",
     "question": "In the assembly for `while (arr[i] != 0) i++;`, which instruction would typically appear at the top of the loop to perform the array access?",
     "options": [
-      "movq %rax, (%rdi,%rsi,8) — stores to the array",
-      "movq (%rdi,%rsi,8), %rax",
-      "addq %rsi, %rdi — advances the base pointer",
-      "cmpq $0, %rdi — checks the base pointer"
+      "`movq %rax, (%rdi,%rsi,8)` — stores to the array",
+      "`movq (%rdi,%rsi,8), %rax`",
+      "`addq %rsi, %rdi` — advances the base pointer",
+      "`cmpq $0, %rdi` — checks the base pointer"
     ],
     "answer_index": 1,
     "explanation": "With arr in %rdi and i in %rsi, arr[i] for long elements is at (%rdi,%rsi,8). A load into %rax followed by testq %rax, %rax / jne .Lloop implements the while condition. The loop increments %rsi (i) at the bottom.",
@@ -5382,10 +5382,10 @@
     "type": "application",
     "question": "On x86-64, the instruction to load a global variable `count` (using RIP-relative addressing) is:",
     "options": [
-      "movq count, %rax",
-      "movq count(%rip), %rax",
-      "leaq count, %rax",
-      "movq $count, %rax"
+      "`movq count, %rax`",
+      "`movq count(%rip), %rax`",
+      "`leaq count, %rax`",
+      "`movq $count, %rax`"
     ],
     "answer_index": 1,
     "explanation": "On x86-64, position-independent code and standard code both use RIP-relative addressing for global variables: count(%rip) = address of count relative to the instruction pointer. This is also how the compiler generates global variable accesses.",
@@ -5414,8 +5414,8 @@
     "type": "analysis",
     "question": "An assembly function needs to increment a global variable `counter`. Which sequence is correct?",
     "options": [
-      "incq counter(%rip)",
-      "movq counter(%rip), %rax / addq $1, %rax / movq %rax, counter(%rip)",
+      "`incq counter(%rip)`",
+      "`movq counter(%rip), %rax` / `addq $1, %rax` / `movq %rax, counter(%rip)`",
       "addq $1, $counter",
       "Both A and B — incq can operate directly on memory"
     ],
@@ -5430,10 +5430,10 @@
     "type": "analysis",
     "question": "A global array is declared as `arr: .quad 1, 2, 3, 4`. To load arr[2] (the third element, value 3), what instruction is used?",
     "options": [
-      "movq arr(%rip), %rax",
-      "movq arr+16(%rip), %rax",
-      "movq 2(arr), %rax",
-      "movq arr(%rip,%rcx,8), %rax where %rcx=2"
+      "`movq arr(%rip), %rax`",
+      "`movq arr+16(%rip), %rax`",
+      "`movq 2(arr), %rax`",
+      "`movq arr(%rip,%rcx,8), %rax` where `%rcx`=2"
     ],
     "answer_index": 1,
     "explanation": "arr is the base address; element 2 is at offset 2 * 8 = 16 bytes. arr+16(%rip) is the RIP-relative address of arr[2]. Option D would also work if %rcx=2, but arr(%rip,%rcx,8) may not be a valid instruction form — the correct form for indexed global access would require computing the base address first via leaq.",
@@ -6967,7 +6967,7 @@
     "question": "What is the difference between calling a function directly and calling via a function pointer?",
     "options": [
       "Function pointer calls are always slower due to extra indirection",
-      "Direct: fixed call instruction; indirect: register call (call *%rax)",
+      "Direct: fixed call instruction; indirect: register call (call *`%rax`)",
       "Function pointer calls cannot pass arguments",
       "Identical machine code — compiler optimizes the pointer away"
     ],
@@ -7479,7 +7479,7 @@
     "question": "How does 'examine memory' (`x/10x $rsp`) help when the backtrace is corrupted?",
     "options": [
       "It re-executes the last 10 instructions to find the corruption",
-      "It dumps 10 hex words from %rsp so you can scan for return addresses",
+      "It dumps 10 hex words from `%rsp` so you can scan for return addresses",
       "It automatically reconstructs the call stack from raw memory",
       "It shows the top 10 entries in the free list"
     ],
@@ -9126,10 +9126,10 @@
     "type": "recall",
     "question": "What is the correct syntax for a Bash if statement?",
     "options": [
-      "if (condition) { body }",
-      "if [ condition ]; then body; fi",
-      "if condition: body end",
-      "if condition then body endif"
+      "`if (condition) { body }`",
+      "`if [ condition ]; then body; fi`",
+      "`if condition: body end`",
+      "`if condition then body endif`"
     ],
     "answer_index": 1,
     "explanation": "Bash if syntax: `if [ condition ]; then commands; fi` (or with elif/else). The semicolons (or newlines) before then and fi are required. The spaces inside [ ] are mandatory.",
@@ -9238,10 +9238,10 @@
     "type": "analysis",
     "question": "A script loops with `for i in $(seq 1 100)`. What is a more efficient Bash alternative?",
     "options": [
-      "for i in {1..100}",
-      "for i in [1-100]",
-      "for (i=1; i<=100; i++)",
-      "for i; do ((i++)); done"
+      "`for i in {1..100}`",
+      "`for i in [1-100]`",
+      "`for (i=1; i<=100; i++)`",
+      "`for i; do ((i++)); done`"
     ],
     "answer_index": 0,
     "explanation": "Bash brace expansion {1..100} generates the sequence directly without forking a subshell for seq. For C-style arithmetic loops: `for ((i=1; i<=100; i++))` is also efficient. Brace expansion is slightly cleaner for simple sequences.",
@@ -10967,8 +10967,8 @@
     "question": "Which x86-64 assembly sequence for `counter++` makes the operation susceptible to a race condition?",
     "options": [
       "lock incq counter  (a single locked instruction)",
-      "mov (%rip+counter), %rax; inc %rax; mov %rax, (%rip+counter)",
-      "xadd %rax, counter",
+      "`mov (%rip+counter), %rax`; `inc %rax`; `mov %rax, (%rip+counter)`",
+      "`xadd %rax, counter`",
       "Both B is susceptible; A and C are atomic"
     ],
     "answer_index": 3,
@@ -14730,9 +14730,9 @@
     "type": "recall",
     "question": "What MySQL command lists all available databases?",
     "options": [
-      "LIST DATABASES;",
-      "SHOW DATABASES;",
-      "SELECT DATABASES;",
+      "`LIST DATABASES;`",
+      "`SHOW DATABASES;`",
+      "`SELECT DATABASES;`",
       "DISPLAY DATABASES;"
     ],
     "answer_index": 1,
@@ -14745,7 +14745,7 @@
     "type": "recall",
     "question": "How do you select which database to work with in MySQL?",
     "options": [
-      "SELECT DATABASE dbname;",
+      "`SELECT DATABASE dbname;`",
       "OPEN dbname;",
       "USE dbname;",
       "CONNECT TO dbname;"
@@ -14760,9 +14760,9 @@
     "type": "recall",
     "question": "What MySQL command shows all tables in the currently selected database?",
     "options": [
-      "LIST TABLES;",
-      "SHOW TABLES;",
-      "SELECT TABLES;",
+      "`LIST TABLES;`",
+      "`SHOW TABLES;`",
+      "`SELECT TABLES;`",
       "DESCRIBE DATABASE;"
     ],
     "answer_index": 1,
@@ -14805,7 +14805,7 @@
     "type": "recall",
     "question": "Which SQL clause filters which rows are included in the result?",
     "options": [
-      "SELECT",
+      "`SELECT`",
       "FROM",
       "WHERE",
       "ORDER BY"
@@ -14850,9 +14850,9 @@
     "type": "recall",
     "question": "How do you select all columns from a table in SQL?",
     "options": [
-      "SELECT ALL FROM table",
-      "SELECT columns FROM table",
-      "SELECT * FROM table",
+      "`SELECT ALL FROM table`",
+      "`SELECT columns FROM table`",
+      "`SELECT * FROM table`",
       "GET * FROM table"
     ],
     "answer_index": 2,
@@ -14895,9 +14895,9 @@
     "type": "application",
     "question": "How do you eliminate duplicate rows from a SELECT result?",
     "options": [
-      "SELECT UNIQUE col FROM table",
-      "SELECT DISTINCT col FROM table",
-      "SELECT NODUPS col FROM table",
+      "`SELECT UNIQUE col FROM table`",
+      "`SELECT DISTINCT col FROM table`",
+      "`SELECT NODUPS col FROM table`",
       "Add WHERE DISTINCT to the query"
     ],
     "answer_index": 1,
@@ -15165,10 +15165,10 @@
     "type": "application",
     "question": "Which query correctly retrieves each student's name and their enrolled course title?",
     "options": [
-      "SELECT s.name, c.title FROM students s, courses c;",
-      "SELECT s.name, c.title FROM students s, courses c WHERE s.course_id = c.id;",
-      "SELECT name, title FROM students JOIN courses;",
-      "SELECT students.name, courses.title WHERE students.course_id = courses.id;"
+      "`SELECT s.name, c.title FROM students s, courses c;`",
+      "`SELECT s.name, c.title FROM students s, courses c WHERE s.course_id = c.id;`",
+      "`SELECT name, title FROM students JOIN courses;`",
+      "`SELECT students.name, courses.title WHERE students.course_id = courses.id;`"
     ],
     "answer_index": 1,
     "explanation": "Correct implicit join: list both tables in FROM, link them in WHERE with s.course_id = c.id. Without the WHERE (option A) you get a Cartesian product."
@@ -15196,8 +15196,8 @@
     "question": "What is the SQL syntax for inserting a new row?",
     "options": [
       "ADD INTO table (col1, col2) VALUES (val1, val2);",
-      "INSERT INTO table (col1, col2) VALUES (val1, val2);",
-      "INSERT table (col1, col2) = (val1, val2);",
+      "`INSERT INTO table (col1, col2) VALUES (val1, val2);`",
+      "`INSERT table (col1, col2) = (val1, val2);`",
       "PUT INTO table VALUES (val1, val2);"
     ],
     "answer_index": 1,
@@ -15285,9 +15285,9 @@
     "type": "application",
     "question": "How do you insert multiple rows in a single INSERT statement?",
     "options": [
-      "INSERT INTO t VALUES (v1,v2), (v3,v4);",
-      "INSERT INTO t VALUES (v1,v2) AND (v3,v4);",
-      "INSERT MULTIPLE INTO t VALUES (v1,v2),(v3,v4);",
+      "`INSERT INTO t VALUES (v1,v2), (v3,v4);`",
+      "`INSERT INTO t VALUES (v1,v2) AND (v3,v4);`",
+      "`INSERT MULTIPLE INTO t VALUES (v1,v2),(v3,v4);`",
       "You cannot insert multiple rows in one statement"
     ],
     "answer_index": 0,
@@ -15316,7 +15316,7 @@
     "question": "What is the SQL syntax to create a new table?",
     "options": [
       "MAKE TABLE name (col1 type, col2 type);",
-      "CREATE TABLE name (col1 type, col2 type);",
+      "`CREATE TABLE name (col1 type, col2 type);`",
       "NEW TABLE name (col1 type, col2 type);",
       "BUILD TABLE name (col1 type, col2 type);"
     ],
@@ -15420,10 +15420,10 @@
     "type": "application",
     "question": "Which CREATE TABLE definition correctly stores a product with an integer ID, a variable name up to 100 chars, and a price with up to 2 decimal places?",
     "options": [
-      "CREATE TABLE product (id DATE, name CHAR(100), price INT);",
-      "CREATE TABLE product (id INT PRIMARY KEY, name VARCHAR(100), price DECIMAL(10,2));",
-      "CREATE TABLE product (id VARCHAR(10), name CHAR(100), price CHAR(10));",
-      "CREATE TABLE product (id INT, name DATE, price VARCHAR(10));"
+      "`CREATE TABLE product (id DATE, name CHAR(100), price INT);`",
+      "`CREATE TABLE product (id INT PRIMARY KEY, name VARCHAR(100), price DECIMAL(10,2));`",
+      "`CREATE TABLE product (id VARCHAR(10), name CHAR(100), price CHAR(10));`",
+      "`CREATE TABLE product (id INT, name DATE, price VARCHAR(10));`"
     ],
     "answer_index": 1,
     "explanation": "id INT PRIMARY KEY for integer ID; name VARCHAR(100) for variable-length name; price DECIMAL(10,2) for currency with 2 decimal places. The other options misuse types (DATE for ID, INT for price, etc.)."
