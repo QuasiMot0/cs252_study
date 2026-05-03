@@ -2188,8 +2188,7 @@
     const subQCount = allQuestions.filter(q => q.subtopic_id === subId).length;
     const practiceBtn = subQCount > 0
       ? `<button class="study-back-btn" style="margin:0;background:#22863a;color:#fff;border-color:#22863a"
-           onclick="startQuiz({type:'subtopic',id:'${subId}',label:${JSON.stringify(subInfo?.subTitle||subId)},total:${subQCount}})">
-           Practice (${subQCount}) &#8594;</button>`
+           onclick="practiceSubtopic('${subId}')">Practice (${subQCount}) &#8594;</button>`
       : '';
 
     const navBar = `
@@ -2210,6 +2209,12 @@
     } catch(e) {
       content.innerHTML = navBar + `<p style="color:#dc3545;margin-top:8px">Failed to load notes for this topic.</p>`;
     }
+  }
+
+  function practiceSubtopic(subId) {
+    const info  = subtopicMap[subId];
+    const count = allQuestions.filter(q => q.subtopic_id === subId).length;
+    startQuiz({ type: 'subtopic', id: subId, label: info?.subTitle || subId, total: count });
   }
 
   function showStudyNav() {
