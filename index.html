@@ -980,6 +980,7 @@
   // Persistent stats (localStorage)
   let globalStats   = {};  // { [subtopic_id]: { wrong, seen } }
   let questionStats = {};  // { [question_id]: { wrong, seen } }
+  let lastExamIds   = new Set();
 
   // Exam setup settings (persist across tab switches)
   let examDiffs    = new Set(['easy','medium','hard']);
@@ -1460,6 +1461,7 @@
   function loadStats() {
     try { globalStats   = JSON.parse(localStorage.getItem('cs252_stats')  || '{}'); } catch(e) { globalStats   = {}; }
     try { questionStats = JSON.parse(localStorage.getItem('cs252_qstats') || '{}'); } catch(e) { questionStats = {}; }
+    try { lastExamIds   = new Set(JSON.parse(localStorage.getItem('cs252_last_exam') || '[]')); } catch(e) { lastExamIds = new Set(); }
   }
 
   function saveStats() {
@@ -1549,6 +1551,7 @@
           else if (streak === 2) w = 0.6;  // correct twice
           else w = 0.15;                   // streak 3+ = mastered
         }
+        if (lastExamIds.has(q.id)) w *= 0.1; // deprioritize questions from last exam
         return { q, key: w * Math.random() };
       })
       .sort((a, b) => b.key - a.key)
@@ -1752,6 +1755,8 @@
     if (!pool.length) return;
     const shuffled  = weightedShuffle(pool);
     examQuestions      = examCount === 'all' ? shuffled : shuffled.slice(0, examCount);
+    lastExamIds = new Set(examQuestions.map(q => q.id));
+    localStorage.setItem('cs252_last_exam', JSON.stringify([...lastExamIds]));
     examAnswers        = new Array(examQuestions.length).fill(-1);
     examShuffledOrders = examQuestions.map(() => [0,1,2,3].sort(() => Math.random() - 0.5));
     examFlagged        = new Set();
