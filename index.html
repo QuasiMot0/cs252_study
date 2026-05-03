@@ -75,7 +75,7 @@
     align-items: center;
     padding: 28px 32px;
   }
-  #main-content > * { width: 100%; max-width: 860px; }
+  #main-content > * { width: 100%; max-width: 1100px; }
   #content-header {
     display: flex; align-items: center; gap: 12px;
     padding-bottom: 16px; margin-bottom: 16px;
@@ -205,7 +205,7 @@
     display: flex; justify-content: space-between;
     font-size: 0.78rem; color: #8892aa; margin-bottom: 16px;
   }
-  #question { font-size: 1.05rem; line-height: 1.6; margin-bottom: 22px; }
+  #question { font-size: 1.2rem; line-height: 1.6; margin-bottom: 22px; }
   #question pre, #explanation pre {
     background: #f0f0f0; border-radius: 6px; padding: 12px; margin: 10px 0;
     overflow-x: auto; font-size: 0.88rem; line-height: 1.5;
@@ -219,7 +219,7 @@
   #options { display: flex; flex-direction: column; gap: 10px; }
   .opt {
     background: #f7f8fd; border: 2px solid #dde2ee; border-radius: 8px;
-    padding: 12px 16px; text-align: left; font-size: 0.95rem;
+    padding: 14px 18px; text-align: left; font-size: 1.05rem;
     cursor: pointer; transition: border-color 0.15s, background 0.15s; line-height: 1.5;
     color: #1a2236;
   }
@@ -358,6 +358,12 @@
     padding: 2px 8px; cursor: pointer; transition: all 0.15s;
   }
   #report-btn:hover { color: #dc3545; border-color: #dc3545; }
+  #notes-btn {
+    font-size: 0.72rem; color: #4a6cf7; background: none;
+    border: 1px solid #4a6cf7; border-radius: 5px;
+    padding: 2px 8px; cursor: pointer; transition: all 0.15s;
+  }
+  #notes-btn:hover { background: #4a6cf7; color: #fff; }
 
   /* ── Report modal ── */
   #report-modal {
@@ -809,7 +815,10 @@
       <div id="meta">
         <span id="q-number"></span>
         <span id="q-tag"></span>
-        <button id="report-btn" onclick="openReport()">Report</button>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button id="notes-btn" onclick="goToTextbook()" style="display:none">View Notes</button>
+          <button id="report-btn" onclick="openReport()">Report</button>
+        </div>
       </div>
       <div id="timer-wrap">
         <div id="timer-label">60s</div>
@@ -830,9 +839,13 @@
         <div class="done-pct" id="done-pct"></div>
         <p class="done-detail" id="done-detail"></p>
         <div class="done-btns">
-          <button id="retry-missed-btn" class="btn-primary" onclick="retryMissed()" style="display:none">Retry Missed (0)</button>
-          <button class="btn-primary"   onclick="retryFilter()">Retry Same Set</button>
-          <button class="btn-secondary" onclick="goBack()">Change Filter</button>
+          <button id="retry-missed-btn" class="btn-primary"   onclick="retryMissed()"   style="display:none">Retry Missed (0)</button>
+          <button class="btn-primary"                         onclick="retryFilter()">Retry Same Set</button>
+          <button class="btn-secondary"                       onclick="goBack()">Change Filter</button>
+        </div>
+        <div class="done-btns" id="next-set-btns" style="display:none;margin-top:10px">
+          <button id="next-set-btn"       class="btn-primary"   onclick="goNextSet()">Next Set &#8594;</button>
+          <button id="next-set-notes-btn" class="btn-secondary" onclick="goNextSetNotes()">Next Set's Notes &#8594;</button>
         </div>
       </div>
       <div id="session-summary"></div>
@@ -981,6 +994,7 @@
   let globalStats   = {};  // { [subtopic_id]: { wrong, seen } }
   let questionStats = {};  // { [question_id]: { wrong, seen } }
   let lastExamIds   = new Set();
+  let fromSubtopic  = null;
 
   // Exam setup settings (persist across tab switches)
   let examDiffs    = new Set(['easy','medium','hard']);
@@ -1012,6 +1026,7 @@
       allQuestions = qs;
       topicsData   = ts;
       buildSubtopicMap();
+      studySubOrder = topicsData.units.flatMap(u => u.topics.flatMap(t => t.subtopics.map(s => s.id)));
 
       document.getElementById('loading').style.display = 'none';
       buildFilterUI();
@@ -1156,6 +1171,7 @@
      QUIZ
   ═══════════════════════════════════════════ */
   function startQuiz(filter) {
+    fromSubtopic = null;
     if (!filter) filter = { type:'all', id:null, label:'All Questions', total:allQuestions.length };
     activeFilter = filter;
 
@@ -1197,6 +1213,24 @@
 
   function retryFilter() { startQuiz(activeFilter); }
 
+  function getNextSubId() {
+    if (!activeFilter || (activeFilter.type !== 'subtopic' && activeFilter.type !== 'sub')) return null;
+    const curIdx = studySubOrder.indexOf(activeFilter.id);
+    return curIdx >= 0 && curIdx < studySubOrder.length - 1 ? studySubOrder[curIdx + 1] : null;
+  }
+
+  function goNextSet() {
+    const nextId = getNextSubId();
+    if (nextId) practiceSubtopic(nextId);
+  }
+
+  function goNextSetNotes() {
+    const nextId = getNextSubId();
+    if (!nextId) return;
+    switchTab('study');
+    loadStudyPage(nextId);
+  }
+
   function goBack() {
     hide('card');
     hide('done');
@@ -1232,6 +1266,7 @@
     document.getElementById('submit-btn').style.display  = 'none';
     document.getElementById('next-btn').style.display    = 'none';
     document.getElementById('key-hint').style.display    = 'block';
+    document.getElementById('notes-btn').style.display   = fromSubtopic ? 'inline-block' : 'none';
     document.getElementById('progress-fill').style.width =
       (idx / questions.length * 100).toFixed(1) + '%';
     updateScore();
@@ -1321,6 +1356,8 @@
     } else {
       retryBtn.style.display = 'none';
     }
+
+    document.getElementById('next-set-btns').style.display = getNextSubId() ? 'flex' : 'none';
 
     show('done');
   }
@@ -2214,7 +2251,14 @@
   function practiceSubtopic(subId) {
     const info  = subtopicMap[subId];
     const count = allQuestions.filter(q => q.subtopic_id === subId).length;
-    startQuiz({ type: 'subtopic', id: subId, label: info?.subTitle || subId, total: count });
+    startQuiz({ type: 'sub', id: subId, label: info?.subTitle || subId, total: count });
+    fromSubtopic = subId;
+  }
+
+  function goToTextbook() {
+    if (!fromSubtopic) return;
+    switchTab('study');
+    loadStudyPage(fromSubtopic);
   }
 
   function showStudyNav() {
