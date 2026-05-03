@@ -2971,8 +2971,8 @@
       "Whichever half has better alignment",
       "The choice is arbitrary and does not affect correctness"
     ],
-    "answer_index": 0,
-    "explanation": "The lab gives the left portion to the user (starting at the original block's address). The remainder is the right portion. This preserves the original header location without requiring address changes in the free list, though the right-portion approach is also valid in other implementations.",
+    "answer_index": 1,
+    "explanation": "Per the lab spec: \"for determinism the user is allocated the block which is higher in memory (i.e. the rightmost block).\" The right (higher address) portion goes to the user; the left remainder stays at the original address and remains in the free list.",
     "source": "CS252-LB01-Malloc-separate-free-alloc-hdr-multiple-free-lists-optimized.pdf:p12"
   },
   {
