@@ -228,6 +228,7 @@
   .opt.correct  { background: #d4edda; border-color: #28a745; color: #155724; }
   .opt.wrong    { background: #f8d7da; border-color: #dc3545; color: #721c24; }
   .opt:disabled { cursor: default; }
+  .opt-code { display: block; margin-top: 6px; background: #f0f2fa; border-radius: 6px; padding: 10px 12px; white-space: pre; font-family: "SFMono-Regular", Consolas, monospace; font-size: 0.88rem; line-height: 1.6; overflow-x: auto; }
 
   #submit-btn {
     display: none; margin-top: 14px; width: 100%; padding: 13px;
@@ -1258,7 +1259,7 @@
     ['A','B','C','D'].forEach((lbl, i) => {
       const btn = document.createElement('button');
       btn.className = 'opt';
-      btn.innerHTML = `<strong>${lbl}.</strong> ${parseText(q.options[shuffledOrder[i]])}`;
+      btn.innerHTML = `<strong>${lbl}.</strong> ${renderOption(q.options[shuffledOrder[i]])}`;
       btn.onclick   = () => pick(i);
       opts.appendChild(btn);
     });
@@ -1880,7 +1881,7 @@
     ['A','B','C','D'].forEach((lbl, i) => {
       const btn = document.createElement('button');
       btn.className = 'opt' + (examAnswers[examIdx] === i ? ' selected' : '');
-      btn.innerHTML = `<strong>${lbl}.</strong> ${parseText(q.options[order[i]])}`;
+      btn.innerHTML = `<strong>${lbl}.</strong> ${renderOption(q.options[order[i]])}`;
       btn.onclick   = () => examPick(i);
       opts.appendChild(btn);
     });
@@ -1970,7 +1971,7 @@
       const isRight = pickedOriginal === q.answer_index;
       const choices = order.map((origIdx, j) =>
         `<div class="erc${origIdx === q.answer_index ? ' rcorrect' : ''}${j === ans && !isRight ? ' rwrong' : ''}">
-           <strong>${labels[j]}.</strong> ${parseText(q.options[origIdx])}
+           <strong>${labels[j]}.</strong> ${renderOption(q.options[origIdx])}
          </div>`).join('');
       return `
         <div class="exam-review-item">
@@ -2125,6 +2126,20 @@
     return esc
       .replace(/```[\w]*\n?([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
       .replace(/`([^`\n]+)`/g, '<code>$1</code>');
+  }
+
+  // Require an actual register reference (%rax, %rdi, etc.) to avoid false positives on English words
+  const CODE_RE = /%\w+/;
+
+  function renderOption(text) {
+    if (!text) return '';
+    if (CODE_RE.test(text)) {
+      const clean = text.replace(/`/g, '');
+      const esc   = clean.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      const lines = esc.split(/\s*[\/;]\s*/).map(l => l.trim()).filter(Boolean).join('\n');
+      return `<code class="opt-code">${lines}</code>`;
+    }
+    return parseText(text);
   }
 
   document.addEventListener('keydown', e => {
