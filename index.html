@@ -2184,12 +2184,20 @@
     const nextId  = curIdx < studySubOrder.length - 1  ? studySubOrder[curIdx + 1] : null;
     const prevInfo = prevId ? subtopicMap[prevId] : null;
     const nextInfo = nextId ? subtopicMap[nextId] : null;
+    const subInfo  = subtopicMap[subId];
+    const subQCount = allQuestions.filter(q => q.subtopic_id === subId).length;
+    const practiceBtn = subQCount > 0
+      ? `<button class="study-back-btn" style="margin:0;background:#22863a;color:#fff;border-color:#22863a"
+           onclick="startQuiz({type:'subtopic',id:'${subId}',label:${JSON.stringify(subInfo?.subTitle||subId)},total:${subQCount}})">
+           Practice (${subQCount}) &#8594;</button>`
+      : '';
 
     const navBar = `
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:8px">
         <button class="study-back-btn" style="margin:0" onclick="showStudyNav()">&#8592; All Topics</button>
         <div style="display:flex;gap:8px">
           ${prevId ? `<button class="study-back-btn" style="margin:0" onclick="loadStudyPage('${prevId}')" title="${escAttr(prevInfo?.subTitle||'')}">&#8592; Prev</button>` : ''}
+          ${practiceBtn}
           ${nextId ? `<button class="study-back-btn" style="margin:0;background:#4a6cf7;color:#fff;border-color:#4a6cf7" onclick="loadStudyPage('${nextId}')" title="${escAttr(nextInfo?.subTitle||'')}">Next &#8594;</button>` : ''}
         </div>
       </div>`;
