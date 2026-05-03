@@ -1251,7 +1251,8 @@
     document.getElementById('q-tag').textContent    = `${q.subtopic_id} · ${q.difficulty}`;
     document.getElementById('question').innerHTML   = parseText(q.question);
 
-    shuffledOrder = [0, 1, 2, 3].sort(() => Math.random() - 0.5);
+    const hasCrossRef = q.options.some(o => /\b[A-D]\b.{0,10}\b[A-D]\b/i.test(o) || /\ball of the above\b|\bnone of the above\b/i.test(o));
+    shuffledOrder = hasCrossRef ? [0, 1, 2, 3] : [0, 1, 2, 3].sort(() => Math.random() - 0.5);
     const opts = document.getElementById('options');
     opts.innerHTML = '';
     ['A','B','C','D'].forEach((lbl, i) => {
@@ -1795,7 +1796,10 @@
     lastExamIds = new Set(examQuestions.map(q => q.id));
     localStorage.setItem('cs252_last_exam', JSON.stringify([...lastExamIds]));
     examAnswers        = new Array(examQuestions.length).fill(-1);
-    examShuffledOrders = examQuestions.map(() => [0,1,2,3].sort(() => Math.random() - 0.5));
+    examShuffledOrders = examQuestions.map(q => {
+      const hasCrossRef = q.options.some(o => /\b[A-D]\b.{0,10}\b[A-D]\b/i.test(o) || /\ball of the above\b|\bnone of the above\b/i.test(o));
+      return hasCrossRef ? [0,1,2,3] : [0,1,2,3].sort(() => Math.random() - 0.5);
+    });
     examFlagged        = new Set();
     examIdx            = 0;
 
