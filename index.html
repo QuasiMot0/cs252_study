@@ -1127,8 +1127,7 @@
         <span class="unit-name">${unit.title}</span>
         <span class="unit-count">${unitTotal} q</span>
         <span class="done-badge" data-fkey="unit:${unit.id}" style="display:none"></span>
-        <button class="start-btn" onclick="event.stopPropagation();
-          startQuiz({type:'unit',id:'${unit.id}',label:'${escAttr(unit.title)}',total:${unitTotal}})">Start</button>
+        <button class="start-btn" onclick="event.stopPropagation();startUnitQuiz('${unit.id}')">Start</button>
       `;
       hdr.addEventListener('click', () => toggleUnit(unit.id));
 
@@ -1146,8 +1145,7 @@
             <span class="sub-name">${sub.title}</span>
             <span class="sub-count">${cnt} q</span>
             <span class="done-badge" data-fkey="sub:${sub.id}" style="display:none"></span>
-            <button class="start-btn sm" onclick="startQuiz({type:'sub',id:'${sub.id}',
-              label:'${escAttr(sub.title)}',total:${cnt}})">Start</button>
+            <button class="start-btn sm" onclick="startSubQuiz('${sub.id}')">Start</button>
           `;
           subsDiv.appendChild(row);
         }
@@ -1432,8 +1430,7 @@
             <div class="summary-bar" style="width:${Math.round(ratio*100)}%;background:${barColor}"></div>
           </div>
           <span class="summary-stat ${statClass}">${wrong}/${seen}</span>
-          <button class="practice-btn" onclick="startQuiz({type:'sub',id:'${sid}',
-            label:'${escAttr(subTitle)}',total:999})">Practice</button>
+          <button class="practice-btn" onclick="startSubQuiz('${sid}')">Practice</button>
           <button class="study-link-btn" onclick="switchTab('study');loadStudyPage('${sid}')">Notes</button>
         `;
         card.appendChild(row);
@@ -2267,6 +2264,19 @@
     }
   }
 
+  function startSubQuiz(subId) {
+    const info  = subtopicMap[subId];
+    const count = allQuestions.filter(q => q.subtopic_id === subId).length;
+    startQuiz({ type: 'sub', id: subId, label: info?.subTitle || subId, total: count });
+  }
+
+  function startUnitQuiz(unitId) {
+    const unit   = topicsData.units.find(u => u.id === unitId);
+    const subIds = new Set(unit.topics.flatMap(t => t.subtopics.map(s => s.id)));
+    const count  = allQuestions.filter(q => subIds.has(q.subtopic_id)).length;
+    startQuiz({ type: 'unit', id: unitId, label: unit.title, total: count });
+  }
+
   function practiceSubtopic(subId) {
     const info  = subtopicMap[subId];
     const count = allQuestions.filter(q => q.subtopic_id === subId).length;
@@ -2366,7 +2376,7 @@
       row.innerHTML = `
         <span class="sub-name">${info.subTitle}</span>
         <span class="sub-count">${ids.length} q</span>
-        <button class="start-btn sm" onclick="startQuiz({type:'search',ids:${JSON.stringify(ids)},label:'${escAttr(info.subTitle)} (search)',total:${ids.length}})">Start</button>
+        <button class="start-btn sm" onclick="startSubQuiz('${sid}')">Start</button>
       `;
       resultList.appendChild(row);
     }
