@@ -2116,6 +2116,7 @@
   }
 
   function escAttr(s) { return s.replace(/'/g,"&#39;").replace(/"/g,'&quot;'); }
+  function escJS(s)   { return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
 
   function parseText(raw) {
     if (!raw) return '';
