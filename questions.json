@@ -2855,12 +2855,12 @@
     "question": "malloc() returns a pointer to the user payload, not to the block header. If `void *user_ptr` is the returned pointer and the header immediately precedes it, how do you recover the header pointer?",
     "options": [
       "(block_header_t *)user_ptr",
-      "(block_header_t *)((char *)user_ptr",
+      "(block_header_t *)((char *)user_ptr - sizeof(block_header_t))",
       "(block_header_t *)((char *)user_ptr + sizeof(block_header_t))",
       "(block_header_t *)user_ptr - 1"
     ],
     "answer_index": 1,
-    "explanation": "The header sits immediately before the payload. Subtracting sizeof(block_header_t) bytes from the payload pointer reaches the header. Option D uses typed pointer arithmetic: user_ptr - 1 steps back sizeof(block_header_t) bytes if cast to block_header_t* first \u2014 but that requires an explicit cast, not just -1 on void*.",
+    "explanation": "The header sits immediately before the payload. Subtracting sizeof(block_header_t) bytes from the payload pointer reaches the header. Casting to char* first ensures byte-level arithmetic: (block_header_t *)((char *)user_ptr - sizeof(block_header_t)). Pointer arithmetic on block_header_t* also works: (block_header_t *)user_ptr - 1 steps back sizeof(block_header_t) bytes automatically.",
     "source": "CS252-LB01-Malloc-separate-free-alloc-hdr-multiple-free-lists-optimized.pdf:p7"
   },
   {
