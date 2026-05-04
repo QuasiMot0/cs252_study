@@ -3687,7 +3687,7 @@
     "question": "A defensive allocator checks that a freed pointer falls within a known heap range before processing it. What additional check would catch free(p+8) (freeing into the middle of a block)?",
     "options": [
       "Verify that p is 8-byte aligned",
-      "Verify that the block header at (p",
+      "Verify that the block header at (p - sizeof(header)) contains a valid magic number",
       "Verify that p is less than the current program break",
       "Verify that p equals one of the sentinel node addresses"
     ],
@@ -7175,7 +7175,7 @@
     "question": "```c\nint a = 5;\nchar *p = (char *)&a;\n*p = 0;  // modify first byte of a\n```\nIs this legal in C?",
     "options": [
       "No \u2014 you cannot cast int* to char*",
-      "Yes \u2014 The C standard's strict aliasing rule has a special exception: char* (and uns...",
+      "Yes \u2014 The C standard's strict aliasing rule has a special exception: char* (and unsigned char*, signed char*) may alias any object",
       "Undefined behavior \u2014 casting between pointer types is always UB",
       "Legal but only on little-endian platforms"
     ],
@@ -8023,7 +8023,7 @@
     "question": "Two processes call open() on the same file independently. Do they share the same file offset?",
     "options": [
       "Yes \u2014 all opens to the same file share one offset",
-      "No \u2014 Each open() call creates a new open file description (struct file in the kern...",
+      "No \u2014 Each open() call creates a new open file description (struct file in the kernel) with its own offset and flags",
       "Only if they are parent and child",
       "Only if both use O_RDWR"
     ],
@@ -12391,7 +12391,7 @@
     "question": "A producer signals a condition variable BEFORE acquiring the mutex. Is this correct?",
     "options": [
       "Yes \u2014 signaling before acquiring the mutex is the recommended pattern",
-      "No \u2014 The producer should: (1) lock mutex, (2) modify the condition (e.g., incremen...",
+      "No \u2014 The producer should: (1) lock mutex, (2) modify the condition (e.g., increment count), (3) signal, (4) unlock mutex",
       "Yes \u2014 signaling outside a mutex avoids a spurious wakeup",
       "The order does not matter for condition variables"
     ],
@@ -13607,7 +13607,7 @@
     "question": "What terminates the HTTP request headers (marking the end of headers before the body)?",
     "options": [
       "A single newline (\\n)",
-      "An empty line (\\r\\n\\r\\n",
+      "An empty line (\\r\\n\\r\\n)",
       "The string 'END HEADERS'",
       "A Content-Length: 0 header"
     ],
@@ -13799,7 +13799,7 @@
     "question": "What is the difference between HTTP 301 and 302 redirects?",
     "options": [
       "301 is temporary; 302 is permanent",
-      "301 is permanent (Moved Permanently",
+      "301 is permanent (Moved Permanently); 302 is temporary (Found)",
       "301 redirects to HTTPS; 302 redirects to HTTP",
       "301 is for GET; 302 is for POST"
     ],
