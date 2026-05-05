@@ -244,7 +244,7 @@
     "subtopic_id": "sub-8-2-1",
     "difficulty": "medium",
     "type": "application",
-    "question": "Given: `pipe_list: cmd_and_args | pipe_list PIPE cmd_and_args ;` — which of these inputs does the grammar correctly parse?\n\nA) `ls`\nB) `ls | grep foo`\nC) `ls | grep foo | wc`\nD) All of the above",
+    "question": "Given: `pipe_list: cmd_and_args | pipe_list PIPE cmd_and_args ;`\n\nWhich of these inputs does the grammar correctly parse?\n- `ls`\n- `ls | grep foo`\n- `ls | grep foo | wc`",
     "options": [
       "Only one-stage commands with no pipes",
       "Only two-stage pipelines (one PIPE token)",
@@ -5239,12 +5239,12 @@
     "question": "Translate this C to the correct assembly (a in %rdi, b in %rsi, result in %rax):\n```c\nreturn (a < b) ? a : b;  // min(a,b)\n```",
     "options": [
       "`movq %rdi,%rax` / `cmpq %rsi,%rdi` / `jl .L` / `movq %rsi,%rax` / `.L: ret`",
-      "`movq %rsi,%rax` / `cmpq %rsi,%rdi` / `jge .L` / `movq %rdi,%rax` / `.L: ret`",
+      "`movq %rsi,%rax` / `cmpq %rsi,%rdi` / `jl .L` / `movq %rdi,%rax` / `.L: ret`",
       "`cmpq %rdi, %rsi` / `jl .Ldone` / `movq %rdi, %rax` / `.Ldone: ret`",
       "Both A and B are correct"
     ],
-    "answer_index": 3,
-    "explanation": "Option A: default %rax = a; if a < b (jl), keep a; else use b. Option B: default %rax = b; if a >= b (jge), keep b; else use a. Both correctly compute min(a,b). Multiple correct translations exist for the same C code.",
+    "answer_index": 0,
+    "explanation": "For `(a < b) ? a : b`, trace option A: rax=a; if a<b jump (keep rax=a, return a ✓); else rax=b, return b ✓. Correct. Option B with `jl`: rax=b; if a<b jump (return b when a<b — should return a ✗). B computes max(a,b), not min. Option C is missing the initial mov into rax and does not handle the equal case correctly.",
     "source": "CS252-Slides-Sprin2026.pdf:p38"
   },
   {
@@ -5255,12 +5255,12 @@
     "question": "Compilers often transform a while loop to a do-while with a guard check. Why?",
     "options": [
       "do-while uses fewer instructions; condition moves to the back edge",
-      "The CPU branch predictor performs better on back-edge jumps",
+      "do-while avoids branch prediction entirely — the loop body always executes at least once, eliminating the conditional check",
       "do-while avoids the need for a cmpq instruction entirely",
       "Both A and B — fewer instructions and better branch prediction"
     ],
-    "answer_index": 3,
-    "explanation": "The transformation: if (cond) { do { body; } while (cond); } moves the test to the bottom, saving one jump instruction per iteration (the body falls through to the test) and aligning the predicted taken branch with the loop back-edge (which the CPU predicts as taken).",
+    "answer_index": 0,
+    "explanation": "Compilers prefer the do-while+guard form because it executes the loop body with one fewer instruction per iteration: the initial condition test in the while form becomes the guard before the do-while, but once the loop runs the test is at the back edge only. Option B is false — a do-while still has a conditional branch (the back-edge check); branch prediction is not eliminated. \"Both A and B\" is therefore wrong.",
     "source": "CS252-Slides-Sprin2026.pdf:p40"
   },
   {
@@ -5415,12 +5415,12 @@
     "question": "An assembly function needs to increment a global variable `counter`. Which sequence is correct?",
     "options": [
       "`incq counter(%rip)`",
-      "`movq counter(%rip), %rax` / `addq $1, %rax` / `movq %rax, counter(%rip)`",
+      "`movq counter, %rax` / `addq $1, %rax` / `movq %rax, counter`",
       "addq $1, $counter",
       "Both A and B — incq can operate directly on memory"
     ],
-    "answer_index": 3,
-    "explanation": "incq counter(%rip) is a valid single instruction that increments a memory location. movq + addq + movq also works but uses 3 instructions. Both are correct. Option C is wrong: you cannot use $ (immediate) as a memory operand.",
+    "answer_index": 0,
+    "explanation": "`incq counter(%rip)` uses RIP-relative addressing to read and increment the global in a single instruction — correct for 64-bit PIC code. Option B drops the `(%rip)` suffix: on 64-bit Linux with PIE binaries, `movq counter, %rax` uses a 32-bit absolute address and will fail to assemble or produce a segfault on a 64-bit global. Always use `symbol(%rip)` for globals. \"Both A and B\" is wrong because B is incorrect.",
     "source": "CS252-Slides-Sprin2026.pdf:p43"
   },
   {
@@ -7352,11 +7352,11 @@
     "options": [
       "gdb ./program",
       "gdb ./program core",
-      "gdb --core=core ./program",
+      "gdb ./program --attach core",
       "Both B and C are equivalent"
     ],
-    "answer_index": 3,
-    "explanation": "Both 'gdb ./program core' and 'gdb --core=core ./program' load the core file with the associated binary for post-mortem debugging. gdb restores the exact state of the process at the time of the crash.",
+    "answer_index": 1,
+    "explanation": "`gdb ./program core` loads the program and the core dump file for post-mortem debugging. Option C is wrong: `--attach` takes a live process PID, not a core file path. Use `gdb --core=core ./program` if you prefer the long-flag form, but option C as written would cause an error. \"Both B and C are equivalent\" is therefore wrong.",
     "source": "CS252-Slides-Sprin2026.pdf:p157"
   },
   {
@@ -8952,11 +8952,11 @@
     "options": [
       "today = date (incorrect — assigns literal string)",
       "today=$(date) (command substitution)",
-      "today=`date` (backtick form)",
+      "today='$(date)' (single-quoted — subshell NOT expanded)",
       "Both B and C are correct"
     ],
-    "answer_index": 3,
-    "explanation": "Both $() and backtick `` ` `` perform command substitution. $() is preferred (nestable, readable). Note: no spaces around = in variable assignment.",
+    "answer_index": 1,
+    "explanation": "`today=$(date)` uses command substitution: the shell runs `date` and assigns its output to the variable. Option C uses single quotes, which suppress all expansion in Bash — `today` would be set to the literal string `$(date)`, not the actual date. \"Both B and C are correct\" is therefore wrong.",
     "source": "CS252-Slides-Sprin2026.pdf:p240"
   },
   {
