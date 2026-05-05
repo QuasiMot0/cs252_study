@@ -932,7 +932,7 @@
     "subtopic_id": "sub-8-5-1",
     "difficulty": "medium",
     "type": "application",
-    "question": "In the previous code, if the parent does NOT call `close(fd[1])` before `read()`, what happens?",
+    "question": "A parent creates a pipe, forks a child, and reads from the pipe:\n```c\nint fd[2];\npipe(fd);\nif (fork() == 0) {\n    close(fd[0]);\n    write(fd[1], \"hello\", 5);\n    close(fd[1]);\n    exit(0);\n}\n// parent does NOT call close(fd[1]) here\nread(fd[0], buf, sizeof(buf));  // what happens?\n```\nIf the parent does NOT call `close(fd[1])` before `read()`, what happens?",
     "options": [
       "read() still returns after the child closes its write end",
       "read() blocks forever because the parent's open write end prevents EOF",
@@ -1012,7 +1012,7 @@
     "subtopic_id": "sub-8-5-2",
     "difficulty": "medium",
     "type": "application",
-    "question": "In the standard pipe-chaining loop, `prevPipe` holds the read end of the previous pipe. After `dup2(prevPipe, STDIN_FILENO)` in command j's child, what must happen to `prevPipe`?",
+    "question": "A shell forks one child per pipeline stage using this loop:\n```c\nint prevPipe = STDIN_FILENO;\nfor (int j = 0; j < n; j++) {\n    int pfd[2];\n    pipe(pfd);\n    if (fork() == 0) {\n        dup2(prevPipe, STDIN_FILENO);\n        dup2(pfd[1], STDOUT_FILENO);\n        /* ??? what must happen to prevPipe here ??? */\n        execvp(cmds[j], args[j]);\n    }\n    close(pfd[1]);\n    prevPipe = pfd[0];\n}\n```\nAfter `dup2(prevPipe, STDIN_FILENO)` in command j's child, what must happen to `prevPipe`?",
     "options": [
       "Nothing — it stays open for the next iteration of the loop",
       "It must be closed",
