@@ -818,7 +818,7 @@
         <span id="q-number"></span>
         <span id="q-tag"></span>
         <div style="display:flex;gap:8px;align-items:center">
-          <button id="notes-btn" onclick="goToTextbook()" style="display:none">View Notes</button>
+          <button id="notes-btn" onclick="goToTextbook()">View Notes</button>
           <button id="report-btn" onclick="openReport()">Report</button>
         </div>
       </div>
@@ -1267,7 +1267,7 @@
     document.getElementById('submit-btn').style.display  = 'none';
     document.getElementById('next-btn').style.display    = 'none';
     document.getElementById('key-hint').style.display    = 'block';
-    document.getElementById('notes-btn').style.display   = fromSubtopic ? 'inline-block' : 'none';
+
     document.getElementById('progress-fill').style.width =
       (idx / questions.length * 100).toFixed(1) + '%';
     updateScore();
@@ -2287,9 +2287,10 @@
   }
 
   function goToTextbook() {
-    if (!fromSubtopic) return;
+    const subId = fromSubtopic || questions[idx]?.subtopic_id;
+    if (!subId) return;
     switchTab('study');
-    loadStudyPage(fromSubtopic);
+    loadStudyPage(subId);
   }
 
   function showStudyNav() {
