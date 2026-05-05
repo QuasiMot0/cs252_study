@@ -8644,11 +8644,11 @@
     "subtopic_id": "sub-6-3-2",
     "difficulty": "medium",
     "type": "application",
-    "question": "What happens if you call `putenv(\"FOO=bar\")` and then modify the string you passed?",
+    "question": "What happens if you call `char buf[] = \"FOO=bar\"; putenv(buf);` and then modify `buf`?",
     "options": [
       "Nothing \u2014 putenv makes a copy of the string",
       "Variable's value changes \u2014 putenv stores the pointer directly",
-      "Modification causes SIGSEGV because environment strings are read-only",
+      "Modification causes SIGSEGV because the environment is stored in read-only memory",
       "The next getenv(\"FOO\") call returns NULL"
     ],
     "answer_index": 1,
