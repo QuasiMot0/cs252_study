@@ -1127,7 +1127,7 @@
     "question": "Process A writes to a pipe that process B reads from. Process B writes to a different pipe that process A reads from. Both are blocked in read(). What is this, and how is it avoided?",
     "options": [
       "A race condition; avoided with mutexes",
-      "A deadlock",
+      "A deadlock; avoided by using non-blocking I/O (select/poll) or restructuring data flow to break the circular dependency",
       "A livelock; avoided by adding random backoff",
       "Pipe starvation; avoided by increasing the pipe buffer size"
     ],
