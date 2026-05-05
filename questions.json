@@ -8598,9 +8598,9 @@
     "type": "analysis",
     "question": "A process calls fork(). The return value in the parent is 1234, and in the child is 0. What do these values mean?",
     "options": [
-      "Parent: child's PID=1234; Child: 0 means success",
-      "Parent: child's PID=1234",
-      "Parent: 1234 is the parent's new PID; Child: the old PID",
+      "Parent: child's PID=1234; Child: 0 means fork() succeeded in the parent too",
+      "Parent: 1234 is the child's PID; Child: 0 means 'I am the child'",
+      "Parent: 1234 means fork() succeeded; Child: 0 is the child's exit status",
       "The values are swapped \u2014 child gets parent's PID"
     ],
     "answer_index": 1,
