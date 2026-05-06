@@ -10982,7 +10982,7 @@
     "type": "recall",
     "question": "Three conditions are needed for a race condition to occur. Which set is correct?",
     "options": [
-      "At least two threads",
+      "At least two threads; at least one shared variable; at least one unsynchronized write",
       "At least two processes; shared memory; no signals",
       "At least two threads; both perform reads only; no locks held",
       "At least one thread; a global variable; a loop"
