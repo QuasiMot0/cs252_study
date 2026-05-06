@@ -1197,6 +1197,7 @@
       buildFilterUI();
       show('filter-screen');
       updateWeakDot();
+      if (restoreExamState()) switchTab('exam');
     } catch(e) {
       document.getElementById('loading').textContent =
         'Error loading data. Run: python3 -m http.server 8252';
@@ -2076,6 +2077,7 @@
     document.querySelectorAll('#exam-options .opt').forEach((b, j) =>
       b.classList.toggle('selected', j === i));
     refreshExamGrid();
+    saveExamState();
   }
 
   function examNav(dir) {
@@ -2083,6 +2085,53 @@
     if (next < 0 || next >= examQuestions.length) return;
     examIdx = next;
     showExamQuestion();
+    saveExamState();
+  }
+
+  function saveExamState() {
+    if (!examQuestions.length) return;
+    localStorage.setItem('cs252_exam_state', JSON.stringify({
+      questions: examQuestions,
+      answers: examAnswers,
+      orders: examShuffledOrders,
+      flagged: [...examFlagged],
+      idx: examIdx,
+      timeLeft: examTimeLeft,
+      timeMins: examTimeMins,
+    }));
+  }
+
+  function restoreExamState() {
+    try {
+      const raw = localStorage.getItem('cs252_exam_state');
+      if (!raw) return false;
+      const s = JSON.parse(raw);
+      if (!s.questions || !s.questions.length) return false;
+      examQuestions      = s.questions;
+      examAnswers        = s.answers;
+      examShuffledOrders = s.orders;
+      examFlagged        = new Set(s.flagged || []);
+      examIdx            = s.idx || 0;
+      examTimeLeft       = s.timeLeft;
+      examTimeMins       = s.timeMins;
+      document.getElementById('exam-setup').style.display        = 'none';
+      document.getElementById('exam-in-progress').style.display  = 'block';
+      document.getElementById('exam-results').style.display      = 'none';
+      document.querySelector('#exam-setup .pane-header').style.display = 'none';
+      buildExamGrid();
+      showExamQuestion();
+      // resume timer
+      clearInterval(examInterval);
+      if (examTimeLeft !== Infinity && examTimeMins > 0) {
+        renderExamTimer();
+        examInterval = setInterval(() => {
+          examTimeLeft--;
+          renderExamTimer();
+          if (examTimeLeft <= 0) { clearInterval(examInterval); autoSubmitExam(); }
+        }, 1000);
+      }
+      return true;
+    } catch(e) { return false; }
   }
 
   function examToggleFlag() {
@@ -2107,6 +2156,7 @@
 
   function submitExam(timedOut) {
     clearInterval(examInterval);
+    localStorage.removeItem('cs252_exam_state');
     const timeUsedSecs = examTimeMins > 0 && examTimeLeft !== Infinity
       ? examTimeMins * 60 - Math.max(0, examTimeLeft)
       : null;
