@@ -39,7 +39,7 @@
     "question": "The instruction `leaq 16(%rbp), %rdi` is executed. Which of the following correctly describes what happens?",
     "options": [
       "The 8-byte value stored at memory address %rbp+16 is loaded into %rdi",
-      "The address %rbp+16 is computed and stored in %rdi without accessing memory",
+      "%rbp+16 is computed and stored in %rdi; no memory is accessed",
       "16 is added to %rbp and the result is stored back into %rbp",
       "The value in %rdi is stored into memory at address %rbp+16"
     ],
@@ -55,7 +55,7 @@
     "question": "A function begins with the instructions `pushq %rbp` and `movq %rsp, %rbp`. What is the purpose of these two instructions?",
     "options": [
       "To save the return address on the stack and set up the new frame pointer",
-      "To save the caller's frame pointer on the stack and establish a new frame pointer pointing to the current top of the stack",
+      "To save the caller's frame pointer and set %rbp to the current %rsp value",
       "To allocate space for local variables by decrementing %rsp by the frame size",
       "To copy the caller's stack frame so the callee has its own independent copy"
     ],
@@ -120,7 +120,7 @@
     "options": [
       "4 bytes, because pointer addition always increments by 1 byte",
       "8 bytes, because p points to a 64-bit address",
-      "16 bytes, because pointer arithmetic scales by the size of the pointed-to type",
+      "16 bytes, because p+4 advances 4 × sizeof(int) = 16 bytes",
       "40 bytes, because the entire array is 40 bytes"
     ],
     "answer_index": 2,
@@ -167,7 +167,7 @@
     "question": "The CS252 malloc allocator stores a footer (ObjectFooter) at the end of every block containing the block's size and allocated bit. What operation does this footer make possible in O(1) time that would otherwise require a linear scan?",
     "options": [
       "Finding the next free block in the free list during allocation",
-      "Locating the header of the physically previous block in memory so it can be coalesced with a newly freed block",
+      "Finding the prior block's header for O(1) coalescing when freed",
       "Verifying the magic number of an allocated block during a free() call",
       "Splitting a large block into two smaller blocks after allocation"
     ],
@@ -214,10 +214,10 @@
     "type": "analysis",
     "question": "Consider the following C code:\n  char *buf = (char *)malloc(5);\n  strcpy(buf, \"hello\");\n  free(buf);\nWhat memory error does this code contain?",
     "options": [
-      "Memory leak — after free(buf) is called, the pointer buf is not set to NULL, which means subsequent reads through the dangling pointer can silently access freed memory and the allocator has no way to detect that the block has already been released",
-      "Double free — calling free(buf) after strcpy() has overwritten the block's contents corrupts the allocator's internal metadata embedded in the block header, causing the allocator to treat the next free() call on the same pointer as a second release of an already-freed block",
-      "Buffer overflow — \"hello\" is 5 characters but strcpy also writes a null terminator, requiring 6 bytes",
-      "Wild free — after strcpy() writes into the buffer, the buf pointer is internally advanced by the C runtime to point past the first character of the string, so the subsequent free() receives an address that does not correspond to the start of any malloc'd block"
+      "After free(buf) is called, buf is not set to NULL, so subsequent reads through the dangling pointer can silently access freed memory",
+      "Calling free(buf) after strcpy() corrupts the allocator's metadata, causing the next free() on the same pointer to be treated as a second release",
+      "\"hello\" is 5 characters but strcpy also writes a null terminator, requiring 6 bytes",
+      "After strcpy() writes into the buffer, buf is advanced past the first character, so free() receives an address that is not the start of any malloc'd block"
     ],
     "answer_index": 2,
     "explanation": "The string literal \"hello\" contains 5 characters plus a null terminator '\\0' — 6 bytes total. malloc(5) allocates only 5 bytes. strcpy writes the 6th byte (the null terminator) one byte past the end of the buffer, corrupting adjacent heap memory. Setting a pointer to NULL after free is good practice but not itself a bug; the actual error here is the off-by-one allocation.",
@@ -230,7 +230,7 @@
     "type": "recall",
     "question": "A developer forks a child process inside a program being debugged with GDB. By default, GDB continues tracing the parent after fork(). Which GDB command makes GDB follow the child instead?",
     "options": [
-      "run --follow child",
+      "run --follow-fork-mode child",
       "set follow-fork-mode child",
       "attach --child",
       "step into child"
@@ -246,7 +246,7 @@
     "type": "application",
     "question": "UNIX was rewritten in C in the early 1970s, making it one of the first operating systems implemented in a high-level language rather than assembly. What was the primary benefit of that decision?",
     "options": [
-      "UNIX became portable — it could be recompiled for a new hardware architecture with only minor machine-specific changes, rather than requiring a complete rewrite in assembly for each new machine",
+      "Recompiling for a new CPU required only minor machine-specific changes, rather than a complete rewrite in assembly for each machine",
       "C programs ran faster than equivalent assembly on PDP-11 hardware, which Bell Labs required to handle its telephone network billing workload without purchasing additional minicomputers",
       "C compilers were already available on all major minicomputer platforms of the era, so UNIX source could be distributed and compiled immediately on any machine without modification",
       "AT&T required all Bell Labs software projects to use a high-level language to reduce long-term maintenance cost, and C was the only language the kernel team was authorized to use"
@@ -280,7 +280,7 @@
     "options": [
       "report_backup.txt becomes a dangling link because the original file is gone",
       "Both files are deleted because rm follows hard links and removes the inode",
-      "The file data remains accessible via report_backup.txt; the inode's reference count drops from 2 to 1",
+      "The file data survives; link count drops to 1, report_backup.txt still valid",
       "report_backup.txt now contains a copy of the file data made at link creation time"
     ],
     "answer_index": 2,
@@ -312,7 +312,7 @@
     "options": [
       "dup2(pipefd[0], STDOUT_FILENO); close(pipefd[1]);",
       "close(pipefd[0]); dup2(pipefd[1], STDOUT_FILENO); close(pipefd[1]);",
-      "dup2(STDOUT_FILENO, pipefd[1]); close(pipefd[0]);",
+      "dup2(STDOUT_FILENO, pipefd[1]); close(pipefd[0]); close(pipefd[1]);",
       "close(pipefd[1]); dup2(pipefd[0], STDIN_FILENO);"
     ],
     "answer_index": 1,
@@ -375,7 +375,7 @@
     "question": "After `pipe(pipefd)` and `fork()`, the parent reads from the pipe while the child writes to it. Which file descriptor must the PARENT close, and why?",
     "options": [
       "pipefd[0], because the parent reads from stdin instead of the pipe",
-      "pipefd[1], because leaving the write end open in the parent prevents the reader from ever receiving EOF",
+      "pipefd[1] — the parent must close it or the reader never sees EOF",
       "Both pipefd[0] and pipefd[1], then reopen them after the child exits",
       "Neither — both ends must remain open for the pipe to function"
     ],
@@ -391,7 +391,7 @@
     "question": "The shell processes `sort < data.txt > results.txt`. After forking the child and before execvp(), which sequence of syscalls correctly sets up both redirections?",
     "options": [
       "dup2(0, data_fd); dup2(1, results_fd) — swap the default descriptors with the opened files",
-      "open data.txt for reading → dup2 onto fd 0; open results.txt for writing/create → dup2 onto fd 1",
+      "open data.txt → dup2 to fd 0; open results.txt for write → dup2 to fd 1",
       "fopen both files, then call freopen() to replace stdin and stdout",
       "pipe() twice to create two one-directional channels, one for input and one for output"
     ],
@@ -504,7 +504,7 @@
     "options": [
       "Calling malloc() to allocate heap memory in a user program",
       "Executing a for loop that adds elements of an array",
-      "Directly reading or writing hardware device registers to initiate a disk I/O",
+      "Writing hardware device registers to initiate a disk I/O",
       "Calling printf() to format and print a string"
     ],
     "answer_index": 2,
@@ -583,7 +583,7 @@
     "question": "Two pthreads created within the same process are running concurrently. Which resources do they SHARE?",
     "options": [
       "Each thread's stack, program counter, and current register values",
-      "The process heap, global variables, and open file descriptor table",
+      "The process heap, global variables, and open file descriptors",
       "Each thread's stack only — the heap is private to each thread",
       "Nothing — threads are isolated like separate processes"
     ],
@@ -614,10 +614,10 @@
     "type": "application",
     "question": "Thread B calls pthread_mutex_trylock() on a mutex that Thread A currently holds. What does pthread_mutex_trylock() return, and how does this differ from pthread_mutex_lock()?",
     "options": [
-      "EBUSY — trylock returns immediately with an error code rather than blocking, so Thread B can retry later, do other work, or take a different code path instead of waiting indefinitely",
-      "0 — trylock always succeeds and grants the lock to Thread B because it is designed for non-blocking use; Thread B enters the critical section even while Thread A holds the mutex",
+      "It returns immediately with an error code rather than blocking, so Thread B can retry later, do other work, or take a different code path",
+      "It always succeeds and grants the lock, allowing Thread B to enter the critical section even while Thread A holds the mutex",
       "Blocks Thread B in the OS scheduler just like pthread_mutex_lock(), except that trylock sets an internal flag causing the kernel to retry the acquisition automatically every millisecond",
-      "EINTR — trylock was interrupted before acquiring the lock, which the caller must detect by checking errno and calling trylock again in a loop until it returns 0 for success"
+      "It was interrupted before acquiring the lock; the caller must check errno and call trylock in a loop until it succeeds"
     ],
     "answer_index": 0,
     "explanation": "pthread_mutex_trylock() is a non-blocking variant: if the lock is already held, it returns EBUSY immediately instead of blocking the calling thread. The caller can then decide whether to retry, perform other work, or give up. pthread_mutex_lock() by contrast puts the calling thread to sleep until the lock is released. trylock is useful when a thread has productive work to do while waiting rather than spinning or blocking.",
@@ -631,7 +631,7 @@
     "question": "A spin lock uses test_and_set: the instruction atomically sets a memory location to 1 and returns its previous value. A thread holds the lock when the location is 1. What does a waiting thread do while the lock is held?",
     "options": [
       "It calls pthread_mutex_lock() to sleep until the lock holder signals it",
-      "It repeatedly calls test_and_set in a tight loop, burning CPU cycles until the location becomes 0",
+      "It loops calling test_and_set, burning CPU cycles until the location becomes 0",
       "It deschedules itself with sched_yield() and retries once when it is rescheduled",
       "It decrements a semaphore to announce that it is waiting, then blocks"
     ],
@@ -680,7 +680,7 @@
     "options": [
       "enqueue() returns an error code immediately because the buffer is full",
       "enqueue() overwrites the oldest element because the buffer is circular",
-      "enqueue() blocks in sema_wait(&_emptySem) until a consumer calls dequeue() and posts to _emptySem",
+      "enqueue() blocks on sema_wait(&_emptySem) until a dequeue() posts a slot",
       "enqueue() spins checking _emptySem in a busy loop until a slot becomes available"
     ],
     "answer_index": 2,
@@ -712,7 +712,7 @@
     "options": [
       "Thread1→A and Thread2→B (each thread points to what it holds); no cycle, no deadlock",
       "A→Thread1 and B→Thread2 (mutexes point to holders); no cycle, so it is safe",
-      "Thread1→B, B→Thread2, Thread2→A, A→Thread1 — wait and hold edges form a cycle, indicating deadlock",
+      "Thread1→B→Thread2→A→Thread1 — wait edges form a cycle, indicating deadlock",
       "Thread1→A→Thread2→B — a chain but not a cycle, indicating starvation only"
     ],
     "answer_index": 2,
@@ -727,7 +727,7 @@
     "question": "Thread X acquires Mutex M2 then M1. Thread Y acquires Mutex M1 then M2. They run concurrently. Applying the lock-ordering rule (always acquire lower-numbered mutex first) requires both threads to acquire M1 before M2. How does this prevent deadlock?",
     "options": [
       "It prevents any thread from holding both mutexes simultaneously, so no waiting can occur",
-      "Both threads compete for M1 first; whichever wins proceeds to acquire M2 and completes, while the other blocks on M1 — no circular wait is possible",
+      "Both compete for M1; one wins and takes M2, the other blocks on M1 — no cycle possible",
       "It introduces a third meta-mutex that serializes all lock acquisitions globally",
       "Thread X is forced to release M2 before trying M1, eliminating the hold-and-wait condition"
     ],
@@ -758,10 +758,10 @@
     "type": "recall",
     "question": "When a web browser sends an HTTP GET request over TCP/IP, at which layer of the TCP/IP stack is the destination IP address header added to the packet?",
     "options": [
-      "Application layer (HTTP) — the browser includes the IP in the HTTP header",
-      "Transport layer (TCP) — TCP segments contain the destination IP",
-      "Internet layer (IP) — the IP header with source and destination IP addresses is added here",
-      "Network Interface layer (Ethernet) — the Ethernet frame header contains both IP and MAC addresses"
+      "The browser includes the destination IP address in the HTTP request header",
+      "TCP segments carry the destination IP address alongside source and destination port numbers",
+      "A header containing the source and destination IP addresses is added to the packet here",
+      "The Ethernet frame header wraps the packet and contains both IP and MAC addresses"
     ],
     "answer_index": 2,
     "explanation": "Each layer adds its own header: HTTP at Application, TCP (with port numbers) at Transport, IP (with 32-bit addresses) at Internet, Ethernet (with 48-bit MAC addresses) at Network Interface. IP addresses are strictly an Internet-layer concern — Ethernet uses MAC addresses at the layer below.",
@@ -774,10 +774,10 @@
     "type": "application",
     "question": "A host has IP address 10.0.0.37 and subnet mask 255.255.255.0. Another host has IP 10.0.0.112 with the same mask. Can they communicate directly without a router?",
     "options": [
-      "No — different values in the last octet mean they belong to distinct subnets, because each unique host address in a /24 network defines its own isolated subnet within the larger 10.0.0.0 address block",
-      "Yes — both share the network prefix 10.0.0 (the first three octets masked by 255.255.255.0), so they are on the same subnet",
+      "Different values in the last octet mean they belong to distinct subnets, since each host address in a /24 network defines its own isolated subnet within the 10.0.0.0 block",
+      "Both share the network prefix 10.0.0 (the first three octets masked by 255.255.255.0), placing them on the same subnet",
       "It depends on whether both hosts have exchanged ARP requests, since direct communication on any network is only possible after each host has the other's MAC address cached in its local ARP table",
-      "No — the mask 255.255.255.0 is a directed broadcast address that prevents unicast communication between individual hosts on the segment, requiring all traffic to be routed through the default gateway"
+      "The mask 255.255.255.0 is a directed broadcast address that prevents unicast communication, requiring all traffic through the default gateway"
     ],
     "answer_index": 1,
     "explanation": "The subnet mask 255.255.255.0 (/24) means the first 24 bits are the network portion. Both hosts share the prefix 10.0.0, placing them on the same subnet. Hosts on the same subnet communicate directly via ARP and Ethernet without passing through a router. Only packets destined for a different network prefix need the default router.",
@@ -790,10 +790,10 @@
     "type": "application",
     "question": "A host just booted with no network configuration. Which protocol runs first to give it a usable IP address, subnet mask, and default router?",
     "options": [
-      "ARP — to discover the MAC addresses of nearby hosts on the LAN",
-      "DNS — to look up the IP address of the default gateway by hostname",
-      "DHCP — to automatically obtain an IP address, subnet mask, default router, and DNS server address",
-      "ICMP — to ping the broadcast address and receive a router advertisement"
+      "Discovers the MAC addresses of nearby hosts by broadcasting on the local network",
+      "Looks up the IP address of the default gateway by its hostname",
+      "Broadcasts to obtain an IP address, subnet mask, default gateway, and DNS server",
+      "Pings the broadcast address to discover nearby routers and collect an advertisement"
     ],
     "answer_index": 2,
     "explanation": "DHCP (Dynamic Host Configuration Protocol) is the bootstrap protocol that runs over UDP using broadcast. A new host sends a DHCP Discover broadcast; a DHCP server replies with an IP address, subnet mask, default router, and DNS server. Only after DHCP is complete can the host use ARP to resolve addresses or DNS to look up hostnames.",
@@ -839,7 +839,7 @@
     "question": "Host A (private IP 192.168.0.10, port 5000) sends a TCP packet through a NAT router to server S (8.8.8.8, port 443). The router assigns external port 7200. When the server's reply arrives addressed to the router's public IP at port 7200, how does the router know where to forward it?",
     "options": [
       "It broadcasts the reply to all private hosts and Host A recognizes its own sequence number",
-      "The router looks up port 7200 in its NAT table and rewrites the destination to (192.168.0.10, port 5000)",
+      "The router looks up port 7200 in its NAT table and rewrites the destination IP and port",
       "The reply's TCP options field contains the private IP address encoded by the NAT router",
       "The router sends an ARP request for port 7200 to determine the private host's MAC address"
     ],
@@ -919,7 +919,7 @@
     "question": "A developer needs to work on a large feature for three weeks without committing incomplete code to the shared server, but still wants local version history so they can roll back. Which type of source control system best supports this?",
     "options": [
       "A centralized system like SVN, because local branches can be created without server access",
-      "A distributed system like Git or Mercurial, because every developer has a full local repository and can commit locally without pushing to the shared server",
+      "A distributed system like Git, where developers can commit to a full local repo without server access",
       "A centralized system like CVS, because it automatically creates private branches for in-progress work",
       "No source control system supports local history without a server; the developer should use manual file backups"
     ],
@@ -934,10 +934,10 @@
     "type": "application",
     "question": "A QA team evaluates the entire application as a black box before each release to determine whether the product meets requirements and is ready to ship. What type of test is this?",
     "options": [
-      "Unit tests — written by programmers to verify individual classes in isolation",
-      "Regression tests — written after fixing a bug to ensure it does not recur",
-      "Acceptance tests — written by QA to evaluate release readiness by testing the whole product against requirements",
-      "System tests — written jointly by QA and programmers to test a specific subsystem's features"
+      "Written by programmers to verify individual classes in isolation",
+      "Written after fixing a bug to ensure the same bug does not recur",
+      "Written by QA to verify the whole product meets release requirements",
+      "Written jointly by QA and programmers to test a specific subsystem's features"
     ],
     "answer_index": 2,
     "explanation": "Acceptance tests evaluate the full product against requirements and determine whether it is ready for release. They are black-box tests written by QA. Unit tests test individual classes (written by programmers). Regression tests verify bug fixes. System tests test a specific subsystem. The distinction between acceptance and system tests is that acceptance tests target release readiness of the whole product.",
@@ -952,7 +952,7 @@
     "options": [
       "Statistical sampling is perfectly accurate; instrumentation can miss function calls in tight loops",
       "Statistical sampling requires no recompilation; code instrumentation requires modifying the source",
-      "Statistical sampling has very low overhead because it piggybacks on timer interrupts that already occur, rather than adding instructions to every function call",
+      "Statistical sampling is low-overhead — it piggybacks on timer interrupts, not per-call instrumentation",
       "Statistical sampling works for multithreaded programs; instrumentation only works for single-threaded code"
     ],
     "answer_index": 2,
