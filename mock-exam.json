@@ -1,0 +1,962 @@
+[
+  {
+    "id": "m-0001",
+    "topic": "x86-64 Assembly Language",
+    "difficulty": "medium",
+    "type": "application",
+    "question": "A function uses register %rbx as a counter for an internal loop. According to the x86-64 System V ABI, what must this function do to conform to the calling convention?",
+    "options": [
+      "Save %rbx to the stack at function entry and restore it before returning, because %rbx is callee-saved and the caller expects its value to survive across any function call it makes",
+      "Copy %rbx into %rax before the loop, because %rax is the designated scratch register for intermediate values and %rbx must be left at zero throughout the function body",
+      "Do nothing — %rbx is a caller-saved register, so the calling function is required to save it before making any call if it intends to use that value afterward",
+      "Write %rbx into a thread-local storage slot at entry and reload it before returning, because the ABI requires all callee register saves to go through thread-local storage rather than the stack"
+    ],
+    "answer_index": 0,
+    "explanation": "%rbx (along with %rbp, %r12–%r15) is callee-saved in the x86-64 System V ABI. If a function uses it, the function must save it (typically with pushq) at entry and restore it (popq) at exit. The caller-saved registers (%rax, %rdi, %rsi, %rdx, %rcx, %r8–%r11) may be freely modified by the callee. Failing to save a callee-saved register silently corrupts the caller's data.",
+    "source": "CS252-Slides-Sprin2026.pdf:p18"
+  },
+  {
+    "id": "m-0002",
+    "topic": "x86-64 Assembly Language",
+    "difficulty": "hard",
+    "type": "analysis",
+    "question": "What value is in %rax after the following x86-64 instructions execute?\n  movq $6, %rax\n  addq $4, %rax\n  imulq $3, %rax\n  subq $2, %rax",
+    "options": [
+      "28",
+      "30",
+      "34",
+      "16"
+    ],
+    "answer_index": 0,
+    "explanation": "Step by step: movq sets %rax=6; addq adds 4 → %rax=10; imulq multiplies by 3 → %rax=30; subq subtracts 2 → %rax=28. A common mistake is applying subtraction before multiplication or misreading operand order (src, dst in AT&T syntax).",
+    "source": "CS252-Slides-Sprin2026.pdf:p22"
+  },
+  {
+    "id": "m-0003",
+    "topic": "x86-64 Assembly Language",
+    "difficulty": "hard",
+    "type": "application",
+    "question": "The instruction `leaq 16(%rbp), %rdi` is executed. Which of the following correctly describes what happens?",
+    "options": [
+      "The 8-byte value stored at memory address %rbp+16 is loaded into %rdi",
+      "The address %rbp+16 is computed and stored in %rdi without accessing memory",
+      "16 is added to %rbp and the result is stored back into %rbp",
+      "The value in %rdi is stored into memory at address %rbp+16"
+    ],
+    "answer_index": 1,
+    "explanation": "leaq ('load effective address') computes the address expression and stores the address itself into the destination register — no memory dereference occurs. movq 16(%rbp), %rdi would load the value at that address. This is a frequent source of confusion.",
+    "source": "CS252-Slides-Sprin2026.pdf:p24"
+  },
+  {
+    "id": "m-0004",
+    "topic": "x86-64 Assembly Language",
+    "difficulty": "hard",
+    "type": "analysis",
+    "question": "A function begins with the instructions `pushq %rbp` and `movq %rsp, %rbp`. What is the purpose of these two instructions?",
+    "options": [
+      "To save the return address on the stack and set up the new frame pointer",
+      "To save the caller's frame pointer on the stack and establish a new frame pointer pointing to the current top of the stack",
+      "To allocate space for local variables by decrementing %rsp by the frame size",
+      "To copy the caller's stack frame so the callee has its own independent copy"
+    ],
+    "answer_index": 1,
+    "explanation": "pushq %rbp saves the caller's base pointer (it is callee-saved). movq %rsp, %rbp sets %rbp to the current stack top, creating the new frame pointer. Local variables are then allocated by subtracting from %rsp separately. The return address was already pushed by callq before these instructions.",
+    "source": "CS252-Slides-Sprin2026.pdf:p30"
+  },
+  {
+    "id": "m-0005",
+    "topic": "Program Build Pipeline + Libraries",
+    "difficulty": "medium",
+    "type": "recall",
+    "question": "A C source file contains `#include <string.h>` and a call to `strlen`. Which step in the build pipeline expands the `#include` directive?",
+    "options": [
+      "The assembler (as), which processes all directives before generating machine code",
+      "The linker (ld), which resolves symbols across object files",
+      "The preprocessor (cpp), which runs before compilation",
+      "The compiler (cc1), which inlines header content during code generation"
+    ],
+    "answer_index": 2,
+    "explanation": "The C preprocessor (cpp) runs first. It processes all # directives — including #include, #define, and #ifdef — and produces an expanded .c file that the compiler then translates to assembly. The assembler and linker operate on later artifacts.",
+    "source": "CS252-Slides-Sprin2026.pdf:p55"
+  },
+  {
+    "id": "m-0006",
+    "topic": "Program Build Pipeline + Libraries",
+    "difficulty": "hard",
+    "type": "application",
+    "question": "A program is linked against libmath.a (a static library). Which statement best describes the resulting executable?",
+    "options": [
+      "The executable stores only a reference to libmath.a; the library is loaded from disk at runtime",
+      "The executable contains copies of only the object code from libmath.a that the program actually calls",
+      "The executable embeds the entire libmath.a archive, including functions the program never calls",
+      "The executable stores the archive's symbol table but defers actual code loading until runtime, so static linking behaves identically to shared library linking for every symbol the program references"
+    ],
+    "answer_index": 1,
+    "explanation": "Static linking copies only the needed object modules from the archive into the executable. Unreferenced modules are not included. By contrast, a .so is loaded at runtime and shared among processes — its code is not embedded in the executable.",
+    "source": "CS252-Slides-Sprin2026.pdf:p68"
+  },
+  {
+    "id": "m-0007",
+    "topic": "Program Build Pipeline + Libraries",
+    "difficulty": "hard",
+    "type": "analysis",
+    "question": "Two separately compiled object files both define a global function named `util_init`. What does the linker do when asked to produce a single executable from both?",
+    "options": [
+      "It silently uses the definition from whichever .o file appears first on the command line",
+      "It merges the two definitions by concatenating their machine code into one function",
+      "It reports a 'multiple definition' error and refuses to produce an executable",
+      "It renames one definition to `util_init_2` automatically to avoid the conflict"
+    ],
+    "answer_index": 2,
+    "explanation": "The linker enforces the one-definition rule for global symbols. Duplicate global definitions produce a linker error. If you intend one to be a fallback, it must be declared `weak`. The linker does not silently pick one or rename symbols.",
+    "source": "CS252-Slides-Sprin2026.pdf:p72"
+  },
+  {
+    "id": "m-0008",
+    "topic": "Memory & Pointers in C",
+    "difficulty": "hard",
+    "type": "application",
+    "question": "Given `int arr[10]` and `int *p = arr`, what is the byte distance between p and p+4 on a platform where sizeof(int)==4?",
+    "options": [
+      "4 bytes, because pointer addition always increments by 1 byte",
+      "8 bytes, because p points to a 64-bit address",
+      "16 bytes, because pointer arithmetic scales by the size of the pointed-to type",
+      "40 bytes, because the entire array is 40 bytes"
+    ],
+    "answer_index": 2,
+    "explanation": "Pointer arithmetic on a type-T pointer scales by sizeof(T). p+4 moves 4 × sizeof(int) = 4 × 4 = 16 bytes past p. The compiler automatically handles this scaling, which is why arr[i] and *(arr+i) are equivalent.",
+    "source": "CS252-Slides-Sprin2026.pdf:p88"
+  },
+  {
+    "id": "m-0009",
+    "topic": "Memory & Pointers in C",
+    "difficulty": "hard",
+    "type": "application",
+    "question": "Which of the following correctly declares a variable `cmp` that can hold a pointer to a function taking two const char* arguments and returning int (matching the signature of strcmp)?",
+    "options": [
+      "int cmp(const char*, const char*)*;",
+      "int (*cmp)(const char*, const char*);",
+      "int* cmp(const char*, const char*);",
+      "(int) *cmp(const char*, const char*);"
+    ],
+    "answer_index": 1,
+    "explanation": "Function pointer syntax: `return_type (*variable_name)(parameter_types)`. The parentheses around *cmp are required — without them, `int *cmp(...)` declares a function returning int*, not a pointer to a function returning int.",
+    "source": "CS252-Slides-Sprin2026.pdf:p115"
+  },
+  {
+    "id": "m-0010",
+    "topic": "Malloc / Explicit Heap Management",
+    "difficulty": "hard",
+    "type": "recall",
+    "question": "In the CS252 malloc implementation, the _allocated field of an ObjectHeader can hold values 0, 1, or 2. What does the value 2 signify?",
+    "options": [
+      "The block has been freed twice (double-free detected)",
+      "The block is allocated and its size has been rounded up to the next power of two",
+      "The block is a sentinel (fence post) marking the boundary of the heap",
+      "The block is in a segregated free list and cannot be coalesced"
+    ],
+    "answer_index": 2,
+    "explanation": "In the CS252 allocator: 0 = free, 1 = allocated, 2 = sentinel/fence-post. Sentinel blocks are placed at the start and end of the heap so that coalescing logic never reads past the heap boundaries. They are never allocated to the user.",
+    "source": "CS252-Slides-Sprin2026.pdf:p142"
+  },
+  {
+    "id": "m-0011",
+    "topic": "Malloc / Explicit Heap Management",
+    "difficulty": "hard",
+    "type": "analysis",
+    "question": "The CS252 malloc allocator stores a footer (ObjectFooter) at the end of every block containing the block's size and allocated bit. What operation does this footer make possible in O(1) time that would otherwise require a linear scan?",
+    "options": [
+      "Finding the next free block in the free list during allocation",
+      "Locating the header of the physically previous block in memory so it can be coalesced with a newly freed block",
+      "Verifying the magic number of an allocated block during a free() call",
+      "Splitting a large block into two smaller blocks after allocation"
+    ],
+    "answer_index": 1,
+    "explanation": "When a block is freed, the allocator wants to coalesce it with the physically preceding block if that block is also free. Without a footer, finding the previous block's header requires scanning from the beginning of the heap. With a footer storing the block's size, you can subtract that size from the current block's address to jump directly to the previous block's header in O(1).",
+    "source": "CS252-Slides-Sprin2026.pdf:p145"
+  },
+  {
+    "id": "m-0012",
+    "topic": "Malloc / Explicit Heap Management",
+    "difficulty": "hard",
+    "type": "application",
+    "question": "The CS252 malloc uses a single doubly-linked free list with first-fit allocation. A student proposes switching to best-fit. Which trade-off accurately describes the difference?",
+    "options": [
+      "First-fit is always faster and consistently produces less fragmentation than best-fit in every workload, because stopping at the first adequate block avoids scanning the rest of the list and naturally preserves larger contiguous regions toward the end of the heap for future large requests",
+      "Best-fit scans the entire free list to find the smallest adequate block, trading speed for potentially better space utilization; first-fit stops at the first block large enough, trading some fragmentation for faster allocation",
+      "Best-fit eliminates external fragmentation entirely, because selecting the closest-fitting block always leaves exactly zero unused bytes after each split, ensuring that over time every byte of the heap remains reusable regardless of the size of future allocation requests",
+      "First-fit requires the free list to be maintained in ascending address order to guarantee deterministic placement behavior, while best-fit operates correctly on any unsorted list, so first-fit imposes additional O(n) insertion overhead on every free() call that best-fit avoids"
+    ],
+    "answer_index": 1,
+    "explanation": "First-fit stops at the first block that fits (fast, but may leave small unusable fragments near the front of the list). Best-fit scans the whole list for the closest-size block (slower), which can reduce fragmentation but is not guaranteed to — the leftover fragments from best-fit are smaller, which can be harder to reuse. Neither is universally superior.",
+    "source": "CS252-Slides-Sprin2026.pdf:p148"
+  },
+  {
+    "id": "m-0013",
+    "topic": "Malloc / Explicit Heap Management",
+    "difficulty": "hard",
+    "type": "recall",
+    "question": "The CS252 debugging malloc allocator fills newly freed blocks with the bit pattern 0xF7EEF7EE. What is the primary purpose of writing this pattern into freed memory?",
+    "options": [
+      "To overwrite the freed block's contents with a compressed form of its metadata so the heap manager can reclaim internal fragmentation and re-add the block to the free list at a smaller effective size without waiting for a full coalesce pass",
+      "To write the fence-post sentinel value at the block's header and footer boundaries, giving the coalescing routine a recognizable marker that prevents it from merging the block with adjacent sentinels that mark the legal edges of the managed heap",
+      "To make dangling pointer dereferences more likely to crash or produce obviously wrong values rather than silently using stale data",
+      "To initialize the _next and _prev pointers of the ObjectHeader's free list node to a known non-null starting address, preventing null-pointer faults when the allocator traverses the doubly-linked free list forward and backward during an allocation search"
+    ],
+    "answer_index": 2,
+    "explanation": "0xF7EEF7EE is a magic 'poison' value. If code reads from a freed block (use-after-free), it sees this recognizable pattern instead of plausible stale data. This makes bugs more visible — the program is more likely to crash or produce clearly wrong output rather than appearing to work accidentally. 0xA10CA7ED ('allocated') is the corresponding pattern written to allocated blocks.",
+    "source": "CS252-Slides-Sprin2026.pdf:p155"
+  },
+  {
+    "id": "m-0014",
+    "topic": "Malloc / Explicit Heap Management",
+    "difficulty": "hard",
+    "type": "analysis",
+    "question": "Consider the following C code:\n  char *buf = (char *)malloc(5);\n  strcpy(buf, \"hello\");\n  free(buf);\nWhat memory error does this code contain?",
+    "options": [
+      "Memory leak — after free(buf) is called, the pointer buf is not set to NULL, which means subsequent reads through the dangling pointer can silently access freed memory and the allocator has no way to detect that the block has already been released",
+      "Double free — calling free(buf) after strcpy() has overwritten the block's contents corrupts the allocator's internal metadata embedded in the block header, causing the allocator to treat the next free() call on the same pointer as a second release of an already-freed block",
+      "Buffer overflow — \"hello\" is 5 characters but strcpy also writes a null terminator, requiring 6 bytes",
+      "Wild free — after strcpy() writes into the buffer, the buf pointer is internally advanced by the C runtime to point past the first character of the string, so the subsequent free() receives an address that does not correspond to the start of any malloc'd block"
+    ],
+    "answer_index": 2,
+    "explanation": "The string literal \"hello\" contains 5 characters plus a null terminator '\\0' — 6 bytes total. malloc(5) allocates only 5 bytes. strcpy writes the 6th byte (the null terminator) one byte past the end of the buffer, corrupting adjacent heap memory. Setting a pointer to NULL after free is good practice but not itself a bug; the actual error here is the off-by-one allocation.",
+    "source": "CS252-Slides-Sprin2026.pdf:p152"
+  },
+  {
+    "id": "m-0015",
+    "topic": "GDB Debugger",
+    "difficulty": "medium",
+    "type": "recall",
+    "question": "A developer forks a child process inside a program being debugged with GDB. By default, GDB continues tracing the parent after fork(). Which GDB command makes GDB follow the child instead?",
+    "options": [
+      "run --follow child",
+      "set follow-fork-mode child",
+      "attach --child",
+      "step into child"
+    ],
+    "answer_index": 1,
+    "explanation": "`set follow-fork-mode child` tells GDB to follow the child process after fork() and detach from the parent. The default is `set follow-fork-mode parent`. This is essential for debugging child-process logic in programs like shells.",
+    "source": "CS252-Slides-Sprin2026.pdf:p162"
+  },
+  {
+    "id": "m-0016",
+    "topic": "UNIX OS History & Intro",
+    "difficulty": "medium",
+    "type": "application",
+    "question": "UNIX was rewritten in C in the early 1970s, making it one of the first operating systems implemented in a high-level language rather than assembly. What was the primary benefit of that decision?",
+    "options": [
+      "UNIX became portable — it could be recompiled for a new hardware architecture with only minor machine-specific changes, rather than requiring a complete rewrite in assembly for each new machine",
+      "C programs ran faster than equivalent assembly on PDP-11 hardware, which Bell Labs required to handle its telephone network billing workload without purchasing additional minicomputers",
+      "C compilers were already available on all major minicomputer platforms of the era, so UNIX source could be distributed and compiled immediately on any machine without modification",
+      "AT&T required all Bell Labs software projects to use a high-level language to reduce long-term maintenance cost, and C was the only language the kernel team was authorized to use"
+    ],
+    "answer_index": 0,
+    "explanation": "Writing UNIX in C made it portable: porting to a new CPU required recompiling the bulk of the OS rather than rewriting it in machine-specific assembly. Only a small machine-dependent layer (context switch, interrupt handling) needed to be in assembly. This portability is why UNIX spread rapidly from the PDP-11 to minicomputers, workstations, and eventually embedded systems throughout the 1970s–1980s.",
+    "source": "CS252-Slides-Sprin2026.pdf:p170"
+  },
+  {
+    "id": "m-0017",
+    "topic": "UNIX File System",
+    "difficulty": "hard",
+    "type": "analysis",
+    "question": "An i-node has 12 direct block pointers, 1 single-indirect pointer, and 1 double-indirect pointer. Assume 1 KB blocks and 256 block pointers per indirect block. How many kilobytes of file data can be addressed through the double-indirect block alone?",
+    "options": [
+      "256 KB",
+      "768 KB",
+      "64 MB expressed as 65,536 KB",
+      "16 GB expressed as 16,777,216 KB"
+    ],
+    "answer_index": 2,
+    "explanation": "The double-indirect block points to 256 single-indirect blocks, each of which points to 256 data blocks of 1 KB each: 256 × 256 × 1 KB = 65,536 KB = 64 MB. The single-indirect alone covers 256 × 1 KB = 256 KB. Triple-indirect adds 256³ KB = 16 GB. A common mistake is adding the direct and single-indirect counts into this calculation.",
+    "source": "CS252-Slides-Sprin2026.pdf:p192"
+  },
+  {
+    "id": "m-0018",
+    "topic": "UNIX File System",
+    "difficulty": "hard",
+    "type": "application",
+    "question": "A user creates a hard link: `ln report.txt report_backup.txt`. Later they delete `report.txt` with `rm`. Which statement accurately describes the outcome?",
+    "options": [
+      "report_backup.txt becomes a dangling link because the original file is gone",
+      "Both files are deleted because rm follows hard links and removes the inode",
+      "The file data remains accessible via report_backup.txt; the inode's reference count drops from 2 to 1",
+      "report_backup.txt now contains a copy of the file data made at link creation time"
+    ],
+    "answer_index": 2,
+    "explanation": "A hard link is a directory entry that points to the same inode as the original. The inode's reference count tracks how many directory entries reference it. rm report.txt removes one directory entry and decrements the count to 1 — the inode and its data blocks are freed only when the count reaches 0. Dangling links are a property of symbolic (soft) links, not hard links.",
+    "source": "CS252-Slides-Sprin2026.pdf:p197"
+  },
+  {
+    "id": "m-0019",
+    "topic": "UNIX File System",
+    "difficulty": "hard",
+    "type": "recall",
+    "question": "Which of the following pieces of information is stored in the SUPERBLOCK of a UNIX file system, rather than in an individual i-node?",
+    "options": [
+      "The read, write, and execute permission bits for every file in the file system, cached in the superblock so that permission checks can be performed without reading individual i-node blocks from disk on each access",
+      "The ordered list of data block numbers that store a specific file's content, updated on every write to ensure the superblock always reflects the current physical block layout of the most recently modified file",
+      "The total number of i-nodes and data blocks in the file system, and bitmaps of free vs. used blocks",
+      "The numeric user ID and group ID of each file's owner, stored centrally in the superblock so that ownership checks can be performed in a single disk read without fetching the individual per-file i-node"
+    ],
+    "answer_index": 2,
+    "explanation": "The superblock stores file-system-wide metadata: total block and inode counts, bitmaps (or free lists) indicating which inodes and data blocks are available, and the inode number of the root directory. Per-file information (permissions, owner, block lists) lives in individual inodes. Directory entries store filenames and inode numbers.",
+    "source": "CS252-Slides-Sprin2026.pdf:p182"
+  },
+  {
+    "id": "m-0020",
+    "topic": "Processes: fork / exec / pipe / signals",
+    "difficulty": "hard",
+    "type": "analysis",
+    "question": "A shell wants to run `ls` with its stdout connected to the write end of a pipe (pipefd[1]). After fork(), which sequence of calls should the CHILD execute before calling execvp(\"ls\", ...)?",
+    "options": [
+      "dup2(pipefd[0], STDOUT_FILENO); close(pipefd[1]);",
+      "close(pipefd[0]); dup2(pipefd[1], STDOUT_FILENO); close(pipefd[1]);",
+      "dup2(STDOUT_FILENO, pipefd[1]); close(pipefd[0]);",
+      "close(pipefd[1]); dup2(pipefd[0], STDIN_FILENO);"
+    ],
+    "answer_index": 1,
+    "explanation": "The child needs stdout (fd 1) to refer to the pipe's write end. Steps: (1) close the read end pipefd[0] — the child won't read from the pipe; (2) dup2(pipefd[1], STDOUT_FILENO) makes fd 1 point to the write end; (3) close pipefd[1] to eliminate the extra reference, so the reader eventually gets EOF. Failing to close pipefd[1] after dup2 leaves two write-end file descriptions open, preventing EOF.",
+    "source": "CS252-Slides-Sprin2026.pdf:p215"
+  },
+  {
+    "id": "m-0021",
+    "topic": "UNIX Commands + Shell Scripting",
+    "difficulty": "hard",
+    "type": "analysis",
+    "question": "What output does the following shell script produce?\n  x=4\n  while [ $x -gt 1 ]; do\n    echo $x\n    x=$((x - 2))\n  done",
+    "options": [
+      "4 2 0 (on separate lines)",
+      "4 2 (on separate lines)",
+      "4 3 2 1 (on separate lines)",
+      "Nothing — the loop condition is false from the start"
+    ],
+    "answer_index": 1,
+    "explanation": "x starts at 4. First iteration: 4 > 1 is true, prints 4, x becomes 2. Second iteration: 2 > 1 is true, prints 2, x becomes 0. Third iteration: 0 > 1 is false, loop exits. Output is 4 then 2. The loop does not print 0 because the condition fails before that echo.",
+    "source": "CS252-Slides-Sprin2026.pdf:p228"
+  },
+  {
+    "id": "m-0022",
+    "topic": "UNIX Commands + Shell Scripting",
+    "difficulty": "hard",
+    "type": "application",
+    "question": "What does the command `find /home -name '*.log' -newer /tmp/marker` do?",
+    "options": [
+      "Searches only the top-level /home directory without descending into subdirectories for files with names ending in .log whose size in bytes is greater than the size of /tmp/marker",
+      "Recursively searches the directory tree under /home for files ending in .log that were modified more recently than /tmp/marker",
+      "Finds all files whose content contains the literal string '.log' anywhere on the filesystem and compares their modification timestamps against /tmp/marker using diff to report differences",
+      "Deletes every file under /home whose name ends in .log and whose modification time is more recent than /tmp/marker, printing each file's path to stdout before performing the deletion"
+    ],
+    "answer_index": 1,
+    "explanation": "find always recurses into subdirectories by default. `-name '*.log'` matches filenames ending in .log. `-newer /tmp/marker` filters to files whose modification time is more recent than /tmp/marker's modification time. find does not delete files unless -exec rm or -delete is specified.",
+    "source": "CS252-Slides-Sprin2026.pdf:p232"
+  },
+  {
+    "id": "m-0023",
+    "topic": "Shell Project",
+    "difficulty": "hard",
+    "type": "recall",
+    "question": "In the CS252 shell grammar, which non-terminal rule handles a sequence of commands connected by pipe characters, such as `ls -l | grep foo | wc -l`?",
+    "options": [
+      "cmd_and_args",
+      "io_modifier_list",
+      "pipe_list",
+      "cmd_list — the top-level grammar rule that contains both pipe_list and io_modifier_list as children, making it responsible for parsing any command sequence that includes pipes, redirections, or both together"
+    ],
+    "answer_index": 2,
+    "explanation": "pipe_list is the top-level grammar rule that matches one or more commands joined by `|`. cmd_and_args handles a single command with its arguments; io_modifier_list handles < and > redirections; background_optional handles the trailing & for background execution.",
+    "source": "CS252-Slides-Sprin2026.pdf:p262"
+  },
+  {
+    "id": "m-0024",
+    "topic": "Shell Project",
+    "difficulty": "hard",
+    "type": "analysis",
+    "question": "After `pipe(pipefd)` and `fork()`, the parent reads from the pipe while the child writes to it. Which file descriptor must the PARENT close, and why?",
+    "options": [
+      "pipefd[0], because the parent reads from stdin instead of the pipe",
+      "pipefd[1], because leaving the write end open in the parent prevents the reader from ever receiving EOF",
+      "Both pipefd[0] and pipefd[1], then reopen them after the child exits",
+      "Neither — both ends must remain open for the pipe to function"
+    ],
+    "answer_index": 1,
+    "explanation": "The kernel closes a pipe and signals EOF to readers only when ALL write-end file descriptors are closed. If the parent holds pipefd[1] open while also reading from pipefd[0], the read will block forever even after the child exits — because there is still an open write end. The parent must close pipefd[1] immediately after fork().",
+    "source": "CS252-Slides-Sprin2026.pdf:p270"
+  },
+  {
+    "id": "m-0025",
+    "topic": "Shell Project",
+    "difficulty": "hard",
+    "type": "application",
+    "question": "The shell processes `sort < data.txt > results.txt`. After forking the child and before execvp(), which sequence of syscalls correctly sets up both redirections?",
+    "options": [
+      "dup2(0, data_fd); dup2(1, results_fd) — swap the default descriptors with the opened files",
+      "open data.txt for reading → dup2 onto fd 0; open results.txt for writing/create → dup2 onto fd 1",
+      "fopen both files, then call freopen() to replace stdin and stdout",
+      "pipe() twice to create two one-directional channels, one for input and one for output"
+    ],
+    "answer_index": 1,
+    "explanation": "open() returns a new file descriptor. dup2(data_fd, 0) makes fd 0 (stdin) refer to data.txt; dup2(results_fd, 1) makes fd 1 (stdout) refer to results.txt. After dup2, the original fds should be closed. fopen is a library function and shouldn't be mixed with exec() setup; pipe() is for inter-process communication, not file redirection.",
+    "source": "CS252-Slides-Sprin2026.pdf:p272"
+  },
+  {
+    "id": "m-0026",
+    "topic": "Shell Project",
+    "difficulty": "hard",
+    "type": "application",
+    "question": "Why must the shell's built-in `cd` command be implemented to run in the parent shell process, rather than forking a child that calls chdir() and exec()?",
+    "options": [
+      "Because the chdir() system call is only available to the process that owns the controlling terminal",
+      "Because a child's chdir() changes only the child's working directory; the parent's working directory would be unaffected",
+      "Because exec() unlinks the process from its current directory before loading the new program",
+      "Because chdir() modifies the kernel's global VFS directory table rather than a per-process field, so a change made in any process affects the working directory namespace for all processes on the system simultaneously"
+    ],
+    "answer_index": 1,
+    "explanation": "Each process has its own current working directory. chdir() modifies only the calling process's directory. If the shell forked and had the child call chdir(), the child's directory would change, the child would exit, and the parent shell would still be in the original directory. Built-ins like cd, setenv, and unsetenv must run in the parent for their effects to persist.",
+    "source": "CS252-Slides-Sprin2026.pdf:p298"
+  },
+  {
+    "id": "m-0027",
+    "topic": "Shell Project",
+    "difficulty": "hard",
+    "type": "recall",
+    "question": "When the CS252 shell expands a wildcard like `*.c`, it converts the pattern to a regular expression and matches it against directory entries. Which sequence of functions does it use?",
+    "options": [
+      "glob() to expand the wildcard pattern into a sorted list of matching pathnames, then access() to verify each matched path is readable before appending it to the command's argument array",
+      "regcomp() to compile the pattern (e.g., `^.*\\.c$`), then opendir()/readdir() to iterate entries, and regexec() to test each",
+      "fnmatch() called once per directory entry to compare the shell glob pattern directly against each filename, using POSIX wildcard semantics without converting the pattern to a full regular expression first",
+      "The kernel performs glob expansion automatically before the shell sees the command, so the shell receives a pre-expanded argv[] array and passes it directly to execvp() without any regex processing"
+    ],
+    "answer_index": 1,
+    "explanation": "The CS252 shell manually converts * to .* and ? to ., anchors with ^ and $, then calls regcomp() to compile the regex. It opens the directory with opendir(), iterates entries with readdir(), and calls regexec() on each entry name. Matching entries are added to the argument list in sorted order.",
+    "source": "CS252-Slides-Sprin2026.pdf:p308"
+  },
+  {
+    "id": "m-0028",
+    "topic": "Shell Project",
+    "difficulty": "hard",
+    "type": "analysis",
+    "question": "The CS252 shell's SIGCHLD handler calls `waitpid(-1, &status, WNOHANG)` in a loop rather than a single `wait()`. Why is the WNOHANG flag necessary?",
+    "options": [
+      "Because waitpid() is not listed as an async-signal-safe function in the POSIX standard, so invoking it from inside a signal handler without WNOHANG would produce undefined behavior and the WNOHANG flag is required to make the call signal-safe",
+      "Because multiple children may have exited before SIGCHLD is delivered; WNOHANG reaps all of them without blocking, since only one signal may be queued even if many children finished",
+      "Because WNOHANG makes waitpid() store the child's exit status in the status variable without removing the child from the process table, so the shell can collect the status immediately while leaving the zombie entry for a later blocking wait to clean up",
+      "Because the first argument -1 to waitpid() is only a valid wildcard when WNOHANG is also specified; without WNOHANG, passing -1 would cause waitpid() to wait for the process group with ID 1 (init) rather than any child of the shell"
+    ],
+    "answer_index": 1,
+    "explanation": "The OS may coalesce multiple SIGCHLD signals into one — if two children finish almost simultaneously, the shell may receive only one signal. WNOHANG lets the handler loop and reap all currently-finished children without blocking. If WNOHANG were omitted, the handler would block after reaping one child, stalling the shell.",
+    "source": "CS252-Slides-Sprin2026.pdf:p318"
+  },
+  {
+    "id": "m-0029",
+    "topic": "Shell Project",
+    "difficulty": "hard",
+    "type": "analysis",
+    "question": "When the CS252 shell evaluates the subshell expression `$(date)`, which mechanism does it use to capture the output of `date`?",
+    "options": [
+      "It exec's the command in the same process with a temporary file substituted for stdout, reads the temporary file's contents back into a string after the command exits, then unlinks the temporary file before substituting the output into the command line",
+      "It creates a pipe, forks a child that redirects stdout to the pipe's write end and exec's `date`; the parent reads from the read end and collects the output as a string",
+      "It sends SIGUSR1 to the command process once it has started, which causes the command to write its output into a shared memory segment that the parent shell then mmap's and reads as a null-terminated string",
+      "It opens a pseudoterminal (pty) device so the command believes it is writing to an interactive terminal, and the shell reads from the master side of the pty to capture the output before substituting it into the surrounding command"
+    ],
+    "answer_index": 1,
+    "explanation": "Subshell capture uses a pipe: the shell calls pipe(), forks, the child closes the read end, dup2's the write end onto stdout, and exec's the command. The parent closes the write end and reads from the read end until EOF, accumulating the output. The captured string is then substituted into the command line.",
+    "source": "CS252-Slides-Sprin2026.pdf:p322"
+  },
+  {
+    "id": "m-0030",
+    "topic": "Shell Project",
+    "difficulty": "hard",
+    "type": "application",
+    "question": "When the user runs `sleep 60 &`, the CS252 shell forks a child to run `sleep 60`. What does the parent shell do immediately after fork(), and how does it eventually clean up the child?",
+    "options": [
+      "The parent calls waitpid(child_pid, &status, 0) with blocking to wait until sleep 60 finishes, ensuring the child is fully reaped before the shell prints the next prompt to the user",
+      "The parent prints the child's PID, returns to the prompt immediately, and later reaps the child via its SIGCHLD handler when sleep exits",
+      "The parent sends SIGSTOP to the child immediately after fork() to suspend it, then resumes it by sending SIGCONT when the user later types fg at the next interactive shell prompt",
+      "The parent calls setsid() to move the child into a new session that is immune to SIGHUP and terminal signals, then records the child's PID in an internal job table for optional later reference"
+    ],
+    "answer_index": 1,
+    "explanation": "For background jobs (ending with &), the shell does NOT call waitpid() immediately — that would block the shell. Instead it prints the PID, returns to the prompt, and the SIGCHLD handler (using waitpid(-1, WNOHANG)) reaps the child automatically when sleep eventually finishes.",
+    "source": "CS252-Slides-Sprin2026.pdf:p320"
+  },
+  {
+    "id": "m-0031",
+    "topic": "Shell Project",
+    "difficulty": "medium",
+    "type": "recall",
+    "question": "The CS252 shell needs to implement `setenv PAGER less`. Which C function call makes this environment variable available to all subsequently exec'd child processes?",
+    "options": [
+      "putenv(\"PAGER=less\") or setenv(\"PAGER\", \"less\", 1) called in the parent shell process before the next fork()",
+      "setenv(\"PAGER\", \"less\", 1) called inside the child process after fork() but before execvp(), so that the new environment variable is present in the exec'd command's environment from the moment the new program begins executing",
+      "export(\"PAGER\", \"less\") called anywhere in the shell process, since export() propagates the variable through both the shell's environ array and the kernel's process environment table simultaneously without requiring a fork",
+      "Writing the string \"PAGER=less\" directly to the file /proc/self/environ, which the kernel reads on each subsequent fork() call to populate the initial environment of newly created child processes"
+    ],
+    "answer_index": 0,
+    "explanation": "Environment modifications must happen in the parent shell process — fork() copies the parent's environment to each child, so any variable set in the parent before fork() is inherited. Setting it in the child after fork() would affect only that one child's exec'd program, not future commands. export() does not exist in C. /proc/self/environ is read-only.",
+    "source": "CS252-Slides-Sprin2026.pdf:p302"
+  },
+  {
+    "id": "m-0032",
+    "topic": "User Mode / Kernel Mode / Interrupts / System Calls",
+    "difficulty": "medium",
+    "type": "recall",
+    "question": "Which of the following operations requires the CPU to be in kernel mode to execute?",
+    "options": [
+      "Calling malloc() to allocate heap memory in a user program",
+      "Executing a for loop that adds elements of an array",
+      "Directly reading or writing hardware device registers to initiate a disk I/O",
+      "Calling printf() to format and print a string"
+    ],
+    "answer_index": 2,
+    "explanation": "Kernel mode provides access to privileged instructions and hardware registers. User programs cannot directly program hardware; they must ask the kernel via system calls. malloc(), array loops, and printf() execute in user mode (though printf and malloc may internally invoke syscalls that briefly switch to kernel mode).",
+    "source": "CS252-Slides-Sprin2026.pdf:p342"
+  },
+  {
+    "id": "m-0033",
+    "topic": "User Mode / Kernel Mode / Interrupts / System Calls",
+    "difficulty": "hard",
+    "type": "analysis",
+    "question": "When a user program calls the C library function `read(fd, buf, n)`, which sequence of events correctly describes what happens at the hardware and OS level?",
+    "options": [
+      "The C library performs the read operation directly via DMA hardware registers, bypassing the CPU privilege level entirely and writing incoming data into buf without any kernel involvement or mode switch",
+      "The C library places the syscall number in a register and executes a syscall (or software interrupt) instruction; the CPU switches to kernel mode and jumps to the kernel's syscall dispatcher",
+      "The program delivers SIGIO to the kernel, which handles the I/O request asynchronously and copies the data into buf once it is available from disk, then signals the user process that buf is ready to read",
+      "The linker replaces all calls to read() with inline assembly that accesses the file descriptor table through a memory-mapped region shared between user space and the kernel, avoiding the need for a privilege-level transition"
+    ],
+    "answer_index": 1,
+    "explanation": "The libc wrapper for read() puts the syscall number (e.g., in %rax on x86-64) and arguments (in %rdi, %rsi, %rdx) into registers, then executes the `syscall` instruction (or `int 0x80` on 32-bit). This causes a controlled CPU mode switch to kernel mode, which dispatches to the appropriate handler via the syscall table. errno is set if the call fails.",
+    "source": "CS252-Slides-Sprin2026.pdf:p350"
+  },
+  {
+    "id": "m-0034",
+    "topic": "Processes & OS Scheduling",
+    "difficulty": "hard",
+    "type": "application",
+    "question": "A process running in the Running state calls read() to load data from a slow disk. What state does it transition to, and when does it return to the Ready state?",
+    "options": [
+      "It transitions briefly to the New state while the I/O request is registered with the kernel's device driver, then immediately returns to Running as the kernel services the disk read synchronously before the system call returns to user code",
+      "It moves to Ready immediately, joining the back of the run queue while the I/O completes in the background",
+      "It moves to Waiting (Blocked); the OS moves it back to Ready when the I/O completes and the data is available",
+      "It stays in Running because the kernel services the I/O inline before the syscall returns"
+    ],
+    "answer_index": 2,
+    "explanation": "When a process blocks on I/O, the OS moves it to the Waiting state, removes it from the run queue, and lets another process run. When the I/O interrupt fires (disk data is ready), the OS moves the process back to Ready. It enters Running again when the scheduler selects it. This is the fundamental motivation for multiprogramming.",
+    "source": "CS252-Slides-Sprin2026.pdf:p368"
+  },
+  {
+    "id": "m-0035",
+    "topic": "Processes & OS Scheduling",
+    "difficulty": "hard",
+    "type": "analysis",
+    "question": "Three processes arrive at time 0 with CPU bursts of 4 ms, 2 ms, and 6 ms (A, B, C respectively). Using Round Robin with a time quantum of 2 ms, in what order do they complete?",
+    "options": [
+      "A, B, C",
+      "B, A, C",
+      "C, A, B",
+      "B, C, A"
+    ],
+    "answer_index": 1,
+    "explanation": "Timeline: A runs 0–2 (2 ms remaining); B runs 2–4 (B done, 0 remaining); A runs 4–6 (A done, 0 remaining); C runs 6–8 (4 remaining); C runs 8–10 (2 remaining); C runs 10–12 (C done). Completion order: B at t=4, A at t=6, C at t=12. Answer: B, A, C.",
+    "source": "CS252-Slides-Sprin2026.pdf:p378"
+  },
+  {
+    "id": "m-0036",
+    "topic": "Processes & OS Scheduling",
+    "difficulty": "hard",
+    "type": "application",
+    "question": "In a Multilevel Feedback Queue (MLFQ) scheduler, an I/O-bound process (one that issues frequent short read() calls) typically remains at or near which priority level, and why?",
+    "options": [
+      "The lowest priority queue, because it causes many context switches that penalize its priority",
+      "The highest priority queue, because it voluntarily yields the CPU before its time quantum expires, signaling interactive behavior",
+      "The middle priority queue, because all processes start there and I/O-bound processes never migrate",
+      "A dynamically varying priority queue, because MLFQ tracks the ratio of CPU cycles consumed to I/O waits over a rolling time window and continuously adjusts the process's queue level based on that measured behavior ratio"
+    ],
+    "answer_index": 1,
+    "explanation": "MLFQ rewards processes that release the CPU before their quantum expires. I/O-bound processes frequently block on I/O (voluntarily yielding) before using their full quantum, so MLFQ keeps them at high priority. CPU-bound processes use their full quantum each time and are gradually demoted to lower-priority queues. This gives interactive/I/O-bound tasks low latency.",
+    "source": "CS252-Slides-Sprin2026.pdf:p388"
+  },
+  {
+    "id": "m-0037",
+    "topic": "Threads & Thread Synchronization",
+    "difficulty": "medium",
+    "type": "recall",
+    "question": "Two pthreads created within the same process are running concurrently. Which resources do they SHARE?",
+    "options": [
+      "Each thread's stack, program counter, and current register values",
+      "The process heap, global variables, and open file descriptor table",
+      "Each thread's stack only — the heap is private to each thread",
+      "Nothing — threads are isolated like separate processes"
+    ],
+    "answer_index": 1,
+    "explanation": "Threads within a process share the address space: heap, global/static variables, and the file descriptor table. Each thread has its OWN stack (for local variables and function call frames), its OWN program counter (current instruction), and its OWN register set. This sharing is what makes thread synchronization necessary.",
+    "source": "CS252-Slides-Sprin2026.pdf:p402"
+  },
+  {
+    "id": "m-0038",
+    "topic": "Threads & Thread Synchronization",
+    "difficulty": "hard",
+    "type": "analysis",
+    "question": "Two threads both execute `total_count++` on the same global integer without any synchronization. On x86-64, this compiles to load-add-store. Why can the final value of total_count be wrong?",
+    "options": [
+      "The compiler optimizes away one increment because it detects two threads writing the same variable",
+      "Both threads may load the same value of total_count before either stores the incremented result, causing one update to be lost",
+      "Integer addition is not defined for concurrent access under the C standard, causing undefined behavior that always produces zero",
+      "x86-64 does not support simultaneous memory reads from two cores, so one load always fails"
+    ],
+    "answer_index": 1,
+    "explanation": "total_count++ compiles to: (1) LOAD total_count into a register, (2) ADD 1, (3) STORE back. If thread A loads the value (say 5) and is preempted before storing, thread B also loads 5, increments to 6, and stores. Thread A then stores 6 as well. Two increments happened but total_count only went from 5 to 6 — one update is lost. This is a classic race condition.",
+    "source": "CS252-Slides-Sprin2026.pdf:p415"
+  },
+  {
+    "id": "m-0039",
+    "topic": "Threads & Thread Synchronization",
+    "difficulty": "hard",
+    "type": "application",
+    "question": "Thread B calls pthread_mutex_trylock() on a mutex that Thread A currently holds. What does pthread_mutex_trylock() return, and how does this differ from pthread_mutex_lock()?",
+    "options": [
+      "EBUSY — trylock returns immediately with an error code rather than blocking, so Thread B can retry later, do other work, or take a different code path instead of waiting indefinitely",
+      "0 — trylock always succeeds and grants the lock to Thread B because it is designed for non-blocking use; Thread B enters the critical section even while Thread A holds the mutex",
+      "Blocks Thread B in the OS scheduler just like pthread_mutex_lock(), except that trylock sets an internal flag causing the kernel to retry the acquisition automatically every millisecond",
+      "EINTR — trylock was interrupted before acquiring the lock, which the caller must detect by checking errno and calling trylock again in a loop until it returns 0 for success"
+    ],
+    "answer_index": 0,
+    "explanation": "pthread_mutex_trylock() is a non-blocking variant: if the lock is already held, it returns EBUSY immediately instead of blocking the calling thread. The caller can then decide whether to retry, perform other work, or give up. pthread_mutex_lock() by contrast puts the calling thread to sleep until the lock is released. trylock is useful when a thread has productive work to do while waiting rather than spinning or blocking.",
+    "source": "CS252-Slides-Sprin2026.pdf:p420"
+  },
+  {
+    "id": "m-0040",
+    "topic": "Threads & Thread Synchronization",
+    "difficulty": "hard",
+    "type": "analysis",
+    "question": "A spin lock uses test_and_set: the instruction atomically sets a memory location to 1 and returns its previous value. A thread holds the lock when the location is 1. What does a waiting thread do while the lock is held?",
+    "options": [
+      "It calls pthread_mutex_lock() to sleep until the lock holder signals it",
+      "It repeatedly calls test_and_set in a tight loop, burning CPU cycles until the location becomes 0",
+      "It deschedules itself with sched_yield() and retries once when it is rescheduled",
+      "It decrements a semaphore to announce that it is waiting, then blocks"
+    ],
+    "answer_index": 1,
+    "explanation": "Spin locks busy-wait: the thread continuously executes test_and_set in a loop. If test_and_set returns 0, it acquired the lock (set it to 1 and the old value was 0). If it returns 1, the lock is still held, and the thread spins again. This wastes CPU but has lower overhead than blocking for very short critical sections. It is inappropriate when lock hold times are long.",
+    "source": "CS252-Slides-Sprin2026.pdf:p428"
+  },
+  {
+    "id": "m-0041",
+    "topic": "Threads & Thread Synchronization",
+    "difficulty": "hard",
+    "type": "application",
+    "question": "A semaphore is initialized to 0. Thread A calls sema_wait() and Thread B later calls sema_post(). What is the correct sequence of events?",
+    "options": [
+      "Thread A proceeds immediately because a semaphore initialized to 0 is a non-negative value, and sema_wait() only blocks when the count is strictly negative after being decremented — a count of 0 is therefore treated as a free resource",
+      "Thread A blocks when sema_wait() decrements the count below zero; it unblocks when Thread B calls sema_post() and increments the count back to 0",
+      "Thread A receives EAGAIN from sema_wait() because waiting on a zero-valued semaphore is a non-blocking operation that fails immediately rather than sleeping, and Thread A must poll sema_wait() in a loop until it returns 0",
+      "Thread B must call sema_post() before Thread A calls sema_wait(), or the wait will never unblock — the semaphore does not record pending waiters, so a post that arrives before the wait is simply discarded and lost"
+    ],
+    "answer_index": 1,
+    "explanation": "sema_wait() decrements the semaphore. When the count would go negative (here: 0 → -1), the calling thread blocks. sema_post() increments the count and wakes one blocked waiter. This n=0 pattern is used to make one thread wait for an event that another thread signals — a common coordination idiom (e.g., the synchronized list's _emptySem).",
+    "source": "CS252-Slides-Sprin2026.pdf:p440"
+  },
+  {
+    "id": "m-0042",
+    "topic": "Threads & Thread Synchronization",
+    "difficulty": "hard",
+    "type": "analysis",
+    "question": "The CS252 SynchronizedList remove() calls sema_wait() BEFORE locking the mutex. What deadlock results if the order is reversed — mutex locked FIRST, then sema_wait()?",
+    "options": [
+      "No deadlock occurs, because the order of sema_wait() and mutex_lock() does not affect correctness — both orderings produce the same set of valid interleavings between insert() and remove() threads and the result is equivalent regardless of which call comes first",
+      "The removing thread holds the mutex and blocks in sema_wait() waiting for an item; any inserting thread that tries to lock the mutex to add an item is also blocked — circular wait and deadlock",
+      "The inserting thread starves because it cannot acquire the _emptySem semaphore while the removing thread holds the mutex, and after the kernel's semaphore timeout expires all pending insert() calls fail with ETIMEDOUT without adding any items",
+      "A race condition allows two remove() threads to both decrement the semaphore and both proceed past sema_wait() into the critical section simultaneously, causing two threads to remove the same list element and corrupting the internal size counter"
+    ],
+    "answer_index": 1,
+    "explanation": "If remove() locks the mutex then calls sema_wait() on an empty list: the removing thread holds the mutex and sleeps waiting for _emptySem to be posted. insert() must lock the same mutex to add an element and then call sema_post(). But insert() cannot lock the mutex because remove() holds it. Circular wait → deadlock. The fix is sema_wait() first (blocking without holding the mutex), then locking.",
+    "source": "CS252-Slides-Sprin2026.pdf:p450"
+  },
+  {
+    "id": "m-0043",
+    "topic": "Threads & Thread Synchronization",
+    "difficulty": "hard",
+    "type": "analysis",
+    "question": "A bounded buffer has capacity N and uses semaphores _emptySem (initialized to N) and _fullSem (initialized to 0). A producer calls enqueue() when the buffer is completely full (_emptySem = 0). What happens?",
+    "options": [
+      "enqueue() returns an error code immediately because the buffer is full",
+      "enqueue() overwrites the oldest element because the buffer is circular",
+      "enqueue() blocks in sema_wait(&_emptySem) until a consumer calls dequeue() and posts to _emptySem",
+      "enqueue() spins checking _emptySem in a busy loop until a slot becomes available"
+    ],
+    "answer_index": 2,
+    "explanation": "When _emptySem is 0, sema_wait(&_emptySem) blocks the producer (the count would go negative). A consumer's dequeue() takes an item and calls sema_post(&_emptySem), incrementing _emptySem to 1 and waking the blocked producer. The producer then proceeds to insert its item. This is the classic producer-consumer solution.",
+    "source": "CS252-Slides-Sprin2026.pdf:p460"
+  },
+  {
+    "id": "m-0044",
+    "topic": "Threads & Thread Synchronization",
+    "difficulty": "hard",
+    "type": "application",
+    "question": "The CS252 RWLock allows multiple concurrent readers but exclusive writers. A writer is waiting for _semAccess while two readers are active. A third reader arrives. What happens to the writer?",
+    "options": [
+      "The writer immediately acquires _semAccess as soon as the two active readers finish, because the CS252 RWLock implementation gives waiting writers unconditional priority over any new reader requests that arrive after the writer begins waiting for the semaphore",
+      "The writer's pending request is placed at the front of the _semAccess wait queue ahead of the new reader, because POSIX semaphores serve waiters in strict FIFO order and the writer registered its wait before the new reader arrived",
+      "The new reader increments _nreaders and may re-acquire _semAccess before the writer, causing the writer to continue waiting — writer starvation",
+      "Both the writer and the new reader block in sema_wait() on _semAccess, waiting for the two active readers to each call sema_post() when they exit the critical section, and then the OS scheduler arbitrarily chooses which waiter proceeds first"
+    ],
+    "answer_index": 2,
+    "explanation": "In the CS252 RWLock, the first reader acquires _semAccess; subsequent readers only increment _nreaders (no wait on _semAccess). The last reader to leave releases _semAccess. If a stream of readers keeps arriving, _semAccess is re-taken before the writer can get it — the writer starves. This RWLock does not give writers priority over late-arriving readers.",
+    "source": "CS252-Slides-Sprin2026.pdf:p468"
+  },
+  {
+    "id": "m-0045",
+    "topic": "Threads & Thread Synchronization",
+    "difficulty": "hard",
+    "type": "analysis",
+    "question": "Thread 1 holds Mutex A and is waiting for Mutex B. Thread 2 holds Mutex B and is waiting for Mutex A. In a resource allocation graph, what does this situation look like, and what does it mean?",
+    "options": [
+      "Thread1→A and Thread2→B (each thread points to what it holds); no cycle, no deadlock",
+      "A→Thread1 and B→Thread2 (mutexes point to holders); no cycle, so it is safe",
+      "Thread1→B, B→Thread2, Thread2→A, A→Thread1 — wait and hold edges form a cycle, indicating deadlock",
+      "Thread1→A→Thread2→B — a chain but not a cycle, indicating starvation only"
+    ],
+    "answer_index": 2,
+    "explanation": "In a resource allocation graph: thread→resource means 'waiting for'; resource→thread means 'held by'. Thread1 waits for B (Thread1→B), B is held by Thread2 (B→Thread2), Thread2 waits for A (Thread2→A), A is held by Thread1 (A→Thread1). This forms a cycle: deadlock. Both threads block forever.",
+    "source": "CS252-Slides-Sprin2026.pdf:p478"
+  },
+  {
+    "id": "m-0046",
+    "topic": "Threads & Thread Synchronization",
+    "difficulty": "hard",
+    "type": "application",
+    "question": "Thread X acquires Mutex M2 then M1. Thread Y acquires Mutex M1 then M2. They run concurrently. Applying the lock-ordering rule (always acquire lower-numbered mutex first) requires both threads to acquire M1 before M2. How does this prevent deadlock?",
+    "options": [
+      "It prevents any thread from holding both mutexes simultaneously, so no waiting can occur",
+      "Both threads compete for M1 first; whichever wins proceeds to acquire M2 and completes, while the other blocks on M1 — no circular wait is possible",
+      "It introduces a third meta-mutex that serializes all lock acquisitions globally",
+      "Thread X is forced to release M2 before trying M1, eliminating the hold-and-wait condition"
+    ],
+    "answer_index": 1,
+    "explanation": "With lock ordering, both threads try M1 first. One acquires M1 and then M2 and runs to completion; the other blocks on M1. When the first releases both mutexes, the second proceeds. There is never a situation where Thread X holds M2 waiting for M1 while Thread Y holds M1 waiting for M2 — the circular wait condition is eliminated.",
+    "source": "CS252-Slides-Sprin2026.pdf:p482"
+  },
+  {
+    "id": "m-0047",
+    "topic": "Threads & Thread Synchronization",
+    "difficulty": "hard",
+    "type": "analysis",
+    "question": "A condition variable's cond_wait(cv, mutex) atomically releases the mutex and suspends the thread. Why must the release and suspension be atomic rather than two separate operations?",
+    "options": [
+      "Because releasing the mutex before being registered as a waiter could allow another thread to call cond_signal() first, causing the signal to be missed (lost wakeup)",
+      "Because the OS scheduler requires the calling thread to hold the associated mutex when making a context-switch decision, so that the scheduler can correctly determine which waiting thread should be granted the CPU next after the condition wait completes",
+      "Because cond_signal() internally checks whether the mutex is currently held before deciding which thread to wake, and releasing the mutex before calling cond_wait() causes cond_signal() to skip the waiting thread and deliver the signal to no one",
+      "Because splitting the unlock and the wait into two separate system calls would require two kernel privilege transitions instead of one, adding measurable overhead to every condition variable operation in a performance-critical multithreaded server"
+    ],
+    "answer_index": 0,
+    "explanation": "If unlock and wait were separate: thread A unlocks the mutex, then before it calls wait(), thread B locks the mutex, changes the condition, and signals the CV — but A is not yet waiting, so it misses the signal. A then calls wait() and sleeps forever. The atomic release-and-wait prevents this race (lost wakeup) by ensuring A is on the wait list before B can acquire the mutex.",
+    "source": "CS252-Slides-Sprin2026.pdf:p495"
+  },
+  {
+    "id": "m-0048",
+    "topic": "Internet & Socket Programming",
+    "difficulty": "medium",
+    "type": "recall",
+    "question": "When a web browser sends an HTTP GET request over TCP/IP, at which layer of the TCP/IP stack is the destination IP address header added to the packet?",
+    "options": [
+      "Application layer (HTTP) — the browser includes the IP in the HTTP header",
+      "Transport layer (TCP) — TCP segments contain the destination IP",
+      "Internet layer (IP) — the IP header with source and destination IP addresses is added here",
+      "Network Interface layer (Ethernet) — the Ethernet frame header contains both IP and MAC addresses"
+    ],
+    "answer_index": 2,
+    "explanation": "Each layer adds its own header: HTTP at Application, TCP (with port numbers) at Transport, IP (with 32-bit addresses) at Internet, Ethernet (with 48-bit MAC addresses) at Network Interface. IP addresses are strictly an Internet-layer concern — Ethernet uses MAC addresses at the layer below.",
+    "source": "CS252-Slides-Sprin2026.pdf:p525"
+  },
+  {
+    "id": "m-0049",
+    "topic": "Internet & Socket Programming",
+    "difficulty": "hard",
+    "type": "application",
+    "question": "A host has IP address 10.0.0.37 and subnet mask 255.255.255.0. Another host has IP 10.0.0.112 with the same mask. Can they communicate directly without a router?",
+    "options": [
+      "No — different values in the last octet mean they belong to distinct subnets, because each unique host address in a /24 network defines its own isolated subnet within the larger 10.0.0.0 address block",
+      "Yes — both share the network prefix 10.0.0 (the first three octets masked by 255.255.255.0), so they are on the same subnet",
+      "It depends on whether both hosts have exchanged ARP requests, since direct communication on any network is only possible after each host has the other's MAC address cached in its local ARP table",
+      "No — the mask 255.255.255.0 is a directed broadcast address that prevents unicast communication between individual hosts on the segment, requiring all traffic to be routed through the default gateway"
+    ],
+    "answer_index": 1,
+    "explanation": "The subnet mask 255.255.255.0 (/24) means the first 24 bits are the network portion. Both hosts share the prefix 10.0.0, placing them on the same subnet. Hosts on the same subnet communicate directly via ARP and Ethernet without passing through a router. Only packets destined for a different network prefix need the default router.",
+    "source": "CS252-Slides-Sprin2026.pdf:p530"
+  },
+  {
+    "id": "m-0050",
+    "topic": "Internet & Socket Programming",
+    "difficulty": "hard",
+    "type": "application",
+    "question": "A host just booted with no network configuration. Which protocol runs first to give it a usable IP address, subnet mask, and default router?",
+    "options": [
+      "ARP — to discover the MAC addresses of nearby hosts on the LAN",
+      "DNS — to look up the IP address of the default gateway by hostname",
+      "DHCP — to automatically obtain an IP address, subnet mask, default router, and DNS server address",
+      "ICMP — to ping the broadcast address and receive a router advertisement"
+    ],
+    "answer_index": 2,
+    "explanation": "DHCP (Dynamic Host Configuration Protocol) is the bootstrap protocol that runs over UDP using broadcast. A new host sends a DHCP Discover broadcast; a DHCP server replies with an IP address, subnet mask, default router, and DNS server. Only after DHCP is complete can the host use ARP to resolve addresses or DNS to look up hostnames.",
+    "source": "CS252-Slides-Sprin2026.pdf:p543"
+  },
+  {
+    "id": "m-0051",
+    "topic": "Internet & Socket Programming",
+    "difficulty": "hard",
+    "type": "analysis",
+    "question": "TCP's adaptive retransmission timer is set to RTT + 4 × RTTSTDDEV. Why is the standard deviation multiplied by 4 rather than just using the raw RTT as the timeout?",
+    "options": [
+      "To guarantee the retransmission timeout is always longer than the TCP three-way handshake duration, ensuring the sender never retransmits a segment while the initial connection is still being established with the remote host",
+      "To add margin proportional to network variability so normal RTT fluctuations do not cause spurious retransmissions, while still detecting real losses quickly",
+      "Because the IETF RFC specifying TCP adaptive retransmission mandates 4 as a fixed constant derived from the Ethernet MTU of 1500 bytes, chosen to align the timeout with the worst-case frame propagation delay across a single LAN segment",
+      "To ensure the sender accumulates exactly four consecutive duplicate acknowledgments before declaring a segment lost and triggering the fast retransmit mechanism that halves the congestion window to relieve network pressure"
+    ],
+    "answer_index": 1,
+    "explanation": "Using RTT alone would cause frequent spurious timeouts during natural network jitter. By adding 4 × RTTSTDDEV, the timeout scales with the variability of the network: a stable network gets a tight timeout; a jittery network gets a looser one. This minimizes spurious retransmissions while still detecting genuine losses promptly.",
+    "source": "CS252-Slides-Sprin2026.pdf:p558"
+  },
+  {
+    "id": "m-0052",
+    "topic": "Internet & Socket Programming",
+    "difficulty": "hard",
+    "type": "application",
+    "question": "A developer is building a live multiplayer game where occasional dropped updates are acceptable but latency must be minimal. Which transport protocol is appropriate and why?",
+    "options": [
+      "TCP, because its guaranteed in-order delivery ensures every game state update reaches all clients without gaps, preventing player-position inconsistencies that would result from even a single dropped packet under UDP",
+      "UDP, because it is connectionless with minimal overhead; a dropped datagram causes a brief hiccup but avoids the latency spikes that TCP retransmission would introduce",
+      "TCP, because its flow control receive window and congestion avoidance algorithm prevent the game server from flooding clients with more state updates than their network interface and CPU can process in real time",
+      "UDP, because UDP datagrams support payloads larger than TCP's maximum segment size limit, allowing the server to pack more game state information into each packet and reduce the total number of transmissions per second"
+    ],
+    "answer_index": 1,
+    "explanation": "Real-time multiplayer games prioritize low latency over perfect reliability. TCP's retransmission and head-of-line blocking can introduce latency spikes when a packet is lost. UDP lets the application decide: drop the old state and use the next update instead. VoIP and real-time games are the canonical use cases for UDP over LAN or internet.",
+    "source": "CS252-Slides-Sprin2026.pdf:p553"
+  },
+  {
+    "id": "m-0053",
+    "topic": "Internet & Socket Programming",
+    "difficulty": "hard",
+    "type": "analysis",
+    "question": "Host A (private IP 192.168.0.10, port 5000) sends a TCP packet through a NAT router to server S (8.8.8.8, port 443). The router assigns external port 7200. When the server's reply arrives addressed to the router's public IP at port 7200, how does the router know where to forward it?",
+    "options": [
+      "It broadcasts the reply to all private hosts and Host A recognizes its own sequence number",
+      "The router looks up port 7200 in its NAT table and rewrites the destination to (192.168.0.10, port 5000)",
+      "The reply's TCP options field contains the private IP address encoded by the NAT router",
+      "The router sends an ARP request for port 7200 to determine the private host's MAC address"
+    ],
+    "answer_index": 1,
+    "explanation": "The NAT table maps external port → (private IP, private port). When the router assigned external port 7200 for Host A's connection, it stored the mapping 7200 → (192.168.0.10:5000). Inbound replies addressed to public-IP:7200 are rewritten to private-IP:5000 and forwarded to Host A. This is how NAT enables many hosts to share one public IP.",
+    "source": "CS252-Slides-Sprin2026.pdf:p565"
+  },
+  {
+    "id": "m-0054",
+    "topic": "Internet & Socket Programming",
+    "difficulty": "hard",
+    "type": "application",
+    "question": "A client program calls socket(AF_INET, SOCK_STREAM, 0) and then immediately calls read(fd, buf, 512) on the returned socket descriptor without calling connect() first. What happens?",
+    "options": [
+      "read() blocks indefinitely waiting for data, because an unconnected SOCK_STREAM socket is treated as a passive listening socket that will receive data whenever a sender writes to the same port",
+      "read() returns 0 immediately, signaling EOF, because no data has been sent to an unconnected socket and the kernel treats the empty stream as closed at the remote end",
+      "read() fails with an error such as ENOTCONN because a SOCK_STREAM socket must be connected via connect() before any data transfer can occur on either end",
+      "read() implicitly triggers a connect() using the last IP address returned by the most recent DNS lookup in the process, then blocks until the server responds with data"
+    ],
+    "answer_index": 2,
+    "explanation": "A TCP socket (SOCK_STREAM) must be connected before it can send or receive data. Calling read() on an unconnected socket returns an error (ENOTCONN on Linux). The correct client sequence is socket() → connect() → read()/write() → close(). Skipping connect() leaves the socket with no established TCP connection, so no data transfer is possible.",
+    "source": "CS252-Slides-Sprin2026.pdf:p585"
+  },
+  {
+    "id": "m-0055",
+    "topic": "SQL & Relational Databases",
+    "difficulty": "hard",
+    "type": "application",
+    "question": "Given tables Books(Title, ISBN, Publisher_ID, Price) and Publishers(Publisher_ID, Name, URL), which SQL query retrieves the Title and publisher Name for all books priced under $25?",
+    "options": [
+      "SELECT Title, Name FROM Books WHERE Price < 25 — retrieves Title from Books and attempts to read Name from the same Books table, but Books has no Name column so this query will produce a runtime error",
+      "SELECT Title, Name FROM Books, Publishers WHERE Books.Publisher_ID = Publishers.Publisher_ID AND Price < 25",
+      "SELECT Title, Name FROM Books JOIN Publishers WHERE Price < 25 — uses the JOIN keyword but omits the required ON clause that specifies which columns link Books to Publishers, producing a syntax or cartesian-product error",
+      "SELECT * FROM Books WHERE Price < 25 AND Name IS NOT NULL — returns all Books columns filtered by price and a null check, but cannot access the Name column since it lives in Publishers and no join is specified"
+    ],
+    "answer_index": 1,
+    "explanation": "Name is in Publishers, not Books, so the two tables must be joined. The correct query uses an implicit join (both tables in FROM) with a join predicate (Books.Publisher_ID = Publishers.Publisher_ID) and the price filter in WHERE. Querying only Books fails because Name is not a column in Books. A JOIN without an ON or WHERE join condition produces a cartesian product (every book paired with every publisher). Filtering on Name IS NOT NULL in Books is invalid for the same reason.",
+    "source": "CS252-Slides-Sprin2026.pdf:p610"
+  },
+  {
+    "id": "m-0056",
+    "topic": "SQL & Relational Databases",
+    "difficulty": "medium",
+    "type": "application",
+    "question": "In SQL LIKE patterns, '%' matches any sequence of zero or more characters and '_' matches exactly one character. Which query finds all book titles that begin with 'Operating' followed by any characters?",
+    "options": [
+      "SELECT Title FROM Books WHERE Title = 'Operating%'",
+      "SELECT Title FROM Books WHERE Title LIKE 'Operating%'",
+      "SELECT Title FROM Books WHERE Title LIKE '_Operating_'",
+      "SELECT Title FROM Books WHERE Title LIKE '%Operating'"
+    ],
+    "answer_index": 1,
+    "explanation": "'Operating%' matches any string starting with 'Operating'. The = operator does exact matching and would not work with % wildcards. '_Operating_' would match strings with exactly one character before and after 'Operating'. '%Operating' matches strings ending with 'Operating'. LIKE is required for pattern matching with % and _.",
+    "source": "CS252-Slides-Sprin2026.pdf:p608"
+  },
+  {
+    "id": "m-0057",
+    "topic": "Software Development in Teams",
+    "difficulty": "hard",
+    "type": "application",
+    "question": "An XP (Extreme Programming) team discovers a bug during development. According to XP testing rules, what should the programmer do before or while fixing the bug?",
+    "options": [
+      "File a formal bug report and wait for the product manager to assign a priority before writing any code",
+      "Write a regression test that reproduces the bug first, then fix the code so the test passes",
+      "Refactor the surrounding module first to make the fix easier, then fix the bug without writing a test",
+      "Notify the QA department and wait for them to write an acceptance test before touching the code"
+    ],
+    "answer_index": 1,
+    "explanation": "XP rule: 'When a bug is found, create a test.' The regression test captures the bug and ensures it cannot be reintroduced silently later. This is test-first bug fixing — the test fails before the fix and passes after. It is one of XP's core testing practices alongside unit tests and acceptance tests.",
+    "source": "CS252-Slides-Sprin2026.pdf:p633"
+  },
+  {
+    "id": "m-0058",
+    "topic": "Software Development in Teams",
+    "difficulty": "hard",
+    "type": "application",
+    "question": "A developer needs to work on a large feature for three weeks without committing incomplete code to the shared server, but still wants local version history so they can roll back. Which type of source control system best supports this?",
+    "options": [
+      "A centralized system like SVN, because local branches can be created without server access",
+      "A distributed system like Git or Mercurial, because every developer has a full local repository and can commit locally without pushing to the shared server",
+      "A centralized system like CVS, because it automatically creates private branches for in-progress work",
+      "No source control system supports local history without a server; the developer should use manual file backups"
+    ],
+    "answer_index": 1,
+    "explanation": "Distributed VCS (Git, Mercurial) give each developer a complete local repository. The developer can commit freely to their local repo, building history and checkpoints, then push to the shared server only when ready. In SVN (centralized), commits go directly to the server — there is no local commit mechanism.",
+    "source": "CS252-Slides-Sprin2026.pdf:p646"
+  },
+  {
+    "id": "m-0059",
+    "topic": "Software Development in Teams",
+    "difficulty": "hard",
+    "type": "application",
+    "question": "A QA team evaluates the entire application as a black box before each release to determine whether the product meets requirements and is ready to ship. What type of test is this?",
+    "options": [
+      "Unit tests — written by programmers to verify individual classes in isolation",
+      "Regression tests — written after fixing a bug to ensure it does not recur",
+      "Acceptance tests — written by QA to evaluate release readiness by testing the whole product against requirements",
+      "System tests — written jointly by QA and programmers to test a specific subsystem's features"
+    ],
+    "answer_index": 2,
+    "explanation": "Acceptance tests evaluate the full product against requirements and determine whether it is ready for release. They are black-box tests written by QA. Unit tests test individual classes (written by programmers). Regression tests verify bug fixes. System tests test a specific subsystem. The distinction between acceptance and system tests is that acceptance tests target release readiness of the whole product.",
+    "source": "CS252-Slides-Sprin2026.pdf:p652"
+  },
+  {
+    "id": "m-0060",
+    "topic": "Program Optimization & Profiling",
+    "difficulty": "hard",
+    "type": "application",
+    "question": "A developer uses gprof to find hot spots in a C program. gprof uses statistical sampling — it records the program counter at each timer interrupt. Compared to code instrumentation (inserting probe code at every function entry/exit), what is the key advantage of statistical sampling?",
+    "options": [
+      "Statistical sampling is perfectly accurate; instrumentation can miss function calls in tight loops",
+      "Statistical sampling requires no recompilation; code instrumentation requires modifying the source",
+      "Statistical sampling has very low overhead because it piggybacks on timer interrupts that already occur, rather than adding instructions to every function call",
+      "Statistical sampling works for multithreaded programs; instrumentation only works for single-threaded code"
+    ],
+    "answer_index": 2,
+    "explanation": "Statistical profiling records the PC at each context switch (timer interrupt) — there is almost no added overhead because these interrupts happen anyway. Code instrumentation inserts code before and after every function, which adds overhead to every function call and can skew the results by making the profiled program slower than the real one. gprof and prof use statistical sampling; VTune and JProfiler can use instrumentation.",
+    "source": "CS252-Slides-Sprin2026.pdf:p676"
+  }
+]

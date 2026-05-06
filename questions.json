@@ -3719,7 +3719,7 @@
     "question": "```c\nchar *p = malloc(8);\nstrcpy(p, \"Hello, World!\");  // 13 chars + null\n```\nWhat is the memory error and what does it corrupt?",
     "options": [
       "Memory leak — p is never freed",
-      "Buffer overflow",
+      "Buffer overflow — writes 14 bytes into an 8-byte buffer, corrupting heap metadata past the allocated block",
       "Double free — strcpy calls free internally",
       "Wild free — p was not allocated with strdup"
     ],
@@ -5719,7 +5719,7 @@
     "question": "What is the difference between a declaration and a definition in C, and why does it matter for the linker?",
     "options": [
       "They are identical; the linker treats them the same",
-      "A declaration tells the compiler the type",
+      "A declaration tells the compiler the type; a definition allocates storage — linker requires exactly one definition per symbol",
       "Declaration in .h; definition in .c — linker ignores both",
       "Definitions processed by preprocessor; declarations by assembler"
     ],
@@ -6199,7 +6199,7 @@
     "question": "The `RTLD_NOW` flag vs `RTLD_LAZY` in dlopen: what is the difference and when would you prefer RTLD_NOW?",
     "options": [
       "RTLD_NOW loads synchronously; RTLD_LAZY loads in a background thread",
-      "RTLD_NOW resolves all symbols at dlopen time; fails if any are missing",
+      "RTLD_NOW resolves all symbols at dlopen time; fails if any are missing — prefer it when you need to catch missing dependencies immediately at load time",
       "RTLD_NOW is faster; RTLD_LAZY is more memory efficient",
       "RTLD_NOW unloads the library after the call; RTLD_LAZY keeps it loaded"
     ],
@@ -6679,7 +6679,7 @@
     "question": "```c\nstruct Weird { char c; long l; };\n```\nWhat is sizeof(struct Weird) on a 64-bit system, and why?",
     "options": [
       "9 bytes",
-      "16 bytes",
+      "16 bytes — 1 (char) + 7 padding + 8 (long); long requires 8-byte alignment",
       "8 bytes",
       "12 bytes"
     ],
@@ -7047,7 +7047,7 @@
     "question": "What is an uninitialized pointer, and why is it dangerous?",
     "options": [
       "A pointer initialized to NULL — safe to dereference",
-      "A pointer variable that was declared but not assigned",
+      "A pointer variable that was declared but not assigned — dangerous because it holds a garbage address and may silently corrupt unrelated memory",
       "A pointer to a zero-initialized global variable",
       "A pointer that was freed but not set to NULL"
     ],
@@ -12123,8 +12123,8 @@
       "No — systems with multiple resource instances never deadlock",
       "Yes — but only if there are more than 2 threads"
     ],
-    "answer_index": 1,
-    "explanation": "With 2 instances of R: A holds 1, B holds 1 — all instances are allocated. A needs 1 more, B needs 1 more — but neither can proceed without the other releasing. Both wait forever — deadlock. With multiple instances, a cycle doesn't always mean deadlock, but here all instances are held by waiting threads.",
+    "answer_index": 0,
+    "explanation": "Yes, this is deadlock. A holds 1 instance and needs 1 more; B holds 1 instance and needs 1 more — all 2 instances are allocated. Neither can proceed without the other releasing, so both wait forever. Circular wait exists: A waits for B's instance, B waits for A's instance. With multiple resource instances, a cycle in the resource allocation graph doesn't always mean deadlock — but here every instance is held by a waiting thread, so it does.",
     "source": "CS252-Slides-Sprin2026.pdf:p434"
   },
   {
@@ -12679,7 +12679,7 @@
     "question": "What is the loopback address in IPv4, and what is it used for?",
     "options": [
       "192.168.1.1 — default gateway",
-      "127.0.0.1",
+      "127.0.0.1 — routes packets back to the same host; used to connect to servers running on the same machine",
       "10.0.0.1 — reserved for testing",
       "0.0.0.0 — binds to all interfaces"
     ],
