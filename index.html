@@ -572,6 +572,26 @@
     font-size: 0.84rem; line-height: 1.5; color: #555;
   }
 
+  /* Review filter bar */
+  .review-filter-bar {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 0 14px; flex-wrap: wrap;
+  }
+  .rfb-group { display: flex; border: 1px solid #dee2e6; border-radius: 6px; overflow: hidden; }
+  .rfb-btn {
+    padding: 5px 13px; font-size: 0.82rem; font-weight: 500;
+    background: #fff; border: none; cursor: pointer; color: #555;
+  }
+  .rfb-btn:not(:last-child) { border-right: 1px solid #dee2e6; }
+  .rfb-btn.rfb-active { background: #1a2236; color: #fff; }
+  .rfb-btn.rfb-active-wrong { background: #dc3545; color: #fff; }
+  .rfb-select {
+    padding: 5px 10px; font-size: 0.82rem; border: 1px solid #dee2e6;
+    border-radius: 6px; background: #fff; color: #555; cursor: pointer;
+    max-width: 240px;
+  }
+  .rv-count { font-size: 0.8rem; color: #8892aa; margin-left: auto; align-self: center; }
+
   /* ─────────────────────────────────────────
      STUDY PANE
   ───────────────────────────────────────── */
@@ -1122,6 +1142,10 @@
   let questionStats = {};  // { [question_id]: { wrong, seen } }
   let lastExamIds   = new Set();
   let fromSubtopic  = null;
+
+  // Review screen filter state
+  let examReviewFilter = { wrongOnly: false, topic: '' };
+  let mockReviewFilter = { wrongOnly: false, topic: '' };
 
   // Exam setup settings (persist across tab switches)
   let examDiffs    = new Set(['easy','medium','hard']);
@@ -2114,18 +2138,24 @@
       timeStr = ` &middot; ${m}m ${s}s`;
     }
 
+    examReviewFilter = { wrongOnly: false, topic: '' };
+
     const labels = ['A','B','C','D'];
+    const examTopics = [...new Set(examQuestions.map(q => subtopicMap[q.subtopic_id]?.unitTitle || q.subtopic_id))].sort();
+    const examTopicOpts = examTopics.map(t => `<option value="${t}">${t}</option>`).join('');
+
     const reviewHTML = examQuestions.map((q, i) => {
       const ans     = examAnswers[i];
       const order   = examShuffledOrders[i];
       const pickedOriginal = ans === -1 ? -1 : order[ans];
       const isRight = pickedOriginal === q.answer_index;
+      const topicLabel = subtopicMap[q.subtopic_id]?.unitTitle || q.subtopic_id;
       const choices = order.map((origIdx, j) =>
         `<div class="erc${origIdx === q.answer_index ? ' rcorrect' : ''}${j === ans && !isRight ? ' rwrong' : ''}">
            <strong>${labels[j]}.</strong> ${renderOption(q.options[origIdx])}
          </div>`).join('');
       return `
-        <div class="exam-review-item">
+        <div class="exam-review-item" data-wrong="${!isRight}" data-topic="${topicLabel}">
           <div class="exam-review-hdr">
             <span class="exam-review-num">Q${i + 1}</span>
             <span class="exam-review-tag">${q.subtopic_id} &middot; ${q.difficulty}${examFlagged.has(i) ? ' &middot; &#9873;' : ''}</span>
@@ -2149,11 +2179,50 @@
         </div>
       </div>
       <div style="padding:0 0 24px">
-        <div class="summary-section-header" style="padding:16px 0 12px">
+        <div class="summary-section-header" style="padding:16px 0 8px">
           Question Review <span class="badge">${total - numRight} wrong</span>
+        </div>
+        <div class="review-filter-bar">
+          <div class="rfb-group">
+            <button id="rv-all-exam"   class="rfb-btn rfb-active" onclick="setReviewWrong('exam',false); this.blur()">All</button>
+            <button id="rv-wrong-exam" class="rfb-btn"            onclick="setReviewWrong('exam',true);  this.blur()">Wrong only</button>
+          </div>
+          <select class="rfb-select" onchange="setReviewTopic('exam', this.value)">
+            <option value="">All topics</option>
+            ${examTopicOpts}
+          </select>
+          <span class="rv-count" id="rv-count-exam">${total} of ${total}</span>
         </div>
         ${reviewHTML}
       </div>`;
+  }
+
+  function setReviewWrong(type, wrongOnly) {
+    const f = type === 'exam' ? examReviewFilter : mockReviewFilter;
+    f.wrongOnly = wrongOnly;
+    document.getElementById(`rv-all-${type}`).className   = `rfb-btn${wrongOnly ? '' : ' rfb-active'}`;
+    document.getElementById(`rv-wrong-${type}`).className = `rfb-btn${wrongOnly ? ' rfb-active-wrong' : ''}`;
+    applyReviewFilters(type);
+  }
+
+  function setReviewTopic(type, val) {
+    const f = type === 'exam' ? examReviewFilter : mockReviewFilter;
+    f.topic = val;
+    applyReviewFilters(type);
+  }
+
+  function applyReviewFilters(type) {
+    const f = type === 'exam' ? examReviewFilter : mockReviewFilter;
+    const items = document.querySelectorAll(`#${type}-results .exam-review-item`);
+    let visible = 0;
+    items.forEach(el => {
+      const show = (!f.wrongOnly || el.dataset.wrong === 'true')
+                && (!f.topic || el.dataset.topic === f.topic);
+      el.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    const countEl = document.getElementById(`rv-count-${type}`);
+    if (countEl) countEl.textContent = `${visible} of ${items.length}`;
   }
 
   function retakeExam() {
@@ -2806,8 +2875,13 @@
         </div>`;
     }).join('');
 
+    mockReviewFilter = { wrongOnly: false, topic: '' };
+
     // Per-question review
     const labels = ['A','B','C','D'];
+    const mockTopics = [...new Set(qs.map(q => q.topic))].sort();
+    const mockTopicOpts = mockTopics.map(t => `<option value="${t}">${t}</option>`).join('');
+
     const reviewHTML = qs.map((q, i) => {
       const ans            = mockAnswers[i];
       const order          = mockShuffledOrders[i];
@@ -2818,7 +2892,7 @@
            <strong>${labels[j]}.</strong> ${renderOption(q.options[origIdx])}
          </div>`).join('');
       return `
-        <div class="exam-review-item">
+        <div class="exam-review-item" data-wrong="${!isRight}" data-topic="${q.topic}">
           <div class="exam-review-hdr">
             <span class="exam-review-num">Q${i + 1}</span>
             <span class="exam-review-tag">${q.topic} &middot; ${q.difficulty}${mockFlagged.has(i) ? ' &middot; &#9873;' : ''}</span>
@@ -2832,7 +2906,7 @@
 
     document.getElementById('mock-results').innerHTML = `
       <div class="done-hero">
-        <h2>${timedOut ? "Time’s Up!" : 'Mock Exam Complete'}</h2>
+        <h2>${timedOut ? "Time's Up!" : 'Mock Exam Complete'}</h2>
         <div class="done-pct ${pctCls}">${pct}%</div>
         <p class="done-detail">${numRight} of ${total} correct &middot; ${timeStr}</p>
         <div class="done-btns">
@@ -2848,8 +2922,19 @@
         <div style="background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(26,34,54,0.07);overflow:hidden;margin-bottom:20px">
           ${topicRows}
         </div>
-        <div class="summary-section-header" style="padding:0 0 12px">
+        <div class="summary-section-header" style="padding:0 0 8px">
           Question Review <span class="badge">${total - numRight} wrong</span>
+        </div>
+        <div class="review-filter-bar">
+          <div class="rfb-group">
+            <button id="rv-all-mock"   class="rfb-btn rfb-active" onclick="setReviewWrong('mock',false); this.blur()">All</button>
+            <button id="rv-wrong-mock" class="rfb-btn"            onclick="setReviewWrong('mock',true);  this.blur()">Wrong only</button>
+          </div>
+          <select class="rfb-select" onchange="setReviewTopic('mock', this.value)">
+            <option value="">All topics</option>
+            ${mockTopicOpts}
+          </select>
+          <span class="rv-count" id="rv-count-mock">${total} of ${total}</span>
         </div>
         ${reviewHTML}
       </div>`;
