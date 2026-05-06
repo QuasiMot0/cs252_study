@@ -2677,11 +2677,13 @@
               </div>`).join('')
           : '';
         wrap.style.display = 'block';
+        const hasBestReview = !!localStorage.getItem('cs252_mock_best_answers');
         wrap.innerHTML = `
           <div class="mock-best-card">
             <div class="mock-best-label">Personal Best</div>
             <div class="mock-best-score">${best.pct}%</div>
             <div class="mock-best-detail">${best.score}/${best.total} correct &middot; ${best.date}</div>
+            ${hasBestReview ? `<button class="btn-secondary" style="margin-top:12px;width:100%;font-size:0.85rem" onclick="showBestAttemptReview()">Review Best Attempt</button>` : ''}
           </div>
           ${hist.length > 1 ? `
           <div style="background:#fff;border-radius:10px;padding:12px 16px;box-shadow:0 2px 8px rgba(26,34,54,0.07);margin-bottom:20px">
@@ -2692,6 +2694,74 @@
         wrap.style.display = 'none';
       }
     } catch(e) { wrap.style.display = 'none'; }
+  }
+
+  function showBestAttemptReview() {
+    const best        = JSON.parse(localStorage.getItem('cs252_mock_best')         || 'null');
+    const bestAnswers = JSON.parse(localStorage.getItem('cs252_mock_best_answers') || 'null');
+    if (!best || !bestAnswers || !mockQuestions.length) return;
+
+    const qMap = Object.fromEntries(mockQuestions.map(q => [q.id, q]));
+    mockReviewFilter = { wrongOnly: false, topic: '' };
+
+    const labels     = ['A','B','C','D'];
+    const mockTopics = [...new Set(bestAnswers.map(a => qMap[a.id]?.topic).filter(Boolean))].sort();
+    const topicOpts  = mockTopics.map(t => `<option value="${t}">${t}</option>`).join('');
+    const total      = bestAnswers.length;
+
+    const reviewHTML = bestAnswers.map((a, i) => {
+      const q = qMap[a.id];
+      if (!q) return '';
+      const isRight = a.picked === q.answer_index;
+      const choices = q.options.map((opt, j) =>
+        `<div class="erc${j === q.answer_index ? ' rcorrect' : ''}${j === a.picked && !isRight ? ' rwrong' : ''}">
+           <strong>${labels[j]}.</strong> ${renderOption(opt)}
+         </div>`).join('');
+      return `
+        <div class="exam-review-item" data-wrong="${!isRight}" data-topic="${q.topic}">
+          <div class="exam-review-hdr">
+            <span class="exam-review-num">Q${i + 1}</span>
+            <span class="exam-review-tag">${q.topic} &middot; ${q.difficulty}</span>
+            <span class="exam-review-verdict ${isRight ? 'cv' : 'cw'}">${isRight ? '✓' : '✗'}</span>
+          </div>
+          <div class="exam-review-q">${parseText(q.question)}</div>
+          <div class="exam-review-choices">${choices}</div>
+          <div class="exam-review-exp">${parseText(q.explanation)}</div>
+        </div>`;
+    }).join('');
+
+    const numRight = bestAnswers.filter(a => qMap[a.id] && a.picked === qMap[a.id].answer_index).length;
+    const pctCls   = best.pct >= 80 ? 'great' : best.pct >= 60 ? 'ok' : 'poor';
+
+    document.getElementById('mock-results').innerHTML = `
+      <div class="done-hero" style="padding-bottom:16px">
+        <h2>Best Attempt Review</h2>
+        <div class="done-pct ${pctCls}">${best.pct}%</div>
+        <p class="done-detail">${best.score}/${best.total} correct &middot; ${best.date}</p>
+        <div class="done-btns">
+          <button class="btn-secondary" onclick="backToMockSetup()">&#8592; Back</button>
+        </div>
+      </div>
+      <div style="padding:0 0 24px">
+        <div class="summary-section-header" style="padding:0 0 8px">
+          Question Review <span class="badge">${total - numRight} wrong</span>
+        </div>
+        <div class="review-filter-bar">
+          <div class="rfb-group">
+            <button id="rv-all-mock"   class="rfb-btn rfb-active" onclick="setReviewWrong('mock',false); this.blur()">All</button>
+            <button id="rv-wrong-mock" class="rfb-btn"            onclick="setReviewWrong('mock',true);  this.blur()">Wrong only</button>
+          </div>
+          <select class="rfb-select" onchange="setReviewTopic('mock', this.value)">
+            <option value="">All topics</option>
+            ${topicOpts}
+          </select>
+          <span class="rv-count" id="rv-count-mock">${total} of ${total}</span>
+        </div>
+        ${reviewHTML}
+      </div>`;
+
+    document.getElementById('mock-setup').style.display   = 'none';
+    document.getElementById('mock-results').style.display = 'block';
   }
 
   function startMockExam() {
@@ -2840,9 +2910,17 @@
 
     const dateStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const entry   = { pct, score: numRight, total, date: dateStr };
+    // Per-question picks for the best-attempt review (stored separately to keep history lean)
+    const bestAnswers = qs.map((q, i) => ({
+      id: q.id,
+      picked: mockAnswers[i] === -1 ? -1 : mockShuffledOrders[i][mockAnswers[i]]
+    }));
     try {
       const best = JSON.parse(localStorage.getItem('cs252_mock_best') || 'null');
-      if (!best || pct > best.pct) localStorage.setItem('cs252_mock_best', JSON.stringify(entry));
+      if (!best || pct > best.pct) {
+        localStorage.setItem('cs252_mock_best', JSON.stringify(entry));
+        localStorage.setItem('cs252_mock_best_answers', JSON.stringify(bestAnswers));
+      }
       const hist = JSON.parse(localStorage.getItem('cs252_mock_history') || '[]');
       hist.unshift(entry);
       localStorage.setItem('cs252_mock_history', JSON.stringify(hist.slice(0, 10)));
